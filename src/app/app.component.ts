@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ILvRowDefinition } from 'src/interfaces/lv-table-interfaces/lv-row-definition.interface';
+import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
 
 @Component({
@@ -16,12 +16,10 @@ export class AppComponent {
     ]
     color = 'darkblue';
     colorBotones: string[] = ['red', 'yellow'];
-    data: ILvRowDefinition[] = [
-        {title: 'YEPA', rowData: 'yesca'},
-        {title: 'YEPA', rowData: 'yesca'},
-        {title: 'YEPA', rowData: 'yesca'},
-        {title: 'YEPA', rowData: 'yesca'}
-    ];
-    colorTabla: string[] = ['darkred', 'white', 'rgb(252, 73, 73)', 'white'];
+    definition: ILvTableDefinition = {
+        header: ['ypx', 'ypx', 'ypv', 'ypb'],
+        fields: ['yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr']
+    }
+    colorTabla: string[] = ['cyan', 'white', 'darkcyan', 'white'];
     colorHeaderTabla: string[] = ['darkblue', 'white']
 }
