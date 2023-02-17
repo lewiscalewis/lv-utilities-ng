@@ -22,4 +22,6 @@ export class AppComponent {
         {title: 'YEPA', rowData: 'yesca'},
         {title: 'YEPA', rowData: 'yesca'}
     ];
+    colorTabla: string[] = ['darkred', 'white', 'rgb(252, 73, 73)', 'white'];
+    colorHeaderTabla: string[] = ['darkblue', 'white']
 }

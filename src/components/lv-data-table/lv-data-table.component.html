@@ -1,13 +1,13 @@
 <div class="lv-table">
     <div class="header-wrapper">
-        <div class="headers" *ngFor="let header of data">
+        <div class="headers" [style]="selectorHeader" *ngFor="let header of data">
             {{header.title}}
         </div>
     </div>
     <div class="row-wrapper">
-        <div class="rows" *ngFor="let row of data">
+        <div class="rows" [style]="selector" *ngFor="let row of data">
             {{row.rowData}}
         </div>
     </div>
-    <div class="controls"></div>
+    <!-- <div class="controls"></div> -->
 </div>
