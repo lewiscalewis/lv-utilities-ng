@@ -1,0 +1,12 @@
+<div class="carousel">
+    <div class="image-container-wrapper">
+      <div class="image-container" [@slideAnimation]="currentIndex">
+        <img id="slide" [src]="slides[currentIndex].src" [alt]="slides[currentIndex].descripcion">
+      </div>
+    </div>
+    <div class="user-controls">
+      <div class="previous" (click)="anterior()">Anterior</div>
+      <div class="next" (click)="siguiente()">Siguiente</div>
+    </div>
+  </div>
+  
