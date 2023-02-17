@@ -1,15 +1,12 @@
-<div class="lv-table">
-    <div class="header-wrapper">
-        <div class="headers" [style]="selectorHeader" *ngFor="let header of headers">
-            {{header}}
-        </div>
-    </div>
-    <div class="row-wrapper">
-        <div [style]="selector" *ngFor="let entry of entries">
-            <div class="rows" *ngFor="let fields of entry">
-                {{fields}}
-            </div>
-        </div>
-    </div>
-    <!-- <div class="controls"></div> -->
-</div>
+<table class="lv-table" [style.color]="rowColor[1]">
+    <thead>
+      <tr>
+        <th *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">{{header}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
+        <td *ngFor="let field of row">{{field}}</td>
+      </tr>
+    </tbody>
+  </table>

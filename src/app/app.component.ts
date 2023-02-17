@@ -18,7 +18,7 @@ export class AppComponent {
     colorBotones: string[] = ['red', 'yellow'];
     definition: ILvTableDefinition = {
         header: ['ypx', 'ypx', 'ypv', 'ypb'],
-        fields: ['yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr']
+        fields: ['yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr','yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr','errer']
     }
     colorTabla: string[] = ['cyan', 'white', 'darkcyan', 'white'];
     colorHeaderTabla: string[] = ['darkblue', 'white']
