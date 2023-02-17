@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
 import { trigger, transition, style, animate, AnimationBuilder } from '@angular/animations';
 import { ILvSlide } from 'src/interfaces/lv-carrousel-interfaces/lv-slide.interface';
 
@@ -21,14 +21,32 @@ import { ILvSlide } from 'src/interfaces/lv-carrousel-interfaces/lv-slide.interf
         ])
     ]
 })
-export class LvCarrouselComponent implements OnInit {
+export class LvCarrouselComponent implements OnInit, AfterViewChecked {
 
+    /**
+     * Debe implementar la interfaz ILvSlide: [{nombre: 'nombre', descripcion: 'descripcion', src='url/de/tu/imagen' (usar ruta relativa: assets/../miimagen.jpg), srcSet(campo opcional):'srcset'}]
+     */
     @Input() slides: ILvSlide[] = [];
+    /**
+     * Color que quiere aplicar en el carrusel, se expresa igual que en css: red,blue...
+     */
+    @Input() color: string = '';
+    public selector: string = '';
+    /**
+     * Array con el color de fondo del botón y color de la letra
+     */
+    @Input() colorBotones: string[] = [];
+    public selectorBoton: string  = '';
     public currentIndex: number = 0;
 
     constructor(private animationBuilder: AnimationBuilder) { }
+    ngAfterViewChecked(): void {
+        this.selector = 'background-color: ' + this.color + ';' + 'border: 3px solid ' + this.color;
+        this.selectorBoton = this.colorBotones.length !== 0 ? 'background-color: ' + this.colorBotones[0] + '; ' + 'color: ' + this.colorBotones[1] : 'background-color: white; color: black;';
+    }
 
     ngOnInit() {
+        
     }
 
     anterior() {

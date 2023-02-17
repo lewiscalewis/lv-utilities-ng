@@ -45,12 +45,14 @@
         color: #fff;
         padding: 10px;
 
+        .slide-name {
+            font-size: 1.3rem;
+        }
+
         .previous,
         .next {
             display: inline-block;
             padding: 0.5rem;
-            background-color: white;
-            color: black;
             margin-left: 10px;
             margin-right: 10px;
             border-radius: 0.25rem;

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ILvRowDefinition } from 'src/interfaces/lv-table-interfaces/lv-row-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
 
 @Component({
@@ -9,8 +10,16 @@ import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
 export class AppComponent {
     title = 'lv-utilities-ng';
     slides: LvSlide[] = [
-        { nombre: 'pepe', descripcion: 'el pepe', src: 'assets/descargar.png' },
-        { nombre: 'pepe', descripcion: 'el pepe', src: 'assets/1366_2000.jpg' },
-        { nombre: 'pepe', descripcion: 'el pepe', src: 'assets/descargar.jpg' }
+        { nombre: 'example 1', descripcion: 'example 1', src: 'assets/slides-samples/example1.jpg' },
+        { nombre: 'example 2', descripcion: 'example 2', src: 'assets/slides-samples/example2.png' },
+        { nombre: 'example 3', descripcion: 'example 3', src: 'assets/slides-samples/example3.jpg' }
     ]
+    color = 'darkblue';
+    colorBotones: string[] = ['red', 'yellow'];
+    data: ILvRowDefinition[] = [
+        {title: 'YEPA', rowData: 'yesca'},
+        {title: 'YEPA', rowData: 'yesca'},
+        {title: 'YEPA', rowData: 'yesca'},
+        {title: 'YEPA', rowData: 'yesca'}
+    ];
 }

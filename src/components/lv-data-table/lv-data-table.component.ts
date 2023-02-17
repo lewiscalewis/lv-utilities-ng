@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ILvRowDefinition } from 'src/interfaces/lv-table-interfaces/lv-row-definition.interface';
 
 @Component({
-  selector: 'app-lv-data-table',
-  templateUrl: './lv-data-table.component.html',
-  styleUrls: ['./lv-data-table.component.css']
+    selector: 'app-lv-data-table',
+    templateUrl: './lv-data-table.component.html',
+    styleUrls: ['./lv-data-table.component.scss']
 })
 export class LvDataTableComponent implements OnInit {
 
-  constructor() { }
+    @Input() data: ILvRowDefinition[] = [];
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() {
+        
+    }
 
 }
