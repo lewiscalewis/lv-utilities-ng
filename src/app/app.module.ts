@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,12 +17,13 @@ import { AppComponent } from './app.component';
     LvCarrouselComponent,
     LvDataTableComponent,
     LvModalComponent,
-    LvFormComponent,
+    LvFormComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

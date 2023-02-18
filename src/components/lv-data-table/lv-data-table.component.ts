@@ -36,6 +36,9 @@ export class LvDataTableComponent implements OnInit {
     fields: string[] = [];
     rows: string[][] = [];
     httpData: any[] = [];
+    tmpField: any;
+    field: any;
+    modifiedData: any[] = [];
 
     constructor(private http: HttpClient) { }
 
@@ -49,25 +52,35 @@ export class LvDataTableComponent implements OnInit {
         }
     }
 
-    formatDataTable() {
-        console.log(this.httpData)
-        const groupSize = this.headers.length;
-        if(this.definition){
-          while (this.fields.length > 0) {
-            const row = [];
-            for (let i = 0; i < groupSize; i++) {
-              row.push(this.fields.shift() || '');
-            }
-            this.rows.push(row);
-          }
-        }else{
-          while (this.httpData.length > 0) {
-            const row = this.httpData.shift();
-            this.rows.push(row);
-          }
+    getFieldType(value: any): string {
+        if (typeof value === 'number') {
+            return 'number';
+        } else if (value instanceof Date) {
+            return 'date';
+        } else {
+            return 'text';
         }
-      }
-      
+    }
+
+
+    formatDataTable() {
+        const groupSize = this.headers.length;
+        if (this.definition) {
+            while (this.fields.length > 0) {
+                const row = [];
+                for (let i = 0; i < groupSize; i++) {
+                    row.push(this.fields.shift() || '');
+                }
+                this.rows.push(row);
+            }
+        } else {
+            while (this.httpData.length > 0) {
+                const row = this.httpData.shift();
+                this.rows.push(row);
+            }
+        }
+    }
+
 
     getHttpData() {
         const httpOptions = {
@@ -75,6 +88,7 @@ export class LvDataTableComponent implements OnInit {
                 'Content-Type': 'application/json'
             })
         };
+
         let objectMapper: LvObjectReader;
         if (this.requestType === RequestType.POST) {
             this.http.post(this.url, this.data, httpOptions)
@@ -98,31 +112,55 @@ export class LvDataTableComponent implements OnInit {
                 this.formatDataTable(); // llamada aquí
             });
         }
-
-        //para futuros usos
-        // if (this.requestType === RequestType.PUT) {
-        //     this.http.put(this.url, this.data, httpOptions)
-        //         .subscribe({
-        //             next: (res) => {
-
-        //             },
-        //             error: (err) => {
-        //                 console.log(err);
-        //             }
-        //         });;
-
-        // }
-
-        // if (this.requestType === RequestType.DELETE) {
-        //     this.http.delete(this.url)
-        //         .subscribe({
-        //             next: (res) => {
-
-        //             },
-        //             error: (err) => {
-        //                 console.log(err);
-        //             }
-        //         });
-        // }
     }
+
+    modifyData() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        console.log(this.modifiedData)
+        if (this.requestType !== RequestType.DELETE) {
+            this.http.put(this.url, this.modifiedData, httpOptions)
+                .subscribe({
+                    next: (res) => {
+                        alert('Se han modificado los datos: ' + res);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                });;
+
+            // if (this.requestType === RequestType.DELETE) {
+            //     this.http.delete(this.url)
+            //         .subscribe({
+            //             next: (res) => {
+            //                 alert('Se han borrado los registros: ' + res);
+            //             },
+            //             error: (err) => {
+            //                 console.log(err);
+            //             }
+            //         });
+            // }
+        }
+    }
+
+    // async canRemove(data: any): Promise<boolean> {
+    //     let canRemove: boolean = false;
+    //     this.http.get(this.url).subscribe(res => {
+    //         canRemove = res;
+    //     });
+    //     return true;
+    // }
+
+    updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
+        row[fieldIndex] = event.value;
+        this.modifiedData[rowIndex] = {
+            ...row
+        };
+        event.blur();
+    }
+
 }

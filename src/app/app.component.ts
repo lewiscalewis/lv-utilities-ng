@@ -17,11 +17,11 @@ export class AppComponent {
     color = 'darkcyan';
     colorBotones: string[] = ['red', 'yellow'];
     definition: ILvTableDefinition = {
-        header: ['ypx', 'ypx', 'ypv', 'ypb'],
-        fields: ['levi', 'iker', 'elias', 'jesus', 'aaron']
+        header: ['pelotudo1', 'pelotudo2', 'pelotudo3', 'pelotudo4', 'pelotudo5', 'fecha'],
+        fields: ['levi', 'iker', 'elias', 'jesus', 'aaron', new Date(), 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()]
     }
     colorTabla: string[] = ['darkcyan', 'white', 'darkcyan', 'white'];
-    colorHeaderTabla: string[] = ['purple', 'white']
+    colorHeaderTabla: string[] = ['black', 'white']
     //url = 'https://api.github.com/users/octocat/repos'
     url = 'https://jsonplaceholder.typicode.com/users'
 }

@@ -1,4 +1,4 @@
 export interface ILvTableDefinition {
     header: string[];
-    fields: string[];
+    fields: any[];
 }
