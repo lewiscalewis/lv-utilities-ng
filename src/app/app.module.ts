@@ -5,6 +5,7 @@ import { LvDataTableComponent } from 'src/components/lv-data-table/lv-data-table
 import { LvFormComponent } from 'src/components/lv-form/lv-form.component';
 import { LvModalComponent } from 'src/components/lv-modal/lv-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
@@ -19,7 +20,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

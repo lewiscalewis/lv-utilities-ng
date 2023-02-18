@@ -14,12 +14,14 @@ export class AppComponent {
         { nombre: 'example 2', descripcion: 'example 2', src: 'assets/slides-samples/example2.png' },
         { nombre: 'example 3', descripcion: 'example 3', src: 'assets/slides-samples/example3.jpg' }
     ]
-    color = 'darkblue';
+    color = 'darkcyan';
     colorBotones: string[] = ['red', 'yellow'];
     definition: ILvTableDefinition = {
         header: ['ypx', 'ypx', 'ypv', 'ypb'],
-        fields: ['yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr','yp', 'ypt', 'ypr', 'ypr', 'yp', 'ypt', 'ypr', 'ypr','errer']
+        fields: ['levi', 'iker', 'elias', 'jesus', 'aaron']
     }
-    colorTabla: string[] = ['cyan', 'white', 'darkcyan', 'white'];
-    colorHeaderTabla: string[] = ['darkblue', 'white']
+    colorTabla: string[] = ['darkcyan', 'white', 'darkcyan', 'white'];
+    colorHeaderTabla: string[] = ['purple', 'white']
+    //url = 'https://api.github.com/users/octocat/repos'
+    url = 'https://jsonplaceholder.typicode.com/users'
 }
