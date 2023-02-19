@@ -160,7 +160,6 @@ export class LvDataTableComponent implements OnInit {
         this.modifiedData[rowIndex] = {
             ...row
         };
-        event.blur();
     }
 
 }
