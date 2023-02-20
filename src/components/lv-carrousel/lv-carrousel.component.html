@@ -5,9 +5,9 @@
       </div>
     </div>
     <div class="user-controls">
-      <div [style]="selectorBoton" class="previous" (click)="anterior()">Anterior</div>
+      <button [style]="selectorBoton" class="previous" (click)="anterior()">Anterior</button>
       <div class="slide-name">{{slides[currentIndex].nombre}}</div>
-      <div [style]="selectorBoton" class="next" (click)="siguiente()">Siguiente</div>
+      <button [style]="selectorBoton" class="next" (click)="siguiente()">Siguiente</button>
     </div>
   </div>
   

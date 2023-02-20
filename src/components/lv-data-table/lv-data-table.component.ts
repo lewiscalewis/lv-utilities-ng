@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -31,54 +33,65 @@ export class LvDataTableComponent implements OnInit {
     @Input() requestType: RequestType = RequestType.GET;
     @Input() rowColor: string[] = [];
     @Input() headerColor: string[] = [];
+    @Input() readOnly: boolean = false;
+    @Input() detailUrl: string = '';
 
     headers: string[] = [];
-    fields: string[] = [];
+    fields: string = '';
     rows: string[][] = [];
     httpData: any[] = [];
     tmpField: any;
     field: any;
     modifiedData: any[] = [];
+    currentPage: number = 1;
+    totalPages: number = 0;
+    pageRows: any[][] = [];
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private router: Router) { }
+
 
     ngOnInit(): void {
         if (this.definition) {
             this.headers = this.definition.header;
-            this.fields = this.definition.fields;
+            this.rows = this.definition.rows;
             this.formatDataTable();
         } else {
             this.getHttpData();
         }
+        let total = parseInt((this.rows.length / 15).toString());
+        console.log(total)
+        this.totalPages = total < 0 ? 1 : total;
+        this.pageRows = this.rows.slice(0, 15);
     }
 
-    getFieldType(value: any): string {
+    getFieldType(value: any): string | void {
         if (typeof value === 'number') {
             return 'number';
-        } else if (value instanceof Date) {
+        } else if (value instanceof Date || this.isDateValid(value)) {
             return 'date';
         } else {
             return 'text';
         }
     }
 
+    isDateValid(dateString: string) {
+        if (dateString.length < 8) {
+            return false;
+        }
+        const date = new Date(dateString);
+        return !isNaN(date.getTime());
+    }
+
 
     formatDataTable() {
-        const groupSize = this.headers.length;
-        if (this.definition) {
-            while (this.fields.length > 0) {
-                const row = [];
-                for (let i = 0; i < groupSize; i++) {
-                    row.push(this.fields.shift() || '');
-                }
-                this.rows.push(row);
-            }
-        } else {
-            while (this.httpData.length > 0) {
-                const row = this.httpData.shift();
-                this.rows.push(row);
-            }
+        while (this.httpData.length > 0) {
+            const row = this.httpData.shift();
+            this.rows.push(row);
         }
+        let total = parseInt((this.rows.length / 15).toString());
+        console.log(total)
+        this.totalPages = total < 0 ? 1 : total;
+        this.pageRows = this.rows.slice(0, 15);
     }
 
 
@@ -121,45 +134,80 @@ export class LvDataTableComponent implements OnInit {
             })
         };
 
-        console.log(this.modifiedData)
-        if (this.requestType !== RequestType.DELETE) {
-            this.http.put(this.url, this.modifiedData, httpOptions)
+        this.http.put(this.url, this.modifiedData, httpOptions)
+            .subscribe({
+                next: (res) => {
+                    alert('Se han modificado los datos: ' + res);
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+    }
+
+    async canRemove(url: string): Promise<boolean> {
+        const res: any = await firstValueFrom(this.http.get(url));
+        return res.isValid;
+    }
+
+    updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
+        if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value)) {
+            row[fieldIndex] = parseFloat(event.value);
+            console.log(row[fieldIndex]);
+        } else {
+            row[fieldIndex] = event.value;
+            console.log(typeof row[fieldIndex]);
+        }
+
+        this.modifiedData[rowIndex] = {
+            ...row
+        };
+    }
+
+    async deleteRow(event: any) {
+        let url = this.url + '/' + event[0];
+        if (await this.canRemove(url + '/canRemove')) {
+            this.http.delete(url)
                 .subscribe({
                     next: (res) => {
-                        alert('Se han modificado los datos: ' + res);
+                        alert('Se han borrado los registros: ' + res);
                     },
                     error: (err) => {
                         console.log(err);
                     }
-                });;
-
-            // if (this.requestType === RequestType.DELETE) {
-            //     this.http.delete(this.url)
-            //         .subscribe({
-            //             next: (res) => {
-            //                 alert('Se han borrado los registros: ' + res);
-            //             },
-            //             error: (err) => {
-            //                 console.log(err);
-            //             }
-            //         });
-            // }
+                });
         }
     }
 
-    // async canRemove(data: any): Promise<boolean> {
-    //     let canRemove: boolean = false;
-    //     this.http.get(this.url).subscribe(res => {
-    //         canRemove = res;
-    //     });
-    //     return true;
-    // }
+    redirectToDetail() {
+        this.router.navigate([this.detailUrl]);
+    }
 
-    updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
-        row[fieldIndex] = event.value;
-        this.modifiedData[rowIndex] = {
-            ...row
-        };
+    previousPage() {
+        if(this.currentPage === 1){
+            this.currentPage = this.totalPages;
+        }else{
+            this.currentPage--;
+        }
+        
+        let second = this.currentPage * 15;
+        let first = second - 15;
+        let tmpArray = this.rows.slice(first, second);
+        this.pageRows = tmpArray;
+        console.log(this.pageRows);
+    }
+
+    nextPage() {
+        if(this.currentPage === this.totalPages){
+            this.currentPage = 1;
+        }else{
+            this.currentPage++;
+        }
+        let second = this.currentPage * 15;
+        let first = second - 15;
+        let tmpArray = this.rows.slice(first, second);
+        this.pageRows = tmpArray;
+        console.log(this.pageRows);
     }
 
 }

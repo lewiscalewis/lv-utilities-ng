@@ -4,21 +4,53 @@
   max-width: 95vw;
   padding: 10px;
   background-color: $table-header-color;
+  border: 1px solid black;
 
-  .actions {
-    margin-top: 20px;
+  .action-container {
+    .actions {
+        margin-top: 20px;
+        @include button-style();
+        
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .pagination {
+            display: flex;
+            flex-direction: row;
+            margin-right: 30px;
+
+            .after{
+                border: 1px solid black;
+                margin-left: 10px;
+                padding: 5px;
+                text-align: center;
+            }
+            .before{
+                border: 1px solid black;
+                padding: 5px;
+                text-align: center;
+            }
+            .current-page{
+                border: 1px solid black;
+                margin-left: 10px;
+                padding: 5px;
+                text-align: center;
+            }
+        }
+      }
   }
   
-
   .lv-table-container {
     max-width: 95vw;
     margin: 0 auto;
-    overflow: auto;
     max-height: 600px;
+    overflow-y: scroll;
   }
 
   .lv-table {
-    width: 100%;
+    width: 98%;
     border-collapse: collapse;
     font-family: $table-font-family;
     font-size: $table-font-size;
@@ -27,6 +59,11 @@
     color: $table-text-color;
     background-color: $table-background-color;
     box-shadow: $table-box-shadow;
+
+    .field-readOnly {
+        width: fit-content;
+        max-width: 200px;
+    }
   }
 
   .lv-table input {
@@ -68,6 +105,12 @@
     background-color: #3b82f6;
   }
   
+  thead {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+  }
 
   .lv-table thead th {
     padding: 12px 16px;
@@ -90,9 +133,11 @@
 
     img {
       margin-right: 10px;
+      cursor: pointer;
 
       &:hover {
-        padding: 1px;
+        border-radius: 50%;
+        border: 1px solid darkgray;
         background-color: $table-row-hover-color;
       }
     }

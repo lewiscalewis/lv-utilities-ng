@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .carousel {
     display: flex;
     flex-direction: column;
@@ -49,21 +51,6 @@
             font-size: 1.3rem;
         }
 
-        .previous,
-        .next {
-            display: inline-block;
-            padding: 0.5rem;
-            margin-left: 10px;
-            margin-right: 10px;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
-
-            &:hover {
-                background-color: rgb(180, 179, 179);
-                box-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
-            }
-        }
+        @include button-style();
     }
 }

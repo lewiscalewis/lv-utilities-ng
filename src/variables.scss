@@ -5,7 +5,7 @@ $table-row-hover-color: #ddd;
 $table-action-icons-color: #555;
 $table-action-icons-hover-color: #333;
 $table-background-color: #fff;
-$table-box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+$table-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 $table-font-family: Arial, sans-serif;
 $table-font-size: 16px;
 $table-line-height: 1.4;
@@ -14,5 +14,32 @@ $table-text-color: #333;
 $table-mobile-font-size: 14px;
 $table-mobile-td-max-width: 200px;
 $table-mobile-td-max-height: 100px;
-$table-mobile-td-overflow: auto;
+$table-mobile-td-overflow: 'scroll';
 $actions-color: #333;
+
+$shadow-color: rgba(255, 255, 255, 0.5); // Color del sombreado
+$shadow-blur: 10px; // Desenfoque del sombreado
+$shadow-offset: 0px 0px; // Desplazamiento horizontal y vertical del sombreado
+$shadow-size: 0px; // Tamaño del sombreado
+
+@mixin button-style() {
+    button {
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+        border: 1px solid black;
+        padding: 0.5rem;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 0.25rem;
+        background-color: white;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+
+        &:hover {
+            background-color: whitesmoke;
+            box-shadow: $shadow-offset $shadow-blur $shadow-size $shadow-color;
+        }
+    }
+}
