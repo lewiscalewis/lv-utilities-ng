@@ -49,6 +49,8 @@ export class LvDataTableComponent implements OnInit {
 
     constructor(private http: HttpClient, private router: Router) { }
 
+    //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
+
 
     ngOnInit(): void {
         if (this.definition) {
