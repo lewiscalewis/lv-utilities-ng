@@ -46,6 +46,7 @@ export class LvDataTableComponent implements OnInit {
     currentPage: number = 1;
     totalPages: number = 0;
     pageRows: any[][] = [];
+    flagFirstExecution: boolean = true;
 
     constructor(private http: HttpClient, private router: Router) { }
 
@@ -186,30 +187,54 @@ export class LvDataTableComponent implements OnInit {
     }
 
     previousPage() {
-        if(this.currentPage === 1){
+        if (this.currentPage === 1) {
             this.currentPage = this.totalPages;
-        }else{
+        } else {
             this.currentPage--;
         }
-        
-        let second = this.currentPage * 15;
-        let first = second - 15;
-        let tmpArray = this.rows.slice(first, second);
-        this.pageRows = tmpArray;
-        console.log(this.pageRows);
+
+        if (this.definition) {
+            let second = this.currentPage * 15;
+            let first = second - 15;
+            let tmpArray = this.rows.slice(first, second);
+            this.pageRows = tmpArray;
+        } else {
+            this.requestPage();
+        }
+
     }
 
     nextPage() {
-        if(this.currentPage === this.totalPages){
+        if (this.currentPage === this.totalPages) {
             this.currentPage = 1;
-        }else{
+        } else {
             this.currentPage++;
         }
-        let second = this.currentPage * 15;
-        let first = second - 15;
-        let tmpArray = this.rows.slice(first, second);
-        this.pageRows = tmpArray;
-        console.log(this.pageRows);
+
+        if(this.definition){
+            let second = this.currentPage * 15;
+            let first = second - 15;
+            let tmpArray = this.rows.slice(first, second);
+            this.pageRows = tmpArray;
+        }else{
+            this.requestPage();
+        }
+        
+    }
+
+    requestPage(){
+        this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
+            let res: any = data;
+            this.pageRows = res;
+        });
+
+        if(this.flagFirstExecution){
+            this.http.get(this.url + '/totalpages').subscribe(data => {
+                let res: any = data;
+                this.totalPages = res;
+                this.flagFirstExecution = false;
+            });
+        }
     }
 
 }
