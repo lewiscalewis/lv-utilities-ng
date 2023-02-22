@@ -44,7 +44,7 @@ export class LvDataTableComponent implements OnInit {
     httpData: any[] = [];
     tmpField: any;
     field: any;
-    modifiedData: any[] = [];
+    modifiedData: any = [];
     currentPage: number = 1;
     totalPages: number = 0;
     pageRows: any[][] = [];
@@ -63,14 +63,25 @@ export class LvDataTableComponent implements OnInit {
 
 
     ngOnInit(): void {
-        if (this.definition) {
+        if (this.definition !== undefined) {
             if (!this.flagDeleteUpdate) {
                 this.rows = this.definition.rows;
             }
             this.headers = this.definition.header;
             this.formatDataTable();
         } else {
-            this.getHttpData();
+            if (this.flagFirstExecution) {
+                this.http.get(this.url + '/totalpages').subscribe(data => {
+                    if(data){
+                        let res: any = data;
+                        this.totalPages = res;
+                        this.flagFirstExecution = false;
+                        
+                    }
+                });
+            } 
+            this.requestPage();
+            //this.getHttpData();
         }
         if (this.rows) {
             this.getCurrentPage();
@@ -80,7 +91,7 @@ export class LvDataTableComponent implements OnInit {
     getFieldType(value: any): string | void {
         if (typeof value === 'number') {
             return 'number';
-        } else if (value instanceof Date || this.isDateValid(value)) {
+        } else if (this.isDateValid(value) || (value instanceof Date)) {
             return 'date';
         } else {
             return 'text';
@@ -88,59 +99,61 @@ export class LvDataTableComponent implements OnInit {
     }
 
     isDateValid(dateString: string) {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(([+-]\d{2}:\d{2})|Z)?$/;
+        let res = false;
         if (dateString.length < 8) {
             return false;
         }
         const date = new Date(dateString);
-        return !isNaN(date.getTime());
+        if(dateRegex.test(dateString)){
+            res = true;
+        }
+        
+        return res;
     }
 
 
     formatDataTable() {
-        if (!this.definition) {
-            while (this.httpData.length > 0) {
-                const row = this.httpData.shift();
-                this.rows.push(row);
-            }
-        }
-        if (this.rows) {
-            let total = parseInt((this.rows.length / 15).toString());
-            this.totalPages = total < 0 ? 1 : total;
+        this.pageRows = this.rows;
+        console.log(this.rows.length)
+        if(this.definition){
+            let total = Math.ceil(this.rows.length / 15);
+            this.totalPages = total < 1 ? 1 : total;
             this.pageRows = this.rows.slice(0, 15);
         }
     }
 
 
-    getHttpData() {
-        let objectMapper: LvObjectReader;
-        if (this.requestType === RequestType.POST) {
-            this.http.post(this.url, this.data, this.httpOptions)
-                .subscribe({
-                    next: (res) => {
-                        objectMapper = new LvObjectReader(res);
-                        this.headers = objectMapper.getHeadersForTable();
-                        this.httpData = objectMapper.getRowsForTable();
-                        this.formatDataTable(); // llamada aquí
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                });
-        }
-        if (this.requestType === RequestType.GET) {
-            this.http.get(this.url).subscribe(data => {
-                objectMapper = new LvObjectReader(data);
-                this.headers = objectMapper.getHeadersForTable();
-                this.httpData = objectMapper.getRowsForTable();
-                this.formatDataTable(); // llamada aquí
-            });
-        }
-    }
+    // getHttpData() {
+    //     let objectMapper: LvObjectReader;
+    //     if (this.requestType === RequestType.POST) {
+    //         this.http.post(this.url, this.data, this.httpOptions)
+    //             .subscribe({
+    //                 next: (res) => {
+    //                     objectMapper = new LvObjectReader(res);
+    //                     this.headers = objectMapper.getHeadersForTable();
+    //                     this.httpData = objectMapper.getRowsForTable();
+    //                     this.formatDataTable(); // llamada aquí
+    //                 },
+    //                 error: (err) => {
+    //                     console.log(err);
+    //                 }
+    //             });
+    //     }
+    //     if (this.requestType === RequestType.GET) {
+    //         this.http.get(this.url).subscribe(data => {
+    //             objectMapper = new LvObjectReader(data);
+    //             this.headers = objectMapper.getHeadersForTable();
+    //             this.httpData = objectMapper.getRowsForTable();
+    //             this.formatDataTable(); // llamada aquí
+    //         });
+    //     }
+    // }
 
     modifyData() {
         if (this.definition) {
             this.rows.forEach((row) => {
-                this.modifiedData.forEach((modData) => {
+                this.modifiedData.forEach((modData: any) => {
                     if (this.rows.indexOf(row) === this.modifiedData.indexOf(modData)) {
                         row = modData;
                     }
@@ -148,10 +161,11 @@ export class LvDataTableComponent implements OnInit {
             });
             this.updatedDataTable.emit(this.rows);
         } else {
-            this.http.put(this.url, this.modifiedData, this.httpOptions)
+            let data = { ...this.modifiedData };
+            this.http.put(this.url, data, this.httpOptions)
                 .subscribe({
-                    next: (res) => {
-                        alert('Se han modificado los datos: ' + res);
+                    next: (res: any) => {
+                        alert(res.message);
                     },
                     error: (err) => {
                         console.log(err);
@@ -169,15 +183,21 @@ export class LvDataTableComponent implements OnInit {
     }
 
     updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
-        if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value)) {
-            row[fieldIndex] = parseFloat(event.value);
+        this.modifiedData = this.rowFormatter(row);
+        if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value) && event.value.match(/[a-zA-Z]+/) === null) {
+            this.modifiedData[this.headers[fieldIndex]] = parseFloat(event.value);
         } else {
-            row[fieldIndex] = event.value;
+            this.modifiedData[this.headers[fieldIndex]] = event.value;
         }
+    }
 
-        this.modifiedData[rowIndex] = {
-            ...row
-        };
+    rowFormatter(row: any) {
+        let resRow: any = [];
+        row.forEach((item: any) => {
+            let index = row.indexOf(item);
+            resRow[this.headers[index]] = item;
+        });
+        return resRow;
     }
 
     async deleteRow(event: any) {
@@ -244,17 +264,18 @@ export class LvDataTableComponent implements OnInit {
     }
 
     requestPage() {
-        this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
-            let res: any = data;
-            this.pageRows = res;
-        });
-
-        if (this.flagFirstExecution) {
-            this.http.get(this.url + '/totalpages').subscribe(data => {
-                let res: any = data;
-                this.totalPages = res;
-                this.flagFirstExecution = false;
-            });
+        let objectMapper: LvObjectReader;
+        try{
+            if(this.currentPage){
+                this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
+                    objectMapper = new LvObjectReader(data);
+                    this.headers = objectMapper.getHeadersForTable();
+                    this.rows = objectMapper.getRowsForTable();
+                    this.formatDataTable(); // llamada aquí
+                });
+            }
+        }catch(error){
+            alert(error);
         }
     }
 
