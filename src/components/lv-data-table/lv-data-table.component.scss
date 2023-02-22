@@ -52,7 +52,7 @@
   }
 
   .lv-table {
-    width: 98%;
+    width: 95vw;
     border-collapse: collapse;
     font-family: $table-font-family;
     font-size: $table-font-size;
@@ -73,6 +73,7 @@
     background-color: transparent;
     width: 100%;
     padding: 10px;
+    min-width: 70px;
     margin: 0;
     font-size: inherit;
   }

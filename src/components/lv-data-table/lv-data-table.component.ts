@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+
 
 
 @Component({
@@ -35,6 +36,7 @@ export class LvDataTableComponent implements OnInit {
     @Input() headerColor: string[] = [];
     @Input() readOnly: boolean = false;
     @Input() detailUrl: string = '';
+    @Output() updatedDataTable: EventEmitter<any[][]> = new EventEmitter();
 
     headers: string[] = [];
     fields: string = '';
@@ -47,6 +49,13 @@ export class LvDataTableComponent implements OnInit {
     totalPages: number = 0;
     pageRows: any[][] = [];
     flagFirstExecution: boolean = true;
+    flagDeleteUpdate: boolean = false;
+
+    private httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json'
+        })
+    };
 
     constructor(private http: HttpClient, private router: Router) { }
 
@@ -55,16 +64,17 @@ export class LvDataTableComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.definition) {
+            if (!this.flagDeleteUpdate) {
+                this.rows = this.definition.rows;
+            }
             this.headers = this.definition.header;
-            this.rows = this.definition.rows;
             this.formatDataTable();
         } else {
             this.getHttpData();
         }
-        let total = parseInt((this.rows.length / 15).toString());
-        console.log(total)
-        this.totalPages = total < 0 ? 1 : total;
-        this.pageRows = this.rows.slice(0, 15);
+        if (this.rows) {
+            this.getCurrentPage();
+        }
     }
 
     getFieldType(value: any): string | void {
@@ -87,27 +97,24 @@ export class LvDataTableComponent implements OnInit {
 
 
     formatDataTable() {
-        while (this.httpData.length > 0) {
-            const row = this.httpData.shift();
-            this.rows.push(row);
+        if (!this.definition) {
+            while (this.httpData.length > 0) {
+                const row = this.httpData.shift();
+                this.rows.push(row);
+            }
         }
-        let total = parseInt((this.rows.length / 15).toString());
-        console.log(total)
-        this.totalPages = total < 0 ? 1 : total;
-        this.pageRows = this.rows.slice(0, 15);
+        if (this.rows) {
+            let total = parseInt((this.rows.length / 15).toString());
+            this.totalPages = total < 0 ? 1 : total;
+            this.pageRows = this.rows.slice(0, 15);
+        }
     }
 
 
     getHttpData() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
         let objectMapper: LvObjectReader;
         if (this.requestType === RequestType.POST) {
-            this.http.post(this.url, this.data, httpOptions)
+            this.http.post(this.url, this.data, this.httpOptions)
                 .subscribe({
                     next: (res) => {
                         objectMapper = new LvObjectReader(res);
@@ -131,35 +138,41 @@ export class LvDataTableComponent implements OnInit {
     }
 
     modifyData() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        this.http.put(this.url, this.modifiedData, httpOptions)
-            .subscribe({
-                next: (res) => {
-                    alert('Se han modificado los datos: ' + res);
-                },
-                error: (err) => {
-                    console.log(err);
-                }
+        if (this.definition) {
+            this.rows.forEach((row) => {
+                this.modifiedData.forEach((modData) => {
+                    if (this.rows.indexOf(row) === this.modifiedData.indexOf(modData)) {
+                        row = modData;
+                    }
+                });
             });
+            this.updatedDataTable.emit(this.rows);
+        } else {
+            this.http.put(this.url, this.modifiedData, this.httpOptions)
+                .subscribe({
+                    next: (res) => {
+                        alert('Se han modificado los datos: ' + res);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                });
+        }
     }
 
     async canRemove(url: string): Promise<boolean> {
+        if (this.definition) {
+            return true;
+        }
         const res: any = await firstValueFrom(this.http.get(url));
-        return res.isValid;
+        return res;
     }
 
     updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
         if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value)) {
             row[fieldIndex] = parseFloat(event.value);
-            console.log(row[fieldIndex]);
         } else {
             row[fieldIndex] = event.value;
-            console.log(typeof row[fieldIndex]);
         }
 
         this.modifiedData[rowIndex] = {
@@ -168,18 +181,25 @@ export class LvDataTableComponent implements OnInit {
     }
 
     async deleteRow(event: any) {
-        let url = this.url + '/' + event[0];
-        if (await this.canRemove(url + '/canRemove')) {
-            this.http.delete(url)
-                .subscribe({
-                    next: (res) => {
-                        alert('Se han borrado los registros: ' + res);
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                });
+        this.flagDeleteUpdate = true;
+        if (!this.definition) {
+            let url = this.url + '/' + event[0];
+            if (await this.canRemove(url + '/canRemove')) {
+                this.http.delete(url)
+                    .subscribe({
+                        next: (res) => {
+                            alert('Se han borrado los registros: ' + res);
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+            }
+        } else {
+            this.rows.splice(this.rows.indexOf(event), 1);
+            this.updatedDataTable.emit(this.rows);
         }
+        this.ngOnInit();
     }
 
     redirectToDetail() {
@@ -194,10 +214,7 @@ export class LvDataTableComponent implements OnInit {
         }
 
         if (this.definition) {
-            let second = this.currentPage * 15;
-            let first = second - 15;
-            let tmpArray = this.rows.slice(first, second);
-            this.pageRows = tmpArray;
+            this.getCurrentPage();
         } else {
             this.requestPage();
         }
@@ -211,24 +228,28 @@ export class LvDataTableComponent implements OnInit {
             this.currentPage++;
         }
 
-        if(this.definition){
-            let second = this.currentPage * 15;
-            let first = second - 15;
-            let tmpArray = this.rows.slice(first, second);
-            this.pageRows = tmpArray;
-        }else{
+        if (this.definition) {
+            this.getCurrentPage();
+        } else {
             this.requestPage();
         }
-        
+
     }
 
-    requestPage(){
+    getCurrentPage() {
+        let second = this.currentPage * 15;
+        let first = second - 15;
+        let tmpArray = this.rows.slice(first, second);
+        this.pageRows = tmpArray;
+    }
+
+    requestPage() {
         this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
             let res: any = data;
             this.pageRows = res;
         });
 
-        if(this.flagFirstExecution){
+        if (this.flagFirstExecution) {
             this.http.get(this.url + '/totalpages').subscribe(data => {
                 let res: any = data;
                 this.totalPages = res;

@@ -133,4 +133,8 @@ export class AppComponent {
     colorHeaderTabla: string[] = ['black', 'white']
     //url = 'https://randomuser.me/api/?results=2000'
     url = 'https://jsonplaceholder.typicode.com/users'
+    
+    setDefinition(data: any){
+        console.log('hi')
+    }
 }
