@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ModalType } from 'src/constants/lv-constans';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
+import { LvModalService } from 'src/services/lv-modal.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
     title = 'lv-utilities-ng';
     slides: LvSlide[] = [
         { nombre: 'example 1', descripcion: 'example 1', src: 'assets/slides-samples/example1.jpg' },
@@ -54,6 +56,17 @@ export class AppComponent {
     url = 'https://localhost:7176/api/entities'
     
     setDefinition(data: any){
-        console.log('hi')
+        console.log('definition updated')
+    }
+
+    constructor(){
+
+    }
+    ngAfterViewInit(): void {
+       
+    }
+
+    ngOnInit(): void {
+       
     }
 }

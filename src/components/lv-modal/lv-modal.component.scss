@@ -1,0 +1,98 @@
+@import '../../variables.scss';
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    .container {
+        margin: 10px;
+        min-width: 500px;
+        max-width: 800px;
+        max-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 50%;
+        flex-direction: column;
+        z-index: 2;
+    
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            width: calc(100% - 10px);
+            height: 35px;
+            max-width: 100%;
+
+            img {
+                max-width: 20px;
+                cursor: pointer;
+            }
+        }
+    
+        .body {
+            display: flex;
+            flex-direction: row;
+            width: calc(100% - 1.67px);
+            min-height: 130px;
+            height: 100%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            border-left: 1px solid rgb(235, 233, 233);
+            border-right: 1px solid rgb(235, 233, 233);
+            background-color: white;
+            overflow: auto;
+        }
+    
+        .actions {
+            display: flex;
+            flex-direction: row;
+            padding: 5px;
+            width: calc(100% - 10px);
+            max-width: 100%;
+            flex-direction: row-reverse;
+            height: 35px;
+
+            @include button-style();
+        }
+    }
+    
+    .information, .confirmation {
+        background-color: darkcyan;
+        color: white;
+    }
+    
+    .warning {
+        background-color: rgb(255, 145, 0);
+        color: white;
+    }
+    
+    .error {
+        background-color: red;
+        color: white;
+    }
+    
+    .succes {
+        background-color: rgb(76, 175, 80);
+        color: white;
+    }
+}
+
+@media(max-width: 768px) {
+    .page {
+        .container {
+            min-width: 95vw;
+            max-width: 95vw;
+        }
+    }
+}

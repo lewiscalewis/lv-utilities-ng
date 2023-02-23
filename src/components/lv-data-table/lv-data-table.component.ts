@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { RequestType } from 'src/constants/lv-constans';
+import { ModalType, RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { LvModalService } from 'src/services/lv-modal.service';
 
 
 
@@ -13,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
     templateUrl: './lv-data-table.component.html',
     styleUrls: ['./lv-data-table.component.scss'],
 })
-export class LvDataTableComponent implements OnInit {
+export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     /**
      * Url de la que quiere sacar la información para pintar la tabla
@@ -47,7 +48,7 @@ export class LvDataTableComponent implements OnInit {
     modifiedData: any = [];
     currentPage: number = 1;
     totalPages: number = 0;
-    pageRows: any[][] = [];
+    pageRows: any = [];
     flagFirstExecution: boolean = true;
     flagDeleteUpdate: boolean = false;
 
@@ -57,12 +58,9 @@ export class LvDataTableComponent implements OnInit {
         })
     };
 
-    constructor(private http: HttpClient, private router: Router) { }
+    constructor(private http: HttpClient, private router: Router, private viewRef: ViewContainerRef, private modalService: LvModalService) { }
 
-    //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
-
-
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         if (this.definition !== undefined) {
             if (!this.flagDeleteUpdate) {
                 this.rows = this.definition.rows;
@@ -86,6 +84,12 @@ export class LvDataTableComponent implements OnInit {
         if (this.rows) {
             this.getCurrentPage();
         }
+    }
+
+    //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
+
+
+    ngOnInit(): void {
     }
 
     getFieldType(value: any): string | void {
@@ -115,7 +119,6 @@ export class LvDataTableComponent implements OnInit {
 
     formatDataTable() {
         this.pageRows = this.rows;
-        console.log(this.rows.length)
         if(this.definition){
             let total = Math.ceil(this.rows.length / 15);
             this.totalPages = total < 1 ? 1 : total;
@@ -165,10 +168,10 @@ export class LvDataTableComponent implements OnInit {
             this.http.put(this.url, data, this.httpOptions)
                 .subscribe({
                     next: (res: any) => {
-                        alert(res.message);
+                        this.modalService.showModal(ModalType.SUCCES, 'Información sobre la operación', res.message, this.viewRef);
                     },
                     error: (err) => {
-                        console.log(err);
+                        this.modalService.showModal(ModalType.ERROR, 'Información sobre la operación', err, this.viewRef);
                     }
                 });
         }
@@ -201,29 +204,40 @@ export class LvDataTableComponent implements OnInit {
     }
 
     async deleteRow(event: any) {
-        this.flagDeleteUpdate = true;
-        if (!this.definition) {
-            let url = this.url + '/' + event[0];
-            if (await this.canRemove(url + '/canRemove')) {
-                this.http.delete(url)
-                    .subscribe({
-                        next: (res) => {
-                            alert('Se han borrado los registros: ' + res);
-                        },
-                        error: (err) => {
-                            console.log(err);
+        this.modalService
+            .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
+            .getUserResponse().subscribe(async res => {
+                if(res){
+                    this.flagDeleteUpdate = true;
+                    if (this.definition) {
+                        this.rows.splice(this.rows.indexOf(event), 1);
+                        this.pageRows = this.rows;
+                        this.updatedDataTable.emit(this.rows);
+                    } else {
+                        let url = this.url + '/' + event[0];
+                        if (await this.canRemove(url + '/canRemove')) {
+                            this.http.delete(url)
+                                .subscribe({
+                                    next: (res: any) => {
+                                        this.modalService.showModal(ModalType.SUCCES, 'Se han borrado los registros', res.message, this.viewRef);
+                                    },
+                                    error: (err) => {
+                                        this.modalService.showModal(ModalType.ERROR, 'Error', err, this.viewRef);
+                                    }
+                                });
                         }
-                    });
-            }
-        } else {
-            this.rows.splice(this.rows.indexOf(event), 1);
-            this.updatedDataTable.emit(this.rows);
-        }
-        this.ngOnInit();
+                    }
+                    this.ngOnInit();
+                }
+            });
     }
 
-    redirectToDetail() {
-        this.router.navigate([this.detailUrl]);
+    redirectToDetail(id: any) {
+        if(this.detailUrl){
+            this.router.navigate([this.detailUrl]);
+        }else{
+            this.router.navigate([this.url+'/'+id]);
+        }   
     }
 
     previousPage() {
@@ -274,8 +288,8 @@ export class LvDataTableComponent implements OnInit {
                     this.formatDataTable(); // llamada aquí
                 });
             }
-        }catch(error){
-            alert(error);
+        }catch(error: any){
+            this.modalService.showModal(ModalType.ERROR, 'Error', error, this.viewRef);
         }
     }
 

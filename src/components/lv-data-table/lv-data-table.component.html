@@ -11,7 +11,7 @@
                 <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
                     <td [hidden]="readOnly">
                         <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
-                        <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail()">
+                        <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
                     </td>
                     <td *ngFor="let field of row; let o=index">
                         <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">

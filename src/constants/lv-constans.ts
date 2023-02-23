@@ -4,3 +4,11 @@ export enum RequestType {
     PUT,
     DELETE
 }
+
+export enum ModalType {
+    CONFIRMATION,
+    ERROR,
+    WARNING,
+    SUCCES,
+    INFORMATION
+}
