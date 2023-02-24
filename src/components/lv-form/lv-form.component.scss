@@ -11,6 +11,7 @@ fieldset {
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     max-width: 80vw;
+    padding: 30px;
 
     legend {
         background-color: white;
@@ -31,7 +32,6 @@ fieldset {
     align-items: flex-start;
     justify-content: center;
     align-content: center;
-    padding: 50px;
     width: 100%;
 
     .lv-actions {
@@ -44,14 +44,16 @@ fieldset {
 .lv-container {
     display: flex;
     width: 100%;
-    max-width: 100%;
+    max-width: 960px;
     max-height: 450px;
-    gap: 30px;
+    gap: 50px;
+    align-self: center;
+    justify-self: center;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
-    overflow: auto;
+    overflow-x: auto;
 
     .error {
         border: 1px solid red;
@@ -63,11 +65,18 @@ fieldset {
 }
 
 .lv-label {
-    display: block;
-    margin: 0.7em;
+    display: flex;
+    flex-direction: column;
     font-weight: bold;
     width: fit-content;
+    min-width: 200px;
     max-width: 300px;
+
+    input {
+        max-width: 200px;
+    }
+      
+      
 }
 
 .lv-input {
