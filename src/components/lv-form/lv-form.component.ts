@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ANGULAR_FORM_VALIDATORS, HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
 import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { LvModalService } from 'src/services/lv-modal.service';
 
@@ -20,27 +20,22 @@ export class LvFormComponent implements OnInit {
      * name: 'Nombre del formulario que se mostrara encapsulado'
      * }
      */
-    @Input() definition: LvFormDefinition = {
-        fields: [{ label: 'example', inputType: 'text', formControlName: 'example' }],
-        showResetButton: false,
-        url: ''
-    };
+    @Input() definition!: LvFormDefinition;
 
     @Output() getForm: EventEmitter<FormGroup> = new EventEmitter();
 
     form: FormGroup;
+    flagIsInvalid: boolean = true;
+    errors: any[] = [];
 
     constructor(private http: HttpClient, private modalService: LvModalService, private viewRef: ViewContainerRef) {
         this.form = new FormGroup({});
-        this.definition.fields.forEach(field => {
-            this.form.addControl(field.formControlName, new FormControl());
-        });
     }
 
     onSubmit() {
         this.http.post(this.definition.url, this.form.value, HTTP_OPTIONS).subscribe({
             next: (data) => {
-                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef);
+                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef).getUserResponse().subscribe(res=>location.reload());
             },
             error: (err) => {
                 this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.viewRef);
@@ -49,10 +44,40 @@ export class LvFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        //esperamos un ciclo de Angular por si acaso
-        setTimeout(() => {
+        if (this.definition) {
+            this.definition.fields.forEach(field => {
+                this.form.addControl(field.formControlName, new FormControl());
+                let control = this.form.get(field.formControlName);
+                if(control && field.validators){
+                    control.addValidators(field.validators);
+                }
+            });
             this.getForm.emit(this.form);
-        });
+            this.form.valueChanges.subscribe((changes) => {
+                let formIsValid = true;
+                this.definition.fields.forEach(field => {
+                    let control = this.form.get(field.formControlName);
+                    let controlError = control?.errors;
+                    if (control?.errors) {
+                        formIsValid = false;
+                        this.errors[this.definition.fields.indexOf(field)] = {
+                            error: controlError,
+                            show: this.form.dirty ? true : false
+                        };
+                    }else{
+                        this.errors[this.definition.fields.indexOf(field)] = {
+                            error: '',
+                            show: this.form.dirty ? true : false
+                        };
+                    }
+                });
+                if (!this.form.touched && !this.form.dirty || !formIsValid) {
+                    this.flagIsInvalid = true;
+                } else {
+                    this.flagIsInvalid = false;
+                }
+            });
+        }
     }
 
     reset() {

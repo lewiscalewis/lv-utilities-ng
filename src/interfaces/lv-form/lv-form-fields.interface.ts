@@ -1,3 +1,5 @@
+import { Validator, ValidatorFn, Validators } from "@angular/forms";
+
 /**Interfaz que deben cumplir obligatoriamente los campos de los LvForm */
 export interface LvFormFieldDefinition {
     /**Label que se mostrará en el campo */
@@ -13,4 +15,7 @@ export interface LvFormFieldDefinition {
      * DOM con el id
      */
     id?: string;
+    //validator?: ValidatorFn;
+    validators?: ValidatorFn[]
+
 }

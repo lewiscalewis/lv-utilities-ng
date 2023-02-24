@@ -4,7 +4,10 @@
   max-width: 95vw;
   padding: 10px;
   background-color: $main-theme;
-  border: 1px solid black;
+  border: 1px solid lightgray;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 3px;
+  max-width: 3000px;
 
   .action-container {
     .actions {
@@ -76,7 +79,8 @@
   }
 
   .lv-table {
-    max-width: 94vw;
+    min-width: 100%;
+    max-width: 100%;
     border-collapse: collapse;
     font-family: $table-font-family;
     font-size: $table-font-size;

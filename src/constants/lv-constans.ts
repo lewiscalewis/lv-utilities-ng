@@ -1,4 +1,5 @@
 import { HttpHeaders } from "@angular/common/http";
+import { Validators } from "@angular/forms";
 
 export enum RequestType {
     POST,
@@ -20,3 +21,13 @@ export const HTTP_OPTIONS = {
         'Content-Type': 'application/json'
     })
 };
+
+export const ANGULAR_FORM_VALIDATORS = {
+    required: Validators.required,
+    minLength: Validators.minLength,
+    maxLength: Validators.maxLength,
+    min: Validators.min,
+    max: Validators.max,
+    email: Validators.email,
+    pattern: Validators.pattern
+  };

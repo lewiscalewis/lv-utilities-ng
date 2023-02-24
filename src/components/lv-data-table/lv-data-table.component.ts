@@ -236,7 +236,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                                     next: (res: any) => {
                                         this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
                                             .getUserResponse().subscribe((res) => {
-                                                window.open('.')
+                                                location.reload();
                                             });
                                     },
                                     error: (err) => {

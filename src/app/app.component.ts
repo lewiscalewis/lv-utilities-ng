@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup } from '@angular/forms';
+import { Form, FormGroup, Validators } from '@angular/forms';
 import { ModalType } from 'src/constants/lv-constans';
+import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
 import { LvModalService } from 'src/services/lv-modal.service';
@@ -56,30 +57,21 @@ export class AppComponent implements OnInit, AfterViewInit {
     //url = 'https://jsonplaceholder.typicode.com/users'
     url = 'https://localhost:7176/api/entities';
 
-    formDef = {
+    formDef: LvFormDefinition = {
         fields: [
-            { label: 'example', inputType: 'text', formControlName: 'example', id: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-            { label: 'example', inputType: 'text', formControlName: 'example' },
-
+            { label: 'ID', inputType: 'number', formControlName: 'id', id: 'example', validators: [Validators.required] },
+            { label: 'NOMBRE', inputType: 'text', formControlName: 'nombre', validators: [Validators.required] },
+            { label: 'DESCRIPCION', inputType: 'text', formControlName: 'descripcion', validators: [Validators.required] },
+            { label: 'FECHA REGISTRO', inputType: 'date', formControlName: 'fecha', validators: [Validators.required] },
         ],
         showResetButton: true,
-        url: '',
+        url: 'https://localhost:7176/api/entities',
         name: 'mi mega form'
     };
 
     getForm(form: FormGroup) {
         console.log(form)
-        const inputElement = document.getElementById('example') as HTMLInputElement;
-        console.log(inputElement)
+        let inputElement = document.getElementById('example') as HTMLInputElement;
         inputElement.addEventListener('blur', () => {
             console.log('Control lost focus');
         });

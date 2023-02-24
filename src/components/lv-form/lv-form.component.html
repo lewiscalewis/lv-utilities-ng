@@ -2,7 +2,7 @@
     <legend *ngIf="definition.name">{{ definition.name }}</legend>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="lv-form">
         <div class="lv-container">
-            <label *ngFor="let field of definition.fields" class="lv-label">
+            <label *ngFor="let field of definition.fields; let i = index" class="lv-label">
                 {{ field.label }}:
                 <input
                     [id]="field.id"
@@ -11,10 +11,18 @@
                     [placeholder]="field.placeHolder ? field.placeHolder : 'Escriba aquí'"
                     class="lv-input"
                 />
+                <div class="error" *ngIf="form.get(field.formControlName)?.invalid && (form.touched || form.dirty)">
+                    <div *ngIf="form.get(field.formControlName)?.hasError('required')">Este campo es requerido</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('email')">No cumple con el formato de un email</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('maxLength')">El valor es demasiado largo</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('minLength')">El valor es demasiado corto</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('pattern')">El valor no cumple con el patrón esperado</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('min')">El valor es demasiado pequeño</div>
+                    <div *ngIf="form.get(field.formControlName)?.hasError('max')">El valor es demasiado grande</div>
+                </div>
             </label>
         </div>
         <div class="lv-actions">
-            <button class="success-color" type="submit">Guardar</button>
             <button
                 type="reset"
                 class="danger"
@@ -23,6 +31,7 @@
             >
                 Limpiar formulario
             </button>
+            <button class="success-color" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
         </div>
     </form>
 </fieldset>
