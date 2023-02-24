@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ModalType, RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, NotFoundError } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
 
 
@@ -70,14 +70,14 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         } else {
             if (this.flagFirstExecution) {
                 this.http.get(this.url + '/totalpages').subscribe(data => {
-                    if(data){
+                    if (data) {
                         let res: any = data;
                         this.totalPages = res;
                         this.flagFirstExecution = false;
-                        
+
                     }
                 });
-            } 
+            }
             this.requestPage();
             //this.getHttpData();
         }
@@ -109,17 +109,17 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             return false;
         }
         const date = new Date(dateString);
-        if(dateRegex.test(dateString)){
+        if (dateRegex.test(dateString)) {
             res = true;
         }
-        
+
         return res;
     }
 
 
     formatDataTable() {
         this.pageRows = this.rows;
-        if(this.definition){
+        if (this.definition) {
             let total = Math.ceil(this.rows.length / 15);
             this.totalPages = total < 1 ? 1 : total;
             this.pageRows = this.rows.slice(0, 15);
@@ -139,7 +139,12 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     //                     this.formatDataTable(); // llamada aquí
     //                 },
     //                 error: (err) => {
-    //                     console.log(err);
+    //                     let error = new HttpErrorResponse(err)
+    // let errorText = '';
+    // for (let key in error.error.errors) {
+    //     errorText += `${key}: ${error.error.errors[key]}\n`;
+    // }
+    // this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
     //                 }
     //             });
     //     }
@@ -168,10 +173,15 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             this.http.put(this.url, data, this.httpOptions)
                 .subscribe({
                     next: (res: any) => {
-                        this.modalService.showModal(ModalType.SUCCES, 'Información sobre la operación', res.message, this.viewRef);
+                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', res.message, this.viewRef);
                     },
                     error: (err) => {
-                        this.modalService.showModal(ModalType.ERROR, 'Información sobre la operación', err, this.viewRef);
+                        let error = new HttpErrorResponse(err)
+                        let errorText = '';
+                        for (let key in error.error.errors) {
+                            errorText += `${key}: ${error.error.errors[key]}\n`;
+                        }
+                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                     }
                 });
         }
@@ -207,7 +217,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.modalService
             .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
             .getUserResponse().subscribe(async res => {
-                if(res){
+                if (res) {
                     this.flagDeleteUpdate = true;
                     if (this.definition) {
                         this.rows.splice(this.rows.indexOf(event), 1);
@@ -219,25 +229,41 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                             this.http.delete(url)
                                 .subscribe({
                                     next: (res: any) => {
-                                        this.modalService.showModal(ModalType.SUCCES, 'Se han borrado los registros', res.message, this.viewRef);
+                                        this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
+                                            .getUserResponse().subscribe((res)=>{
+                                                window.open('.')
+                                            });
                                     },
                                     error: (err) => {
-                                        this.modalService.showModal(ModalType.ERROR, 'Error', err, this.viewRef);
+                                        let error: HttpErrorResponse | string = new HttpErrorResponse(err)
+                                        let errorText = '';
+                                        if (err) {
+                                            if(error.error){
+                                                for (let key in error.error.errors) {
+                                                    errorText += `${key}: ${error.error.errors[key]}\n`;
+                                                }
+                                            }else{
+                                                errorText = 'No se ha encontrado la página con url: ' + url;
+                                            }
+                                        } else {
+                                            errorText = 'No se ha encontrado la página con url: ' + url;
+                                        }
+
+                                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                                     }
                                 });
                         }
                     }
-                    this.ngOnInit();
                 }
             });
     }
 
     redirectToDetail(id: any) {
-        if(this.detailUrl){
+        if (this.detailUrl) {
             this.router.navigate([this.detailUrl]);
-        }else{
-            this.router.navigate([this.url+'/'+id]);
-        }   
+        } else {
+            this.router.navigate([this.url + '/' + id]);
+        }
     }
 
     previousPage() {
@@ -279,8 +305,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     requestPage() {
         let objectMapper: LvObjectReader;
-        try{
-            if(this.currentPage){
+        try {
+            if (this.currentPage) {
                 this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
                     objectMapper = new LvObjectReader(data);
                     this.headers = objectMapper.getHeadersForTable();
@@ -288,7 +314,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     this.formatDataTable(); // llamada aquí
                 });
             }
-        }catch(error: any){
+        } catch (error: any) {
             this.modalService.showModal(ModalType.ERROR, 'Error', error, this.viewRef);
         }
     }

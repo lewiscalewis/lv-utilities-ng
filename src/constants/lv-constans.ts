@@ -9,6 +9,6 @@ export enum ModalType {
     CONFIRMATION,
     ERROR,
     WARNING,
-    SUCCES,
+    SUCCESS,
     INFORMATION
 }
