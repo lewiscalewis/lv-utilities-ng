@@ -12,6 +12,14 @@ export class LvModalService {
 
     constructor() { }
 
+    /**
+     * 
+     * @param modalType Usar ModalType (ModalType.SUCCESS, ModalType.CONFIRMATION...)
+     * @param header 
+     * @param message 
+     * @param viewContainerRef inyecta en el constructor una variable de tipo ViewContainerRef y pasala por parámetro aquí
+     * @returns 
+     */
     showModal(modalType: ModalType, header: string, message: string, viewContainerRef: ViewContainerRef) {
         const componentRef = viewContainerRef.createComponent(LvModalComponent);
         componentRef.instance.modalType = modalType;

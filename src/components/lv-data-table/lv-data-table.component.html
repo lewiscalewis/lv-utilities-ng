@@ -3,11 +3,14 @@
         <table class="lv-table" [style.color]="rowColor[1]">
             <thead>
               <tr>
-                <th [style.background-color]="headerColor[0]" [style.color]="headerColor[1]" [hidden]="readOnly">Acciones</th>
+                <th [style.background-color]="headerColor[0]" [style.color]="headerColor[1]" [hidden]="readOnly">
+                    <img src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                    <img src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                </th>
                 <th *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">{{header}}</th>
               </tr>
             </thead>
-            <tbody class="table-controls">  
+            <tbody class="table-controls" *ngIf="!flagReduceOrExpandShow">  
                 <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
                     <td [hidden]="readOnly">
                         <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
@@ -28,7 +31,7 @@
     </div>
     <div class="action-container" *ngIf="!readOnly">
         <div class="actions" [style.background-color]="headerColor[0]">
-            <button (click)="modifyData()">Guardar</button>
+            <button (click)="modifyData()" class="succes-color">Guardar</button>
             <div class="pagination">
                 <div class="before" (click)="previousPage()" *ngIf="totalPages > 1">&lt;</div>
                 <div class="current-page">{{ currentPage }}/{{totalPages}}</div>

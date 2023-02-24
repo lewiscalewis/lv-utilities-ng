@@ -14,7 +14,7 @@ $table-text-color: #333;
 $table-mobile-font-size: 14px;
 $table-mobile-td-max-width: 200px;
 $table-mobile-td-max-height: 100px;
-$table-mobile-td-overflow: 'scroll';
+$table-mobile-td-overflow: 'auto';
 $actions-color: #333;
 
 $shadow-color: rgba(255, 255, 255, 0.5); // Color del sombreado
@@ -22,23 +22,30 @@ $shadow-blur: 10px; // Desenfoque del sombreado
 $shadow-offset: 0px 0px; // Desplazamiento horizontal y vertical del sombreado
 $shadow-size: 0px; // Tamaño del sombreado
 
+//temas
+$succes-color: rgb(76, 175, 80);
+
+//botones
+$background-button: rgb(199, 199, 199);
+
 @mixin button-style() {
     button {
         display: inline-block;
         margin-left: 10px;
         margin-right: 10px;
-        border: 1px solid black;
+        border: 1px solid white;
         padding: 0.5rem;
         padding-left: 15px;
         padding-right: 15px;
         border-radius: 0.25rem;
         background-color: white;
         cursor: pointer;
-        transition: background-color 0.2s ease;
         box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+        transition: background-color 0.7s ease-in-out;
 
         &:hover {
-            background-color: whitesmoke;
+            color: white;
+            background-color: $background-button;
             box-shadow: $shadow-offset $shadow-blur $shadow-size $shadow-color;
         }
     }

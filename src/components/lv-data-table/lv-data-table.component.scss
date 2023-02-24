@@ -10,6 +10,17 @@
     .actions {
         margin-top: 20px;
         @include button-style();
+
+        .succes-color {
+            background-color: $succes-color;
+            color: white;
+
+            &:hover {
+                border: 1px solid $succes-color;
+                background-color: white;
+                color: $succes-color
+            }
+        }
         
         display: flex;
         flex-direction: row;
@@ -23,22 +34,46 @@
 
             .after{
                 border: 1px solid black;
+                border-radius: 0.25rem;
                 margin-left: 10px;
                 padding: 5px;
                 text-align: center;
                 cursor: pointer;
+                transition: background-color, 0.500s ease-in-out;
+                background-color: white;
+
+                &:hover {
+                    background-color: $background-button;
+                    color: white;
+                }
             }
             .before{
                 border: 1px solid black;
                 padding: 5px;
+                border-radius: 0.25rem;
                 text-align: center;
                 cursor: pointer;
+                transition: background-color, 0.500s ease-in-out;
+                background-color: white;
+
+                &:hover {
+                    background-color: $background-button;
+                    color: white;
+                }
             }
             .current-page{
                 border: 1px solid black;
+                border-radius: 0.25rem;
                 margin-left: 10px;
                 padding: 5px;
                 text-align: center;
+                transition: background-color, 0.500s ease-in-out;
+                background-color: white;
+
+                &:hover {
+                    background-color: $background-button;
+                    color: white;
+                }
             }
         }
       }
@@ -48,11 +83,11 @@
     max-width: 95vw;
     margin: 0 auto;
     max-height: 600px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .lv-table {
-    width: 95vw;
+    max-width: 94vw;
     border-collapse: collapse;
     font-family: $table-font-family;
     font-size: $table-font-size;

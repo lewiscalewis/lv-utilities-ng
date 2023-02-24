@@ -51,6 +51,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     pageRows: any = [];
     flagFirstExecution: boolean = true;
     flagDeleteUpdate: boolean = false;
+    flagReduceOrExpandShow: boolean = false;
 
     private httpOptions = {
         headers: new HttpHeaders({
@@ -316,6 +317,14 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             }
         } catch (error: any) {
             this.modalService.showModal(ModalType.ERROR, 'Error', error, this.viewRef);
+        }
+    }
+
+    reduceOrExpand(){
+        if(this.flagReduceOrExpandShow){
+            this.flagReduceOrExpandShow = false; //se expande
+        }else{
+            this.flagReduceOrExpandShow = true; //se contrae
         }
     }
 

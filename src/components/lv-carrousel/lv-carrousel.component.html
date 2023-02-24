@@ -5,9 +5,9 @@
       </div>
     </div>
     <div class="user-controls">
-      <button [style]="selectorBoton" class="previous" (click)="anterior()">Anterior</button>
+      <button [ngClass]="selectorBoton" class="previous" (click)="anterior()">Anterior</button>
       <div class="slide-name">{{slides[currentIndex].nombre}}</div>
-      <button [style]="selectorBoton" class="next" (click)="siguiente()">Siguiente</button>
+      <button [ngClass]="selectorBoton" class="next" (click)="siguiente()">Siguiente</button>
     </div>
   </div>
   
