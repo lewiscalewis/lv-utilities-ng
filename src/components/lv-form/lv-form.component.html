@@ -1,3 +1,28 @@
-<p>
-  lv-form works!
-</p>
+<fieldset>
+    <legend *ngIf="definition.name">{{ definition.name }}</legend>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="lv-form">
+        <div class="lv-container">
+            <label *ngFor="let field of definition.fields" class="lv-label">
+                {{ field.label }}:
+                <input
+                    [id]="field.id"
+                    [type]="field.inputType"
+                    [formControlName]="field.formControlName"
+                    [placeholder]="field.placeHolder ? field.placeHolder : 'Escriba aquí'"
+                    class="lv-input"
+                />
+            </label>
+        </div>
+        <div class="lv-actions">
+            <button class="success-color" type="submit">Guardar</button>
+            <button
+                type="reset"
+                class="danger"
+                (click)="reset()"
+                *ngIf="definition.showResetButton"
+            >
+                Limpiar formulario
+            </button>
+        </div>
+    </form>
+</fieldset>

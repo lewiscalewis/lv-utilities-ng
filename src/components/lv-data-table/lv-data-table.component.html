@@ -31,7 +31,7 @@
     </div>
     <div class="action-container" *ngIf="!readOnly">
         <div class="actions" [style.background-color]="headerColor[0]">
-            <button (click)="modifyData()" class="succes-color">Guardar</button>
+            <button [disabled]="!isDirty" (click)="modifyData()" [ngClass]="{'disabled': !isDirty, 'success-color': isDirty}">Guardar</button>
             <div class="pagination">
                 <div class="before" (click)="previousPage()" *ngIf="totalPages > 1">&lt;</div>
                 <div class="current-page">{{ currentPage }}/{{totalPages}}</div>

@@ -3,24 +3,13 @@
 .container {
   max-width: 95vw;
   padding: 10px;
-  background-color: $table-header-color;
+  background-color: $main-theme;
   border: 1px solid black;
 
   .action-container {
     .actions {
         margin-top: 20px;
         @include button-style();
-
-        .succes-color {
-            background-color: $succes-color;
-            color: white;
-
-            &:hover {
-                border: 1px solid $succes-color;
-                background-color: white;
-                color: $succes-color
-            }
-        }
         
         display: flex;
         flex-direction: row;
@@ -152,7 +141,7 @@
   .lv-table thead th {
     padding: 12px 16px;
     font-weight: bold;
-    background-color: $table-header-color;
+    background-color: $main-theme;
     border: none;
     color: $table-action-icons-color;
     text-transform: uppercase;

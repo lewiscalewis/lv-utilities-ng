@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormGroup } from '@angular/forms';
 import { ModalType } from 'src/constants/lv-constans';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
@@ -46,27 +47,56 @@ export class AppComponent implements OnInit, AfterViewInit {
             [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
             [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
             [5, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-          
+
         ]
     }
     colorTabla: string[] = ['darkcyan', 'white', 'darkcyan', 'white'];
     colorHeaderTabla: string[] = ['black', 'white']
     //url = 'https://randomuser.me/api/?results=2000'
     //url = 'https://jsonplaceholder.typicode.com/users'
-    url = 'https://localhost:7176/api/entities'
-    
-    setDefinition(data: any){
+    url = 'https://localhost:7176/api/entities';
+
+    formDef = {
+        fields: [
+            { label: 'example', inputType: 'text', formControlName: 'example', id: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+            { label: 'example', inputType: 'text', formControlName: 'example' },
+
+        ],
+        showResetButton: true,
+        url: '',
+        name: 'mi mega form'
+    };
+
+    getForm(form: FormGroup) {
+        console.log(form)
+        const inputElement = document.getElementById('example') as HTMLInputElement;
+        console.log(inputElement)
+        inputElement.addEventListener('blur', () => {
+            console.log('Control lost focus');
+        });
+    }
+
+    setDefinition(data: any) {
         console.log('definition updated')
     }
 
-    constructor(){
+    constructor() {
 
     }
     ngAfterViewInit(): void {
-       
+
     }
 
     ngOnInit(): void {
-       
+
     }
 }

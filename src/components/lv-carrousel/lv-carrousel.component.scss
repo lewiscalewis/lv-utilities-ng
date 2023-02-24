@@ -6,8 +6,8 @@
     align-items: center;
     position: relative;
     max-width: 600px;
-    background-color: black;
-    border: 3px solid black;
+    background-color: $main-theme;
+    border: 3px solid $main-theme;
     border-radius: 6px;
 
     .image-container-wrapper {
@@ -44,7 +44,7 @@
         align-items: center;
         width: 100%;
         height: 100%;
-        color: #fff;
+        color: black;
         padding: 10px;
 
         .slide-name {

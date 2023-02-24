@@ -1,4 +1,4 @@
-$table-header-color: #eee;
+$main-theme: #eee;
 $table-row-odd-color: #f5f5f5;
 $table-row-even-color: #efefef;
 $table-row-hover-color: #ddd;
@@ -14,7 +14,7 @@ $table-text-color: #333;
 $table-mobile-font-size: 14px;
 $table-mobile-td-max-width: 200px;
 $table-mobile-td-max-height: 100px;
-$table-mobile-td-overflow: 'auto';
+$table-mobile-td-overflow: "auto";
 $actions-color: #333;
 
 $shadow-color: rgba(255, 255, 255, 0.5); // Color del sombreado
@@ -26,7 +26,7 @@ $shadow-size: 0px; // Tamaño del sombreado
 $succes-color: rgb(76, 175, 80);
 
 //botones
-$background-button: rgb(199, 199, 199);
+$background-button: #007bff;
 
 @mixin button-style() {
     button {
@@ -41,12 +41,46 @@ $background-button: rgb(199, 199, 199);
         background-color: white;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
-        transition: background-color 0.7s ease-in-out;
+        transition: background-color 0.4s ease-in-out;
 
         &:hover {
             color: white;
             background-color: $background-button;
             box-shadow: $shadow-offset $shadow-blur $shadow-size $shadow-color;
+        }
+    }
+
+    .success-color {
+        background-color: $succes-color;
+        color: white;
+
+        &:hover {
+            border: 1px solid $succes-color;
+            background-color: white;
+            color: $succes-color;
+        }
+    }
+
+    .danger {
+        background-color: red;
+        color: white;
+
+        &:hover {
+            border: 1px solid red;
+            background-color: white;
+            color: red;
+        }
+    }
+
+    .disabled {
+        background-color: rgb(168, 165, 165);
+        border: 1px solid rgb(168, 165, 165);
+        color: grey;
+
+        &:hover {
+            background-color: rgb(168, 165, 165);
+            border: 1px solid rgb(168, 165, 165);
+            color: grey;
         }
     }
 }

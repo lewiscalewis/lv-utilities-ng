@@ -41,7 +41,7 @@ export class LvCarrouselComponent implements OnInit, AfterViewChecked {
 
     constructor(private animationBuilder: AnimationBuilder) { }
     ngAfterViewChecked(): void {
-        this.selector = 'background-color: ' + this.color + ';' + 'border: 3px solid ' + this.color;
+        this.selector = '';
         this.selectorBoton = this.colorBotones.length !== 0 ? 'background-color: ' + this.colorBotones[0] + '; ' + 'color: ' + this.colorBotones[1] : 'background-color: white; color: black;';
     }
 
