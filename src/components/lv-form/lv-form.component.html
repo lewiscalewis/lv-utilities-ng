@@ -11,7 +11,7 @@
                     [placeholder]="field.placeHolder ? field.placeHolder : 'Escriba aquí'"
                     class="lv-input"
                 />
-                <div class="error" *ngIf="form.get(field.formControlName)?.invalid && (form.touched || form.dirty)">
+                <div class="error" [ngClass]="{'show-error': form.get(field.formControlName)?.invalid && form.get(field.formControlName)?.touched}">
                     <div *ngIf="form.get(field.formControlName)?.hasError('required')">Este campo es requerido</div>
                     <div *ngIf="form.get(field.formControlName)?.hasError('email')">No cumple con el formato de un email</div>
                     <div *ngIf="form.get(field.formControlName)?.hasError('maxLength')">El valor es demasiado largo</div>
@@ -23,15 +23,16 @@
             </label>
         </div>
         <div class="lv-actions">
-            <button
+            <div class="lv-subcontainer">
+                <button
                 type="reset"
-                class="danger"
+                class="danger action-button"
                 (click)="reset()"
-                *ngIf="definition.showResetButton"
-            >
-                Limpiar formulario
-            </button>
-            <button class="success-color" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
+                *ngIf="definition.showResetButton">
+                    Limpiar formulario
+                 </button>
+                 <button class="success-color action-button" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
+            </div>
         </div>
     </form>
 </fieldset>

@@ -30,7 +30,7 @@ $background-button: #007bff;
 
 @mixin button-style() {
     button {
-        display: inline-block;
+        display: flex;
         margin-left: 10px;
         margin-right: 10px;
         border: 1px solid white;

@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { ANGULAR_FORM_VALIDATORS, HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
+import { FormControl, FormGroup } from '@angular/forms';
+import { HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
 import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { LvModalService } from 'src/services/lv-modal.service';
 
@@ -32,10 +32,11 @@ export class LvFormComponent implements OnInit {
         this.form = new FormGroup({});
     }
 
+    //TODO: AÑADIR VALIDAR AL DARLE A GUARDAR, ROJO -> ERRORES, VERDER -> CORRECTO
     onSubmit() {
         this.http.post(this.definition.url, this.form.value, HTTP_OPTIONS).subscribe({
             next: (data) => {
-                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef).getUserResponse().subscribe(res=>location.reload());
+                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef).getUserResponse().subscribe(res => location.reload());
             },
             error: (err) => {
                 this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.viewRef);
@@ -48,7 +49,7 @@ export class LvFormComponent implements OnInit {
             this.definition.fields.forEach(field => {
                 this.form.addControl(field.formControlName, new FormControl());
                 let control = this.form.get(field.formControlName);
-                if(control && field.validators){
+                if (control && field.validators) {
                     control.addValidators(field.validators);
                 }
             });
@@ -64,7 +65,7 @@ export class LvFormComponent implements OnInit {
                             error: controlError,
                             show: this.form.dirty ? true : false
                         };
-                    }else{
+                    } else {
                         this.errors[this.definition.fields.indexOf(field)] = {
                             error: '',
                             show: this.form.dirty ? true : false
