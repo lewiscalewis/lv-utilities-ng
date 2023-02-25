@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, Form, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalType } from 'src/constants/lv-constans';
 import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
@@ -59,20 +59,29 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     formDef: LvFormDefinition = {
         fields: [
-            { label: 'ID', inputType: 'number', formControlName: 'id', id: 'example', validators: [Validators.required] },
-            { label: 'NOMBRE', inputType: 'text', formControlName: 'nombre', validators: [Validators.required] },
-            { label: 'DESCRIPCION', inputType: 'text', formControlName: 'descripcion', validators: [Validators.required] },
-            { label: 'FECHA REGISTRO', inputType: 'date', formControlName: 'fecha', validators: [Validators.required] },
-            { label: 'SID', inputType: 'number', formControlName: 'sid', id: 'example', validators: [Validators.required] },
-            { label: 'ESTADO', inputType: 'text', formControlName: 'estado', validators: [Validators.required] },
-            { label: 'DOCUMENTOS', inputType: 'file', formControlName: 'documento', validators: [Validators.required] },
-            { label: 'FECHA EXPIRACION', inputType: 'date', formControlName: 'expira', validators: [Validators.required] },
+            { label: 'ID', inputType: 'number', formControlName: 'id', id: 'example', required: true },
+            { label: 'NOMBRE', inputType: 'text', formControlName: 'nombre',  },
+            { label: 'DESCRIPCION', inputType: 'text', formControlName: 'descripcion', validators:[this.customValidator()] },
+            { label: 'FECHA REGISTRO', inputType: 'date', formControlName: 'fecha',  },
+            { label: 'SID', inputType: 'number', formControlName: 'sid', id: 'example', validators:[Validators.max(1)] },
+            { label: 'ESTADO', inputType: 'text', formControlName: 'estado',  },
+            { label: 'DOCUMENTOS', inputType: 'file', formControlName: 'documento',  },
+            { label: 'FECHA EXPIRACION', inputType: 'date', formControlName: 'expira',  },
         ],
         showResetButton: true,
         url: 'https://localhost:7176/api/entities',
         name: 'mi mega form'
     };
 
+    customValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+          if (control.value && control.value.toLowerCase() === 'gay') {
+            return { gayError: true };
+          }
+          return null;
+        };
+      }
+      
     getForm(form: FormGroup) {
         console.log(form)
         let inputElement = document.getElementById('example') as HTMLInputElement;

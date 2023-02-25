@@ -16,6 +16,7 @@ export interface LvFormFieldDefinition {
      */
     id?: string;
     //validator?: ValidatorFn;
+    required?: boolean;
     validators?: ValidatorFn[]
 
 }

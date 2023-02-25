@@ -3,13 +3,16 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="lv-form">
         <div class="lv-container">
             <label *ngFor="let field of definition.fields; let i = index" class="lv-label">
-                {{ field.label }}:
+                <div class="label">
+                    {{ field.label }} <div style="color: red" *ngIf="form.get(field.formControlName)?.hasError('required')">{{ field.required ? '*' : '' }}</div>
+                </div>
                 <input
                     [id]="field.id"
                     [type]="field.inputType"
                     [formControlName]="field.formControlName"
                     [placeholder]="field.placeHolder ? field.placeHolder : 'Escriba aquí'"
                     class="lv-input"
+                    [required]="field.required ? field.required : false"
                 />
                 <div class="error" [ngClass]="{'show-error': form.get(field.formControlName)?.invalid && form.get(field.formControlName)?.touched}">
                     <div *ngIf="form.get(field.formControlName)?.hasError('required')">Este campo es requerido</div>
@@ -19,6 +22,10 @@
                     <div *ngIf="form.get(field.formControlName)?.hasError('pattern')">El valor no cumple con el patrón esperado</div>
                     <div *ngIf="form.get(field.formControlName)?.hasError('min')">El valor es demasiado pequeño</div>
                     <div *ngIf="form.get(field.formControlName)?.hasError('max')">El valor es demasiado grande</div>
+                    <div *ngIf="form.get(field.formControlName)?.invalid && !(form.get(field.formControlName)?.hasError('required') || form.get(field.formControlName)?.hasError('email') || form.get(field.formControlName)?.hasError('maxLength') || form.get(field.formControlName)?.hasError('minLength') || form.get(field.formControlName)?.hasError('pattern') || form.get(field.formControlName)?.hasError('min') || form.get(field.formControlName)?.hasError('max'))">
+                        Este campo no es válido, demasiado largo o corto
+                    </div>
+                      
                 </div>
             </label>
         </div>
@@ -31,6 +38,7 @@
                 *ngIf="definition.showResetButton">
                     Limpiar formulario
                  </button>
+                 <div style="color: red" *ngIf="form.invalid">Rellena los campos obligatorios (*)</div>
                  <button class="success-color action-button" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
             </div>
         </div>
