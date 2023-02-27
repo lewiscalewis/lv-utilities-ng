@@ -207,26 +207,32 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         } else {
             console.log(this.modifiedData);
             console.log(this.newRows)
-            let data = { ...{...this.modifiedData} };
+            let data = [...this.modifiedData];
             this.http.put(this.url, data, HTTP_OPTIONS)
                 .subscribe({
                     next: (res: any) => {
-                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', res.message, this.viewRef);
+                        console.log(res); // Imprimir la respuesta completa en la consola
+                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
                     },
                     error: (err) => {
                         let response = new HttpErrorResponse(err);
                         let errorText = '';
                         let index = 1;
 
-                        for (let message in response.error.errors) {
-                            console.log(message)
-                            errorText += `${index}: ${response.error.errors[message]}\n`;
-                            index++;
+                        if(response.status === 200){
+                            this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
+                        }else{
+                            for (let message in response.error.errors) {
+                                console.log(message)
+                                errorText += `${index}: ${response.error.errors[message]}\n`;
+                                index++;
+                            }
+    
+                            this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                         }
-
-                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                     }
                 });
+
         }
         this.isDirty = false;
     }
@@ -240,7 +246,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     updateFieldValue(event: any, row: any, fieldIndex: number, isNew?: boolean) {
-        let cleanRow = this.rowFormatter(row);
+        let cleanRow = { ...this.rowFormatter(row) };
 
         if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value) && event.value.match(/[a-zA-Z]+/) === null) {
             cleanRow[this.headers[fieldIndex]] = parseFloat(event.value);
@@ -270,7 +276,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                         r = cleanRow;
                     }
                 });
-            }else{
+            } else {
                 this.modifiedData.push(cleanRow);
             }
         }
