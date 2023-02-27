@@ -30,10 +30,11 @@ $background-button: #007bff;
 
 @mixin button-style() {
     button {
-        display: flex;
+        display: inline-block;
         margin-left: 10px;
         margin-right: 10px;
         border: 1px solid white;
+        text-align: center;
         padding: 0.5rem;
         padding-left: 15px;
         padding-right: 15px;
@@ -42,6 +43,7 @@ $background-button: #007bff;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
         transition: background-color 0.4s ease-in-out;
+        vertical-align: center;
 
         &:hover {
             color: white;

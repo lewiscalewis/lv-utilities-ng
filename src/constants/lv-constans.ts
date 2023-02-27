@@ -31,3 +31,9 @@ export const ANGULAR_FORM_VALIDATORS = {
     email: Validators.email,
     pattern: Validators.pattern
   };
+
+  export enum States {
+    NEW,
+    MODIFIED,
+    DELETED
+  }

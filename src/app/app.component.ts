@@ -40,14 +40,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             [5, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
             [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
             [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [5, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [0, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
-            [5, 'levi', 'iker', 'elias', 'jesus', 'aaron', new Date()],
 
         ]
     }

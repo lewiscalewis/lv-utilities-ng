@@ -8,7 +8,7 @@ export class LvObjectReader {
   }
 
   private getHeaders(data: any): string[] {
-    return Object.keys(data[0]);
+    return Object.keys(data[0] ? data[0] : data);
   }
 
   private getRows(data: any): any[] {

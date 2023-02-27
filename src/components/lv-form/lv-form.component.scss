@@ -2,15 +2,12 @@
 
 fieldset {
     display: flex;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    max-width: 95vw;
+    margin: 20px 0;
+    max-width: 80vw;
     max-height: 600px;
     border: 1px solid lightgray;
-    border-radius: 3px;
+    border-radius: 6px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    max-width: 80vw;
-    padding: 0;
 
     legend {
         background-color: white;
@@ -30,14 +27,14 @@ fieldset {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
-    align-content: center;
     width: 100%;
 
     .lv-actions {
         display: flex;
         justify-content: space-between;
         margin-top: 1em;
+        padding-bottom: 10px;
+        background-color: white;
     }
 }
 
@@ -46,14 +43,12 @@ fieldset {
     width: 100%;
     max-width: 960px;
     max-height: 450px;
-    gap: 50px;
-    align-self: center;
-    justify-self: center;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: wrap;
     overflow-y: auto;
+    gap: 30px;
 
     .error {
         border: 1px solid red;
@@ -75,25 +70,21 @@ fieldset {
     flex-direction: column;
     font-weight: bold;
     width: fit-content;
+    width: 100%;
     min-width: 200px;
-
-    .label {
-        display: flex;
-        flex-direction: row;
-    }
+    max-width: 300px;
 
     input {
-        max-width: 200px;
-    }
-
-    input[type="file"] {
-        max-width: 300px;
+        max-width: calc(100% - 15px);
+        margin: 0;
+        margin-top: 10px;
     }
 }
 
 .lv-input {
-    display: block;
+    display: flex;
     width: 100%;
+    max-width: 100%;
     padding: 0.5em;
     margin: 1em;
     border: 1px solid #ccc;
@@ -102,28 +93,23 @@ fieldset {
 
 .lv-actions {
     position: sticky;
-    padding: 20px;
     bottom: 0;
-    width: calc(100% - 40px);
-    margin: 0;
-    background-color: $main-theme;
+    width: calc(100%);
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
     justify-content: center;
     align-content: center;
+    align-self: center;
     @include button-style();
 
     .lv-subcontainer {
         display: flex;
         flex-direction: row;
         margin: 0 auto;
-        flex-wrap: nowrap;
         justify-content: space-between;
         width: 100%;
         max-width: 900px;
     }
-    
 }
 
 .lv-actions button:hover {
@@ -137,18 +123,11 @@ fieldset {
 }
 
 @media (max-width: 720px) {
-    fieldset {
-        .lv-form {
-            .lv-container {
-                .lv-label {
-                    max-width: 200px;
+    .lv-label {
 
-                    input[type="file"] {
-                        max-width: 200px;
-                        margin: 0;
-                    }
-                }
-            }
+        input {
+            width: calc(100% - 15px);
+            margin: 0;
         }
     }
 }

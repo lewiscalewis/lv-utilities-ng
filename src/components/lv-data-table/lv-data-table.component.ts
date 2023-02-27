@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { HTTP_OPTIONS, ModalType, RequestType } from 'src/constants/lv-constans';
+import { HTTP_OPTIONS, ModalType, RequestType, States } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom, NotFoundError } from 'rxjs';
@@ -45,7 +45,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     httpData: any[] = [];
     tmpField: any;
     field: any;
-    modifiedData: any = [];
+    modifiedData: string[][] = [];
     currentPage: number = 1;
     totalPages: number = 0;
     pageRows: any = [];
@@ -53,6 +53,12 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     flagDeleteUpdate: boolean = false;
     flagReduceOrExpandShow: boolean = false;
     isDirty: boolean = false;
+    newRow: boolean = false;
+    newRowObject: any = [];
+    newRowCleanObject: any[] = [];
+    valueTypes: string[] = [];
+    newRows: any[] = [];
+    private rowId = 0;
 
     constructor(private http: HttpClient, private router: Router, private viewRef: ViewContainerRef, private modalService: LvModalService) { }
 
@@ -95,26 +101,51 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     getFieldType(value: any): string | void {
         if (typeof value === 'number') {
+            if(this.valueTypes.length < this.headers.length){
+                this.valueTypes.push('number')
+            }
             return 'number';
         } else if (this.isDateValid(value) || (value instanceof Date)) {
+            if(this.valueTypes.length < this.headers.length){
+                this.valueTypes.push('date')
+            }
             return 'date';
+        } else if (this.isEmailValid(value)) {
+            if(this.valueTypes.length < this.headers.length){
+                this.valueTypes.push('email')
+            }
+            return 'email';
         } else {
+            if(this.valueTypes.length < this.headers.length){
+                this.valueTypes.push('text')
+            }
             return 'text';
         }
     }
 
-    isDateValid(dateString: string) {
-        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(([+-]\d{2}:\d{2})|Z)?$/;
-        let res = false;
-        if (dateString.length < 8) {
-            return false;
-        }
-        const date = new Date(dateString);
-        if (dateRegex.test(dateString)) {
-            res = true;
-        }
+    isEmailValid(email: string): boolean {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+      }
+      
 
-        return res;
+    isDateValid(dateString: string) {
+        if(dateString){
+            const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(([+-]\d{2}:\d{2})|Z)?$/;
+            let res = false;
+            if (dateString.length < 8) {
+                return false;
+            }
+            const date = new Date(dateString);
+            if (dateRegex.test(dateString)) {
+                res = true;
+            }
+    
+            return res;
+        }
+        
+        return false;
+        
     }
 
 
@@ -122,7 +153,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.pageRows = this.rows;
         if (this.definition) {
             let total = Math.ceil(this.rows.length / 15);
-            this.totalPages = total < 1 ? 1 : total;
+            this.totalPages = total <= 1 ? 1 : total;
             this.pageRows = this.rows.slice(0, 15);
         }
     }
@@ -160,8 +191,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     // }
 
     modifyData() {
-        console.log(this.isDirty)
         if (this.definition) {
+            this.rows = [...this.rows, ...this.newRows];
             this.rows.forEach((row) => {
                 this.modifiedData.forEach((modData: any) => {
                     if (this.rows.indexOf(row) === this.modifiedData.indexOf(modData)) {
@@ -172,6 +203,10 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han guardado los datos correctamente', this.viewRef);
             this.updatedDataTable.emit(this.rows);
         } else {
+            console.log(this.modifiedData);
+            console.log(this.newRows)
+            let newArray = [...this.modifiedData, ...this.newRows]
+            console.log(newArray)
             let data = { ...this.modifiedData };
             this.http.put(this.url, data, HTTP_OPTIONS)
                 .subscribe({
@@ -179,11 +214,16 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                         this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', res.message, this.viewRef);
                     },
                     error: (err) => {
-                        let error = new HttpErrorResponse(err)
+                        let response = new HttpErrorResponse(err);
                         let errorText = '';
-                        for (let key in error.error.errors) {
-                            errorText += `${key}: ${error.error.errors[key]}\n`;
+                        let index = 1;
+                        
+                        for (let message in response.error.errors) {
+                            console.log(message)
+                            errorText += `${index}: ${response.error.errors[message]}\n`;
+                            index++;
                         }
+                        
                         this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                     }
                 });
@@ -199,14 +239,15 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         return res;
     }
 
-    updateFieldValue(event: any, rowIndex: number, row: any, fieldIndex: number) {
-        this.modifiedData = this.rowFormatter(row);
+    updateFieldValue(event: any, row: any, fieldIndex: number, rowIndex?: number,) {
+        let cleanRow = this.rowFormatter(row);
         if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value) && event.value.match(/[a-zA-Z]+/) === null) {
-            this.modifiedData[this.headers[fieldIndex]] = parseFloat(event.value);
+            cleanRow[this.headers[fieldIndex]] = parseFloat(event.value);
         } else {
-            this.modifiedData[this.headers[fieldIndex]] = event.value;
+            cleanRow[this.headers[fieldIndex]] = event.value;
         }
         this.isDirty = true;
+        this.modifiedData.push(cleanRow);
     }
 
     rowFormatter(row: any) {
@@ -218,16 +259,26 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         return resRow;
     }
 
-    async deleteRow(event: any) {
-        this.modalService
+    async deleteRow(event: any, newRow?: boolean) {
+        if(newRow){
+            this.newRow = false;
+            let index = this.newRows.indexOf(event);
+            this.newRows.splice(index, 1);
+            if(!!this.modifiedData && !!this.newRows){
+                this.isDirty = false;
+            }
+        }else{
+            this.modalService
             .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
             .getUserResponse().subscribe(async res => {
                 if (res) {
                     this.flagDeleteUpdate = true;
                     if (this.definition) {
                         this.rows.splice(this.rows.indexOf(event), 1);
-                        this.pageRows = this.rows;
-                        this.updatedDataTable.emit(this.rows);
+                        this.formatDataTable();
+                        this.currentPage = this.currentPage > this.totalPages ? this.currentPage - 1 : this.currentPage;
+                        this.getCurrentPage();
+                        this.ngOnInit();
                     } else {
                         let url = this.url + '/' + event[0];
                         if (await this.canRemove(url + '/canRemove')) {
@@ -236,7 +287,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                                     next: (res: any) => {
                                         this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
                                             .getUserResponse().subscribe((res) => {
-                                                location.reload();
+                                                this.requestPage();
+                                                //this.getCurrentPage();
                                             });
                                     },
                                     error: (err) => {
@@ -261,6 +313,27 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     }
                 }
             });
+        }
+    }
+
+    addRow(){
+        this.newRowObject = [];
+        this.headers.forEach(header =>{
+            switch(this.valueTypes[this.headers.indexOf(header)]){
+                case 'number': this.newRowObject[header] = 0;
+                    break;
+                case 'text': this.newRowObject[header] = ''
+                    break;
+                case 'date': this.newRowObject[header] = new Date();
+                    break;
+                case 'email': this.newRowObject[header] = '';
+                    break;
+            }
+        });
+        this.isDirty = true;
+        this.newRowCleanObject = Object.values(this.newRowObject);
+        this.newRows.push(this.newRowObject);
+        this.newRow = true;
     }
 
     redirectToDetail(id: any) {

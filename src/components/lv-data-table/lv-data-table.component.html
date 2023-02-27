@@ -10,7 +10,22 @@
                 <th *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">{{header}}</th>
               </tr>
             </thead>
-            <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow" *ngIf="!flagReduceOrExpandShow">  
+            <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow" *ngIf="!flagReduceOrExpandShow">
+                <tr *ngFor="let row of newRows" style="border: 1px solid rgb(88, 88, 88);">
+                    <td [hidden]="readOnly">
+                        <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                        <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                    </td>
+                    <td *ngFor="let field of newRowCleanObject; let o=index">
+                        <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
+                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase type="email" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
+                            <input *ngSwitchDefault type="text" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
+                        </ng-container>
+                        <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                    </td>
+                </tr>  
                 <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
                     <td [hidden]="readOnly">
                         <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
@@ -18,9 +33,10 @@
                     </td>
                     <td *ngFor="let field of row; let o=index">
                         <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (blur)="updateFieldValue($event.target, i, row, o)" [readonly]="readOnly">
-                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (blur)="updateFieldValue($event.target, i, row, o)" [readonly]="readOnly">
-                            <input *ngSwitchDefault type="text" [ngModel]="field" (blur)="updateFieldValue($event.target, i, row, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (blur)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (blur)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase type="email" [ngModel]="field" (blur)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                            <input *ngSwitchDefault type="text" [ngModel]="field" (blur)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                         </ng-container>
                         <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
                     </td>
@@ -32,6 +48,7 @@
     <div class="action-container" *ngIf="!readOnly">
         <div class="actions" [style.background-color]="headerColor[0]">
             <button [disabled]="!isDirty" (click)="modifyData()" [ngClass]="{'disabled': !isDirty, 'success-color': isDirty}">Guardar</button>
+            <button (click)="addRow()">Añadir</button>
             <div class="pagination">
                 <div class="before" (click)="previousPage()" *ngIf="totalPages > 1">&lt;</div>
                 <div class="current-page">{{ currentPage }}/{{totalPages}}</div>
