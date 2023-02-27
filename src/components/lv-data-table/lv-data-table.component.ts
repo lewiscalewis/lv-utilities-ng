@@ -45,7 +45,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     httpData: any[] = [];
     tmpField: any;
     field: any;
-    modifiedData: string[][] = [];
+    modifiedData: any[] = [];
     currentPage: number = 1;
     totalPages: number = 0;
     pageRows: any = [];
@@ -58,6 +58,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     newRowCleanObject: any[] = [];
     valueTypes: string[] = [];
     newRows: any[] = [];
+    rowChanges: any;
+    newRowChanges: any;
     private rowId = 0;
 
     constructor(private http: HttpClient, private router: Router, private viewRef: ViewContainerRef, private modalService: LvModalService) { }
@@ -101,22 +103,22 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     getFieldType(value: any): string | void {
         if (typeof value === 'number') {
-            if(this.valueTypes.length < this.headers.length){
+            if (this.valueTypes.length < this.headers.length) {
                 this.valueTypes.push('number')
             }
             return 'number';
         } else if (this.isDateValid(value) || (value instanceof Date)) {
-            if(this.valueTypes.length < this.headers.length){
+            if (this.valueTypes.length < this.headers.length) {
                 this.valueTypes.push('date')
             }
             return 'date';
         } else if (this.isEmailValid(value)) {
-            if(this.valueTypes.length < this.headers.length){
+            if (this.valueTypes.length < this.headers.length) {
                 this.valueTypes.push('email')
             }
             return 'email';
         } else {
-            if(this.valueTypes.length < this.headers.length){
+            if (this.valueTypes.length < this.headers.length) {
                 this.valueTypes.push('text')
             }
             return 'text';
@@ -126,11 +128,11 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     isEmailValid(email: string): boolean {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(email);
-      }
-      
+    }
+
 
     isDateValid(dateString: string) {
-        if(dateString){
+        if (dateString) {
             const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(([+-]\d{2}:\d{2})|Z)?$/;
             let res = false;
             if (dateString.length < 8) {
@@ -140,12 +142,12 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             if (dateRegex.test(dateString)) {
                 res = true;
             }
-    
+
             return res;
         }
-        
+
         return false;
-        
+
     }
 
 
@@ -205,9 +207,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         } else {
             console.log(this.modifiedData);
             console.log(this.newRows)
-            let newArray = [...this.modifiedData, ...this.newRows]
-            console.log(newArray)
-            let data = { ...this.modifiedData };
+            let data = { ...{...this.modifiedData} };
             this.http.put(this.url, data, HTTP_OPTIONS)
                 .subscribe({
                     next: (res: any) => {
@@ -217,13 +217,13 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                         let response = new HttpErrorResponse(err);
                         let errorText = '';
                         let index = 1;
-                        
+
                         for (let message in response.error.errors) {
                             console.log(message)
                             errorText += `${index}: ${response.error.errors[message]}\n`;
                             index++;
                         }
-                        
+
                         this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
                     }
                 });
@@ -239,15 +239,43 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         return res;
     }
 
-    updateFieldValue(event: any, row: any, fieldIndex: number, rowIndex?: number,) {
+    updateFieldValue(event: any, row: any, fieldIndex: number, isNew?: boolean) {
         let cleanRow = this.rowFormatter(row);
+
         if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value) && event.value.match(/[a-zA-Z]+/) === null) {
             cleanRow[this.headers[fieldIndex]] = parseFloat(event.value);
         } else {
             cleanRow[this.headers[fieldIndex]] = event.value;
         }
+
+        if (isNew) {
+            let finded = this.newRowChanges.find((r: any) => r.id === event.value);
+            if (finded) {
+                this.newRowChanges.forEach((r: any) => {
+                    if (r.id === finded.id) {
+                        row[this.headers[fieldIndex]] = event.value;
+                        r = row;
+                    }
+                });
+            } else {
+                row[this.headers[fieldIndex]] = event.value;
+                this.newRowChanges.push(row);
+            }
+        } else {
+            let finded = this.modifiedData.find((r: any) => r.id === event.value);
+            if (finded) {
+                this.modifiedData.forEach((r: any) => {
+                    if (r.id === finded.id) {
+                        row[this.headers[fieldIndex]] = event.value;
+                        r = cleanRow;
+                    }
+                });
+            }else{
+                this.modifiedData.push(cleanRow);
+            }
+        }
+
         this.isDirty = true;
-        this.modifiedData.push(cleanRow);
     }
 
     rowFormatter(row: any) {
@@ -260,66 +288,66 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     async deleteRow(event: any, newRow?: boolean) {
-        if(newRow){
+        if (newRow) {
             this.newRow = false;
             let index = this.newRows.indexOf(event);
             this.newRows.splice(index, 1);
-            if(!!this.modifiedData && !!this.newRows){
+            if (!!this.modifiedData && !!this.newRows) {
                 this.isDirty = false;
             }
-        }else{
+        } else {
             this.modalService
-            .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
-            .getUserResponse().subscribe(async res => {
-                if (res) {
-                    this.flagDeleteUpdate = true;
-                    if (this.definition) {
-                        this.rows.splice(this.rows.indexOf(event), 1);
-                        this.formatDataTable();
-                        this.currentPage = this.currentPage > this.totalPages ? this.currentPage - 1 : this.currentPage;
-                        this.getCurrentPage();
-                        this.ngOnInit();
-                    } else {
-                        let url = this.url + '/' + event[0];
-                        if (await this.canRemove(url + '/canRemove')) {
-                            this.http.delete(url)
-                                .subscribe({
-                                    next: (res: any) => {
-                                        this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
-                                            .getUserResponse().subscribe((res) => {
-                                                this.requestPage();
-                                                //this.getCurrentPage();
-                                            });
-                                    },
-                                    error: (err) => {
-                                        let error: HttpErrorResponse | string = new HttpErrorResponse(err)
-                                        let errorText = '';
-                                        if (err) {
-                                            if (error.error) {
-                                                for (let key in error.error.errors) {
-                                                    errorText += `${key}: ${error.error.errors[key]}\n`;
+                .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
+                .getUserResponse().subscribe(async res => {
+                    if (res) {
+                        this.flagDeleteUpdate = true;
+                        if (this.definition) {
+                            this.rows.splice(this.rows.indexOf(event), 1);
+                            this.formatDataTable();
+                            this.currentPage = this.currentPage > this.totalPages ? this.currentPage - 1 : this.currentPage;
+                            this.getCurrentPage();
+                            this.ngOnInit();
+                        } else {
+                            let url = this.url + '/' + event[0];
+                            if (await this.canRemove(url + '/canRemove')) {
+                                this.http.delete(url)
+                                    .subscribe({
+                                        next: (res: any) => {
+                                            this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
+                                                .getUserResponse().subscribe((res) => {
+                                                    this.requestPage();
+                                                    //this.getCurrentPage();
+                                                });
+                                        },
+                                        error: (err) => {
+                                            let error: HttpErrorResponse | string = new HttpErrorResponse(err)
+                                            let errorText = '';
+                                            if (err) {
+                                                if (error.error) {
+                                                    for (let key in error.error.errors) {
+                                                        errorText += `${key}: ${error.error.errors[key]}\n`;
+                                                    }
+                                                } else {
+                                                    errorText = 'No se ha encontrado la página con url: ' + url;
                                                 }
                                             } else {
                                                 errorText = 'No se ha encontrado la página con url: ' + url;
                                             }
-                                        } else {
-                                            errorText = 'No se ha encontrado la página con url: ' + url;
-                                        }
 
-                                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
-                                    }
-                                });
+                                            this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                                        }
+                                    });
+                            }
                         }
                     }
-                }
-            });
+                });
         }
     }
 
-    addRow(){
+    addRow() {
         this.newRowObject = [];
-        this.headers.forEach(header =>{
-            switch(this.valueTypes[this.headers.indexOf(header)]){
+        this.headers.forEach(header => {
+            switch (this.valueTypes[this.headers.indexOf(header)]) {
                 case 'number': this.newRowObject[header] = 0;
                     break;
                 case 'text': this.newRowObject[header] = ''
@@ -333,6 +361,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.isDirty = true;
         this.newRowCleanObject = Object.values(this.newRowObject);
         this.newRows.push(this.newRowObject);
+        this.newRowChanges = { ...this.newRowChanges, ...this.newRowObject }
         this.newRow = true;
     }
 

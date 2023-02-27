@@ -18,10 +18,10 @@
                     </td>
                     <td *ngFor="let field of newRowCleanObject; let o=index">
                         <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
-                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
-                            <input *ngSwitchCase type="email" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
-                            <input *ngSwitchDefault type="text" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o)" [readonly]="readOnly">
+                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o, true)" [readonly]="readOnly">
+                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (blur)="updateFieldValue($event.target, newRowObject, o, true)" [readonly]="readOnly">
+                            <input *ngSwitchCase type="email" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o, true)" [readonly]="readOnly">
+                            <input *ngSwitchDefault type="text" [ngModel]="field" (blur)="updateFieldValue($event.target, newRowObject, o, true)" [readonly]="readOnly">
                         </ng-container>
                         <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
                     </td>
