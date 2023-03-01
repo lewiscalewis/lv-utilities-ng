@@ -2,6 +2,6 @@
     <app-lv-carrousel [slides]="slides"></app-lv-carrousel>
     <app-lv-data-table  [url]="url" [readOnly]="false" (updatedDataTable)="setDefinition($event)"></app-lv-data-table>
     <app-lv-form [definition]="formDef" (getForm)="getForm($event)"></app-lv-form>
-    <app-lv-sideBar [links]="links" [actions]="sideBarActions" [close]="isClosed"></app-lv-sideBar>
+    <app-lv-sideBar [links]="links" [close]="isClosed"></app-lv-sideBar>
     <button (click)="setClose()">Abrir menu</button>
 </div>

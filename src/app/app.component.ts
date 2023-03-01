@@ -69,13 +69,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         name: 'mi mega form'
     };
 
-    sideBarActions: LvSideBarLinks[] = [
-        { description: 'example1', url: '' },
-        { description: 'example2', url: '' },
-        { description: 'example3', url: '' },
-        { description: 'example4', url: '' },
-        { description: 'example5', url: '' }
-    ];
     links: LvSideBarLinks[] = [
         { description: 'example1', url: '' },
         { description: 'example2', url: '' },

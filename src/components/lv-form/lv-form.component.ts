@@ -41,10 +41,14 @@ export class LvFormComponent implements OnInit {
             error: (err) => {
                 let response: HttpErrorResponse | string = new HttpErrorResponse(err)
                 let errorText = '';
-                for (let message in response.error.errors) {
-                    errorText += `${response.error.errors[message]}\n`;
+                if(response.error.errors){
+                    for (let message in response.error.errors) {
+                        errorText += `${response.error.errors[message]}\n`;
+                    }
+                    this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                }else{
+                    this.modalService.showModal(ModalType.ERROR, 'Error', 'Ha ocurrido un error, no se han podido envíar los datos', this.viewRef);
                 }
-                this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
             }
         });
     }

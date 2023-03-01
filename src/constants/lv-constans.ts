@@ -37,3 +37,9 @@ export const ANGULAR_FORM_VALIDATORS = {
     MODIFIED,
     DELETED
   }
+
+  export enum Position {
+    LEFT,
+    RIGHT,
+    BOTTOM
+  }

@@ -1,4 +1,4 @@
-<div class="lv-container" [ngClass]="{'open': !close, 'close': close}">
+<div class="lv-container" [ngClass]="{'open': !close, 'close': close, 'left': position === posLeft, 'right':  position === posRight, 'bottom': position === posBottom}">
     <div class="burguer-icon">
         <img src="assets/sideBar-icons/burguer-icon.svg" alt="burguer icon" (click)="closeState()">
     </div>
@@ -8,8 +8,6 @@
             <img src="assets/table-icons/detail.svg" alt="go to url">
             <div>{{link.description}}</div> 
         </div>
-    </div>
-    <div class="action">
-
+        <ng-content></ng-content>
     </div>
 </div>

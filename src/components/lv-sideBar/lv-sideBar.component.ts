@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Position } from 'src/constants/lv-constans';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
 @Component({
@@ -9,8 +10,12 @@ import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.intef
 export class LvSideBarComponent implements OnInit {
 
     @Input() links!: LvSideBarLinks[];
-    @Input() actions!: LvSideBarLinks[];
     @Input() close!: boolean;
+    @Input() position: Position = Position.BOTTOM;
+
+    posLeft: Position = Position.LEFT;
+    posRight: Position = Position.RIGHT;
+    posBottom: Position = Position.BOTTOM;
 
   constructor() { }
 
