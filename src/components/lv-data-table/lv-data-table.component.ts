@@ -61,6 +61,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     rowChanges: any[] = [];
     newRowChanges: any[] = [];
     private lastId = 0;
+    loading: boolean = true;
 
     constructor(
         private http: HttpClient, 
@@ -70,12 +71,14 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         private cdRef: ChangeDetectorRef) { }
 
     ngAfterViewInit(): void {
+        this.loading = true;
         if (this.definition !== undefined) {
             if (!this.flagDeleteUpdate) {
                 this.rows = this.definition.rows;
             }
             this.headers = this.definition.header;
             this.formatDataTable();
+            this.loading = false;
         } else {
             if (this.flagFirstExecution) {
                 this.http.get(this.url + '/totalpages').subscribe({
@@ -199,6 +202,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     // }
 
     modifyData() {
+        this.loading = true;
         console.log(this.modifiedData)
         if (this.definition) {
             if (this.newRowChanges.length > 0) {
@@ -231,6 +235,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.newRows = [];
         this.newRowChanges = [];
         this.isDirty = false;
+        this.loading = false;
     }
 
     requestModify(data: any) {
@@ -482,6 +487,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     requestPage() {
+        this.loading = true;
         let objectMapper: LvObjectReader;
         try {
             if (this.currentPage) {
@@ -490,6 +496,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     this.headers = objectMapper.getHeadersForTable();
                     this.rows = objectMapper.getRowsForTable();
                     this.formatDataTable(); // llamada aquí
+                    this.loading = false;
                 });
             }
         } catch (error: any) {

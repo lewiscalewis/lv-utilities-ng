@@ -81,7 +81,7 @@
     }
 
     .lv-table {
-        min-width: 100%;
+        width: 100%;
         max-width: 100%;
         height: 100%;
         max-height: 600px;
@@ -105,6 +105,15 @@
 
         .table-controls-reduce {
             visibility: collapse;
+        }
+
+        .spinner {
+            background-color: $main-theme;
+            display: flex;
+            min-width: 100%;
+            width: 100%;
+            justify-content: center;
+            justify-items: center;
         }
     }
 

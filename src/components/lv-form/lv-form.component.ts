@@ -27,6 +27,7 @@ export class LvFormComponent implements OnInit {
     form: FormGroup;
     flagIsInvalid: boolean = true;
     errors: any[] = [];
+    loading: boolean = true;
 
     constructor(private http: HttpClient, private modalService: LvModalService, private viewRef: ViewContainerRef) {
         this.form = new FormGroup({});
@@ -34,11 +35,14 @@ export class LvFormComponent implements OnInit {
 
     //TODO: AÑADIR VALIDAR AL DARLE A GUARDAR, ROJO -> ERRORES, VERDER -> CORRECTO
     onSubmit() {
+        this.loading = true;
         this.http.post(this.definition.url, this.form.value, HTTP_OPTIONS).subscribe({
             next: (data) => {
+                this.loading = false;
                 this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef).getUserResponse().subscribe(res => location.reload());
             },
             error: (err) => {
+                this.loading = false;
                 let response: HttpErrorResponse | string = new HttpErrorResponse(err)
                 let errorText = '';
                 if(response.error.errors){
@@ -85,6 +89,7 @@ export class LvFormComponent implements OnInit {
                 }
             });
         }
+        this.loading = false;
     }
 
     reset() {

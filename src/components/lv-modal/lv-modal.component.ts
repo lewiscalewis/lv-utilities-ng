@@ -15,6 +15,8 @@ export class LvModalComponent implements OnInit, OnDestroy {
     @Input() public show: boolean = false;
     @Output() public userResponse: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    pageShow: boolean = false;
+
     constructor(private modalService: LvModalService) { }
 
     ngOnDestroy(): void {

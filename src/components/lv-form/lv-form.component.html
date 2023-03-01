@@ -39,7 +39,13 @@
                     Limpiar formulario
                  </button>
                  <div class="required-message" style="color: red" *ngIf="form.invalid"><p>Rellena los campos obligatorios (*)</p></div>
-                 <button class="success-color action-button" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
+                 <ng-container *ngIf="loading; else template">
+                    <app-lv-load-spinner></app-lv-load-spinner>
+                 </ng-container>
+                 <ng-template #template>
+                    <button class="success-color action-button" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
+                 </ng-template>
+                 
             </div>
         </div>
     </form>

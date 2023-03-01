@@ -1,57 +1,61 @@
 <div class="container" [style.background-color]="headerColor[0]">
     <div class="lv-table-container">
         <table class="lv-table" [style.color]="rowColor[1]">
-            <thead>
-              <tr>
-                <th [style.background-color]="headerColor[0]" [style.color]="headerColor[1]" [hidden]="readOnly">
-                    <img style="cursor: pointer;" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                    <img style="cursor: pointer;" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                </th>
-                <th *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">{{header}}</th>
-              </tr>
-            </thead>
-            <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
-                <tr *ngFor="let row of newRows; let x = index">
-                    <td [hidden]="readOnly">
-                        <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                        <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
-                    </td>
-                    <td *ngFor="let field of newRowCleanObject[x]; let o=index">
-                        <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                            <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                            <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                        </ng-container>
-                        <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
-                    </td>
-                </tr> 
-                <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
-                    <td [hidden]="readOnly">
-                        <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
-                        <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
-                    </td>
-                    <td *ngFor="let field of row; let o=index">
-                        <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                            <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                            <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                            <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                            <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                        </ng-container>
-                        <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
-                    </td>
-                </tr>
-            </tbody>
-            
+            <ng-container *ngIf="!loading; else spinner">
+                <thead>
+                    <tr>
+                      <th [style.background-color]="headerColor[0]" [style.color]="headerColor[1]" [hidden]="readOnly">
+                          <img style="cursor: pointer;" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                          <img style="cursor: pointer;" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                      </th>
+                      <th *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">{{header}}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
+                      <tr *ngFor="let row of newRows; let x = index">
+                          <td [hidden]="readOnly">
+                              <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                              <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                          </td>
+                          <td *ngFor="let field of newRowCleanObject[x]; let o=index">
+                              <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
+                                  <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                  <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                  <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                              </ng-container>
+                              <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                          </td>
+                      </tr> 
+                      <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
+                          <td [hidden]="readOnly">
+                              <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
+                              <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
+                          </td>
+                          <td *ngFor="let field of row; let o=index">
+                              <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
+                                  <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                  <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                  <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                              </ng-container>
+                              <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                          </td>
+                      </tr>
+                  </tbody>
+            </ng-container>
+            <ng-template #spinner>
+                <app-lv-load-spinner class="spinner"></app-lv-load-spinner>
+            </ng-template>
           </table>
     </div>
     <div class="action-container" *ngIf="!readOnly">
         <div class="actions" [style.background-color]="headerColor[0]">
             <div>
                 <button [disabled]="!isDirty" (click)="modifyData()" [ngClass]="{'disabled': !isDirty, 'success-color': isDirty}">Guardar</button>
-                <button class="secondary" (click)="addRow()">Añadir</button>
+                <button class="secondary" (click)="addRow()" *ngIf="!loading">Añadir</button>
             </div>
-            <div class="pagination">
+            <div class="pagination" *ngIf="!loading">
                 <div class="before" (click)="previousPage()" *ngIf="totalPages > 1">&lt;</div>
                 <div class="current-page">{{ currentPage }}/{{totalPages}}</div>
                 <div class="after" (click)="nextPage()" *ngIf="totalPages > 1">&gt;</div>

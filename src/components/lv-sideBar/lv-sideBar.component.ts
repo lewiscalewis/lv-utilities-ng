@@ -11,7 +11,7 @@ export class LvSideBarComponent implements OnInit {
 
     @Input() links!: LvSideBarLinks[];
     @Input() close!: boolean;
-    @Input() position: Position = Position.BOTTOM;
+    @Input() position!: Position;
 
     posLeft: Position = Position.LEFT;
     posRight: Position = Position.RIGHT;

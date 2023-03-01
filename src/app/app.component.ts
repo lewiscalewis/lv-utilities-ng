@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
 import { AbstractControl, Form, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { ModalType } from 'src/constants/lv-constans';
+import { ModalType, Position } from 'src/constants/lv-constans';
 import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
@@ -78,6 +78,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     ];
 
     isClosed = true;
+
+    position = Position.LEFT;
 
     setClose(){
         if(this.isClosed){
