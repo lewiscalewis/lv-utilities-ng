@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { HTTP_OPTIONS, ModalType, RequestType, States } from 'src/constants/lv-constans';
@@ -58,11 +58,16 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     newRowCleanObject: any[] = [];
     valueTypes: string[] = [];
     newRows: any[] = [];
-    rowChanges: any;
-    newRowChanges: any;
+    rowChanges: any[] = [];
+    newRowChanges: any[] = [];
     private rowId = 0;
 
-    constructor(private http: HttpClient, private router: Router, private viewRef: ViewContainerRef, private modalService: LvModalService) { }
+    constructor(
+        private http: HttpClient, 
+        private router: Router, 
+        private viewRef: ViewContainerRef, 
+        private modalService: LvModalService,
+        private cdRef: ChangeDetectorRef) { }
 
     ngAfterViewInit(): void {
         if (this.definition !== undefined) {
@@ -158,6 +163,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             this.totalPages = total <= 1 ? 1 : total;
             this.pageRows = this.rows.slice(0, 15);
         }
+        this.cdRef.detectChanges();
     }
 
 
@@ -194,47 +200,88 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     modifyData() {
         if (this.definition) {
-            this.rows = [...this.rows, ...this.newRows];
-            this.rows.forEach((row) => {
-                this.modifiedData.forEach((modData: any) => {
-                    if (this.rows.indexOf(row) === this.modifiedData.indexOf(modData)) {
-                        row = modData;
-                    }
+            if (this.newRowChanges.length > 0) {
+                let formattedData = this.newRowChanges.map((row: any) => {
+                    return Object.values(row) as any[];
                 });
-            });
+                this.rows = [...this.rows, ...formattedData]
+            }
+            if(this.modifiedData.length > 0){
+                this.rows = [...this.rows, ...this.modifiedData];
+            }
             this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han guardado los datos correctamente', this.viewRef);
             this.updatedDataTable.emit(this.rows);
+            this.getCurrentPage();
         } else {
-            console.log(this.modifiedData);
-            console.log(this.newRows)
-            let data = [...this.modifiedData];
-            this.http.put(this.url, data, HTTP_OPTIONS)
-                .subscribe({
-                    next: (res: any) => {
-                        console.log(res); // Imprimir la respuesta completa en la consola
-                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
-                    },
-                    error: (err) => {
-                        let response = new HttpErrorResponse(err);
-                        let errorText = '';
-                        let index = 1;
-
-                        if(response.status === 200){
-                            this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
-                        }else{
-                            for (let message in response.error.errors) {
-                                console.log(message)
-                                errorText += `${index}: ${response.error.errors[message]}\n`;
-                                index++;
-                            }
-    
-                            this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
-                        }
-                    }
+            let data;
+            if (this.newRowChanges.length > 0) {
+                let newChanges = this.newRowChanges.map(row => {
+                    let object = { ...row }
+                    return object;
                 });
-
+                this.requestNew(newChanges);
+            }
+            if(this.modifiedData.length > 0){
+                data = [...this.modifiedData];
+                this.requestModify(data);
+            }
+            this.requestPage();
         }
+        this.newRows = [];
+        this.newRowChanges = [];
         this.isDirty = false;
+    }
+
+    requestModify(data: any) {
+        this.http.put(this.url, data, HTTP_OPTIONS)
+            .subscribe({
+                next: (res: any) => {
+                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
+                },
+                error: (err) => {
+                    let response = new HttpErrorResponse(err);
+                    let errorText = '';
+                    let index = 1;
+
+                    if (response.status === 200) {
+                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
+                    } else {
+                        for (let message in response.error.errors) {
+                            errorText += `${index}: ${response.error.errors[message]}\n`;
+                            index++;
+                        }
+
+                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                    }
+                }
+            });
+        this.modifiedData = [];
+    }
+
+    requestNew(data: any){
+        this.http.post(this.url, data, HTTP_OPTIONS).subscribe({
+            next: (res: any) => {
+                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.viewRef);
+            },
+            error: (err) => {
+                let response = new HttpErrorResponse(err);
+                let errorText = '';
+                let index = 1;
+
+                if (response.status === 200) {
+                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.viewRef);
+                } else {
+                    for (let message in response.error.errors) {
+                        errorText += `${index}: ${response.error.errors[message]}\n`;
+                        index++;
+                    }
+
+                    this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                }
+            }
+        });
+
+        this.newRowChanges = [];
     }
 
     async canRemove(url: string): Promise<boolean> {
@@ -255,7 +302,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         }
 
         if (isNew) {
-            let finded = this.newRowChanges.find((r: any) => r.id === event.value);
+            let finded = this.newRowChanges.find((r: any) => r.id === row.id);
             if (finded) {
                 this.newRowChanges.forEach((r: any) => {
                     if (r.id === finded.id) {
@@ -268,7 +315,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 this.newRowChanges.push(row);
             }
         } else {
-            let finded = this.modifiedData.find((r: any) => r.id === event.value);
+            let finded = this.modifiedData.find((r: any) => r.id === cleanRow.id);
             if (finded) {
                 this.modifiedData.forEach((r: any) => {
                     if (r.id === finded.id) {
@@ -312,7 +359,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                             this.formatDataTable();
                             this.currentPage = this.currentPage > this.totalPages ? this.currentPage - 1 : this.currentPage;
                             this.getCurrentPage();
-                            this.ngOnInit();
+                            this.cdRef.detectChanges();
                         } else {
                             let url = this.url + '/' + event[0];
                             if (await this.canRemove(url + '/canRemove')) {
@@ -367,7 +414,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.isDirty = true;
         this.newRowCleanObject = Object.values(this.newRowObject);
         this.newRows.push(this.newRowObject);
-        this.newRowChanges = { ...this.newRowChanges, ...this.newRowObject }
+        this.newRowChanges = [...this.newRowChanges, ...this.newRowObject]
         this.newRow = true;
     }
 
@@ -414,6 +461,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         let first = second - 15;
         let tmpArray = this.rows.slice(first, second);
         this.pageRows = tmpArray;
+        //this.cdRef.detectChanges();
     }
 
     requestPage() {

@@ -83,7 +83,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     setDefinition(data: any) {
-        console.log('definition updated')
+        console.log(data)
+        this.definition = data;
     }
 
     constructor() {
