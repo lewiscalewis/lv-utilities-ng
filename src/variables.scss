@@ -24,6 +24,7 @@ $shadow-size: 0px; // Tamaño del sombreado
 
 //temas
 $succes-color: rgb(76, 175, 80);
+$box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
 //botones
 $background-button: #007bff;
@@ -93,7 +94,7 @@ $background-button: #007bff;
 
         &:hover {
             background-color: rgb(255, 255, 255);
-            border: 1px solid rgb(255, 255, 255);
+            border: 1px solid rgb(0, 2, 145);
             color: rgb(0, 2, 145);
         }
     }

@@ -11,8 +11,17 @@ export interface LvFormFieldDefinition {
     /**Descripcion del placeHolder */
     placeHolder?: string;
     /**Campo opcional, tenga en cuenta que si necesita acceder a eventos como blur, focus, etc necesitará asignar un id
-     * ya que no podrá acceder a ellos desde el formGroup (pero si al valueChanges) por que tendrá que usar js para manipular el
-     * DOM con el id
+     * ya que no podrá acceder a ellos desde el formGroup (pero si al valueChanges). Tendrá que usar js para manipular el
+     * DOM con el id:
+     * getForm(form: FormGroup) {
+        console.log(form)
+        let inputElement = document.getElementById('example') as HTMLInputElement;
+        inputElement.addEventListener('blur', () => {
+            console.log('Control lost focus');
+        });
+
+        <app-lv-form [definition]="formDef" (getForm)="getForm($event)"></app-lv-form>
+    }
      */
     id?: string;
     //validator?: ValidatorFn;

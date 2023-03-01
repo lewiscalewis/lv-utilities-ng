@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LvSideBarComponent } from 'src/components/lv-sideBar/lv-sideBar.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     LvCarrouselComponent,
     LvDataTableComponent,
     LvModalComponent,
-    LvFormComponent
+    LvFormComponent,
+    LvSideBarComponent
   ],
   imports: [
     BrowserModule,
