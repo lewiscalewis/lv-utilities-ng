@@ -60,7 +60,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     newRows: any[] = [];
     rowChanges: any[] = [];
     newRowChanges: any[] = [];
-    private rowId = 0;
+    private lastId = 0;
 
     constructor(
         private http: HttpClient, 
@@ -199,6 +199,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     // }
 
     modifyData() {
+        console.log(this.modifiedData)
         if (this.definition) {
             if (this.newRowChanges.length > 0) {
                 let formattedData = this.newRowChanges.map((row: any) => {
@@ -328,6 +329,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             }
         }
 
+
         this.isDirty = true;
     }
 
@@ -411,11 +413,26 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     break;
             }
         });
-        this.isDirty = true;
-        this.newRowCleanObject = Object.values(this.newRowObject);
+    
+        if(this.definition){
+            let increase = true;
+            this.rows.forEach((row: any) => {
+                let fr = this.rowFormatter(row);
+                if(fr['id'] > this.lastId){
+                    this.lastId = fr['id'] + 1;
+                    increase = false;
+                }
+            });
+            if(increase){
+                this.lastId++;
+            }
+        }
+        this.newRowObject.id = this.lastId;
+        this.newRowCleanObject.push(Object.values(this.newRowObject));
         this.newRows.push(this.newRowObject);
-        this.newRowChanges = [...this.newRowChanges, ...this.newRowObject]
+        this.newRowChanges.push(this.newRowObject);
         this.newRow = true;
+        this.isDirty = true;
     }
 
     redirectToDetail(id: any) {
