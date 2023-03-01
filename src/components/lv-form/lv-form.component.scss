@@ -58,10 +58,15 @@ fieldset {
         padding: 1px;
         opacity: 0;
         transition: opacity 1s ease-in-out;
+        height: 0;
+        width: 0;
     }
 
     .error.show-error {
         opacity: 1;
+        height: 100%;
+        width: 100%;
+        margin: 5px;
     }
 }
 
@@ -78,6 +83,11 @@ fieldset {
         max-width: calc(100% - 15px);
         margin: 0;
         margin-top: 10px;
+    }
+
+    .label {
+        display: flex;
+        flex-direction: row;
     }
 }
 
@@ -109,6 +119,12 @@ fieldset {
         justify-content: space-between;
         width: 100%;
         max-width: 900px;
+        max-height: 60px;
+
+        p {
+            padding: 0;
+            margin: 5px auto;
+        }
     }
 }
 

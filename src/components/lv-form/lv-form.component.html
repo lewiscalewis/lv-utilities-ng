@@ -23,7 +23,7 @@
                     <div *ngIf="form.get(field.formControlName)?.hasError('min')">El valor es demasiado pequeño</div>
                     <div *ngIf="form.get(field.formControlName)?.hasError('max')">El valor es demasiado grande</div>
                     <div *ngIf="form.get(field.formControlName)?.invalid && !(form.get(field.formControlName)?.hasError('required') || form.get(field.formControlName)?.hasError('email') || form.get(field.formControlName)?.hasError('maxLength') || form.get(field.formControlName)?.hasError('minLength') || form.get(field.formControlName)?.hasError('pattern') || form.get(field.formControlName)?.hasError('min') || form.get(field.formControlName)?.hasError('max'))">
-                        Este campo no es válido, demasiado largo o corto
+                        {{ !form.get(field.formControlName)?.errors?.['customError'] ? 'Este campo no es válido, demasiado largo o corto' : form.get(field.formControlName)?.errors?.['customError']}}
                     </div>
                       
                 </div>
@@ -38,7 +38,7 @@
                 *ngIf="definition.showResetButton">
                     Limpiar formulario
                  </button>
-                 <div style="color: red" *ngIf="form.invalid">Rellena los campos obligatorios (*)</div>
+                 <div class="required-message" style="color: red" *ngIf="form.invalid"><p>Rellena los campos obligatorios (*)</p></div>
                  <button class="success-color action-button" type="submit" [disabled]="flagIsInvalid" [ngClass]="{'disabled': flagIsInvalid, 'success-color': !flagIsInvalid}">Guardar</button>
             </div>
         </div>

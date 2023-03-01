@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
-import { AbstractControl, Form, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, Form, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalType } from 'src/constants/lv-constans';
 import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
@@ -49,29 +49,33 @@ export class AppComponent implements OnInit, AfterViewInit {
     //url = 'https://jsonplaceholder.typicode.com/users'
     url = 'https://localhost:7176/api/entities';
 
+    idControl = new FormControl('', [this.customLengthValidator]);
+    descControl = new FormControl();
+
     formDef: LvFormDefinition = {
         fields: [
-            { label: 'ID', inputType: 'number', formControlName: 'id', id: 'example', required: true },
-            { label: 'NOMBRE', inputType: 'text', formControlName: 'nombre',  },
-            { label: 'DESCRIPCION', inputType: 'text', formControlName: 'descripcion', validators:[this.customValidator()] },
-            { label: 'FECHA REGISTRO', inputType: 'date', formControlName: 'fecha',  },
-            { label: 'SID', inputType: 'number', formControlName: 'sid', id: 'example', validators:[Validators.max(1)] },
-            { label: 'ESTADO', inputType: 'text', formControlName: 'estado',  },
-            { label: 'DOCUMENTOS', inputType: 'file', formControlName: 'documento',  },
-            { label: 'FECHA EXPIRACION', inputType: 'date', formControlName: 'expira',  },
+            { label: 'ID', control: this.idControl, inputType: 'number', formControlName: 'id', id: 'example' },
+            { label: 'NOMBRE', control: new FormControl(), inputType: 'text', formControlName: 'nombre' },
+            { label: 'DESCRIPCION', control: this.descControl, inputType: 'text', formControlName: 'descripcion' },
+            { label: 'FECHA REGISTRO', control: new FormControl(), inputType: 'date', formControlName: 'fecha' },
+            { label: 'SID', control: new FormControl(), inputType: 'number', formControlName: 'sid', id: 'example'},
+            { label: 'ESTADO', control: new FormControl(), inputType: 'text', formControlName: 'estado',  },
+            { label: 'DOCUMENTOS', control: new FormControl(), inputType: 'file', formControlName: 'documento' },
+            { label: 'FECHA EXPIRACION', control: new FormControl(), inputType: 'date', formControlName: 'expira'  },
         ],
         showResetButton: true,
-        url: 'https://localhost:7176/api/entities',
+        url: 'https://localhost:7176/api/entity',
         name: 'mi mega form'
     };
 
-    customValidator(): ValidatorFn {
-        return (control: AbstractControl): ValidationErrors | null => {
-          if (control.value && control.value.toLowerCase() === 'gay') {
-            return { gayError: true };
-          }
-          return null;
-        };
+    customLengthValidator(control: AbstractControl): ValidationErrors | null {
+        const value = control.value as string;
+      
+        if (value.length < 5 || value.length > 10) {
+          return { customError: `La longitud debe estar entre 5 y 10 caracteres (actualmente: ${value.length})` };
+        }
+      
+        return null;
       }
       
     getForm(form: FormGroup) {

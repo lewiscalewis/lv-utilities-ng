@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
@@ -39,7 +39,12 @@ export class LvFormComponent implements OnInit {
                 this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se ha enviado su formulario', this.viewRef).getUserResponse().subscribe(res => location.reload());
             },
             error: (err) => {
-                this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.viewRef);
+                let response: HttpErrorResponse | string = new HttpErrorResponse(err)
+                let errorText = '';
+                for (let message in response.error.errors) {
+                    errorText += `${response.error.errors[message]}\n`;
+                }
+                this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
             }
         });
     }
@@ -47,11 +52,8 @@ export class LvFormComponent implements OnInit {
     ngOnInit() {
         if (this.definition) {
             this.definition.fields.forEach(field => {
-                this.form.addControl(field.formControlName, new FormControl());
-                let control = this.form.get(field.formControlName);
-                if (control && field.validators) {
-                    control.addValidators(field.validators);
-                }
+                this.form.addControl(field.formControlName,
+                    field.control);
             });
             this.getForm.emit(this.form);
             this.form.valueChanges.subscribe((changes) => {

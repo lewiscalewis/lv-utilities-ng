@@ -1,4 +1,4 @@
-import { Validator, ValidatorFn, Validators } from "@angular/forms";
+import { FormControl, Validator, ValidatorFn, Validators } from "@angular/forms";
 
 /**Interfaz que deben cumplir obligatoriamente los campos de los LvForm */
 export interface LvFormFieldDefinition {
@@ -17,6 +17,18 @@ export interface LvFormFieldDefinition {
     id?: string;
     //validator?: ValidatorFn;
     required?: boolean;
-    validators?: ValidatorFn[]
+
+    /**El elemento form control que desea añadir junto a sus validators o custom validators (recuerda que la key del validator debe de ser customError)
+     * customValidator(control: AbstractControl): ValidationErrors | null {
+        const value = control.value as string;
+      
+        if (value.length < 5 || value.length > 10) {
+          return { customError: `La longitud debe estar entre 5 y 10 caracteres (actualmente: ${value.length})` };
+        }
+      
+        return null;
+      }
+    */
+    control: FormControl;
 
 }

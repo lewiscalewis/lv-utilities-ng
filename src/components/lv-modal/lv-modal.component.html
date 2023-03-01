@@ -6,7 +6,7 @@
             <img src="assets\modal-icons\close.svg" alt="" class="quitIcon" (click)="closeModal()">
         </div>
         <div class="body">
-            <div>{{message}}</div>
+            <div style="white-space: pre-line">{{message}}</div>
         </div>
         <div class="modal-actions" [ngClass]="{'confirmation': modalType === 0, 'error': modalType === 1, 'warning': modalType === 2, 'succes' : modalType === 3, 'information' : modalType === 4}">
             <ng-container [ngSwitch]="modalType">
