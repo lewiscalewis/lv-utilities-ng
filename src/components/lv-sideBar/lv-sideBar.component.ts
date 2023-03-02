@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Position } from 'src/constants/lv-constans';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
@@ -13,6 +13,7 @@ export class LvSideBarComponent implements OnInit {
     @Input() links!: LvSideBarLinks[];
     @Input() close!: boolean;
     @Input() position!: Position;
+    @Output() isClosed: EventEmitter<boolean> = new EventEmitter(); 
 
     posLeft: Position = Position.LEFT;
     posRight: Position = Position.RIGHT;
@@ -26,8 +27,10 @@ export class LvSideBarComponent implements OnInit {
   closeState(){
     if(this.close){
         this.close = false;
+        this.isClosed.emit(this.close);
     }else{
         this.close = true;
+        this.isClosed.emit(this.close);
     }
   }
 

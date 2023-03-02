@@ -1,9 +1,9 @@
-@import '../../variables.scss';
+@import "../../variables.scss";
 
 $lv-container-width: 250px;
-$lv-container-closed-width:$lv-container-width;
+$lv-container-closed-width: $lv-container-width;
 $padding: 15px;
-$translate-calc: calc($lv-container-closed-width + ($padding * 2));
+$translate-calc: 600px;
 
 .lv-container {
     display: flex;
@@ -15,7 +15,8 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
     max-height: 100%;
     position: fixed;
     align-self: flex-start;
-    background-color: rgba(255, 255, 255, 0.934);
+    background-color: rgba(255, 255, 255, 0.988);
+    z-index: 1;
     border: 1px solid lightgray;
     border-radius: 6px;
     box-shadow: $box-shadow;
@@ -24,7 +25,7 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
     overflow-y: auto;
     transition: transform 1s ease-in-out;
     transform: translateX(0px);
-   
+
     .links {
         margin-top: 10px;
         display: flex;
@@ -32,9 +33,8 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
         flex-direction: row;
         flex-wrap: nowrap;
         padding: 0;
-        background-color: white;
 
-        *{
+        * {
             display: flex;
             justify-self: center;
             align-self: center;
@@ -43,6 +43,7 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
         .link {
             padding: 0;
             margin: 2px;
+            border-radius: 3px;
             width: calc(100% - 60px);
             max-width: 200px;
             gap: 10px;
@@ -53,7 +54,8 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
             box-shadow: $box-shadow;
             overflow-x: hidden;
             font-size: smaller;
-            transition: transform 0.3s ease-in-out, background-color 0.5s ease-in-out;
+            transition: transform 0.3s ease-in-out,
+                background-color 0.5s ease-in-out;
 
             &:hover {
                 transform: scale(1.1);
@@ -67,14 +69,43 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
 .lv-container.left {
     left: 0px;
     top: 0px;
+    padding: 20px;
+
+    .links {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        overflow-y: auto;
+
+        .link {
+            margin: 5px;
+            max-width: 170px;
+            display: flex;
+            padding: 20px;
+            box-shadow: $box-shadow;
+            overflow-x: hidden;
+            font-size: smaller;
+            transition: transform 0.3s ease-in-out,
+                background-color 0.5s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+                background-color: lighten($main-theme, 20%);
+                cursor: pointer;
+            }
+        }
+    }
 
     &.close {
-        transition: transform 1s ease-in-out;
+        transition: transform 0.8s ease-in-out;
         transform: translateX(-$translate-calc);
     }
 
     &.open {
-        transition: transform 1s ease-in-out;
+        transition: transform 0.8s ease-in-out;
         transform: translateX(0px);
     }
 }
@@ -82,14 +113,43 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
 .lv-container.right {
     right: 0px;
     top: 0px;
+    padding: 20px;
+
+    .links {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        overflow-y: auto;
+
+        .link {
+            margin: 5px;
+            max-width: 170px;
+            display: flex;
+            padding: 20px;
+            box-shadow: $box-shadow;
+            overflow-x: hidden;
+            font-size: smaller;
+            transition: transform 0.3s ease-in-out,
+                background-color 0.5s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+                background-color: lighten($main-theme, 20%);
+                cursor: pointer;
+            }
+        }
+    }
 
     &.close {
-        transition: transform 1s ease-in-out;
-        transform: translateX(+$translate-calc);
+        transition: transform 0.8s ease-in-out;
+        transform: translateX(+ $translate-calc);
     }
 
     &.open {
-        transition: transform 1s ease-in-out;
+        transition: transform 0.8s ease-in-out;
         transform: translateX(0px);
     }
 }
@@ -97,50 +157,77 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
 .lv-container.bottom {
     position: fixed;
     padding: 15px;
-    justify-content: center;
-    align-items: center;
     bottom: 0px;
     left: 0px;
     width: 100vw !important;
-    height: 60px;
-    max-height: 150px;
+    max-height: 110px;
     max-width: 100vw;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-direction: column;
 
     &.close {
-        transition: transform 1s ease-in-out;
-        transform: translateY(+$translate-calc);
+        transition: transform 0.8s ease-in-out;
+        transform: translateY(+ $translate-calc);
     }
 
     &.open {
-        transition: transform 1s ease-in-out;
+        transition: transform 0.8s ease-in-out;
         transform: translateY(0px);
     }
 
-    .link {
-        padding: 0;
-        margin: 2px;
-        width: auto;
-        max-width: 150px;
-        gap: 10px;
-        padding: 20px;
+    .burguer-icon {
+        display: grid;
+        width: 100%;
+        height: 15px;
+        top: 0px;
+        right: 0px;
+
+        img {
+            display: flex;
+            justify-self: flex-end;
+            margin-right: 55px;
+            align-self: flex-end;
+            position: sticky;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            padding: 2px;
+            background-color: black;
+
+            &:hover {
+                background-color: white;
+                border: 1px solid black;
+            }
+        }
+    }
+
+    .links {
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-        box-shadow: $box-shadow;
-        overflow-x: hidden;
-        font-size: smaller;
-        transition: transform 0.3s ease-in-out, background-color 0.5s ease-in-out;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        overflow-y: auto;
 
-        &:hover {
-            transform: scale(1.1);
-            background-color: lighten($main-theme, 20%);
-            cursor: pointer;
+        .link {
+            padding: 0;
+            margin: 5px;
+            max-width: 150px;
+            display: flex;
+            padding: 20px;
+            box-shadow: $box-shadow;
+            overflow-x: hidden;
+            font-size: smaller;
+            transition: transform 0.3s ease-in-out,
+                background-color 0.5s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+                background-color: lighten($main-theme, 20%);
+                cursor: pointer;
+            }
         }
     }
 }

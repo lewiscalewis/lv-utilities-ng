@@ -14,13 +14,18 @@ import { LvModalService } from 'src/services/lv-modal.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
     title = 'lv-utilities-ng';
+
+    //slider
     slides: LvSlide[] = [
         { nombre: 'example 1', descripcion: 'example 1', src: 'assets/slides-samples/example1.jpg' },
         { nombre: 'example 2', descripcion: 'example 2', src: 'assets/slides-samples/example2.png' },
         { nombre: 'example 3', descripcion: 'example 3', src: 'assets/slides-samples/example3.jpg' }
-    ]
+    ];
     color = 'darkcyan';
     colorBotones: string[] = ['red', 'yellow'];
+
+
+    //table
     definition: ILvTableDefinition = {
         header: ['id', 'pelotudo1', 'pelotudo2', 'pelotudo3', 'pelotudo4', 'pelotudo5', 'fecha'],
         rows: [
@@ -50,6 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     //url = 'https://jsonplaceholder.typicode.com/users'
     url = 'https://localhost:7176/api/entities';
 
+    //form
     idControl = new FormControl('', [this.customLengthValidator]);
     descControl = new FormControl();
 
@@ -63,39 +69,12 @@ export class AppComponent implements OnInit, AfterViewInit {
             { label: 'ESTADO', control: new FormControl(), inputType: 'text', formControlName: 'estado', },
             { label: 'DOCUMENTOS', control: new FormControl(), inputType: 'file', formControlName: 'documento' },
             { label: 'FECHA EXPIRACION', control: new FormControl(), inputType: 'date', formControlName: 'expira' },
-            { label: 'ID', control: this.idControl, inputType: 'number', formControlName: 'id', id: 'example' },
-            { label: 'NOMBRE', control: new FormControl(), inputType: 'text', formControlName: 'nombre' },
-            { label: 'DESCRIPCION', control: this.descControl, inputType: 'text', formControlName: 'descripcion' },
-            { label: 'FECHA REGISTRO', control: new FormControl(), inputType: 'date', formControlName: 'fecha' },
-            { label: 'SID', control: new FormControl(), inputType: 'number', formControlName: 'sid', id: 'example' },
-            { label: 'ESTADO', control: new FormControl(), inputType: 'text', formControlName: 'estado', },
-            { label: 'DOCUMENTOS', control: new FormControl(), inputType: 'file', formControlName: 'documento' },
-            { label: 'FECHA EXPIRACION', control: new FormControl(), inputType: 'date', formControlName: 'expira' },
+            
         ],
         showResetButton: true,
         url: 'https://localhost:7176/api/entity',
         name: 'mi mega form'
     };
-
-    links: LvSideBarLinks[] = [
-        { description: 'example1', url: '' },
-        { description: 'example2', url: '' },
-        { description: 'example3', url: '' },
-        { description: 'example4', url: '' },
-        { description: 'example5', url: '' }
-    ];
-
-    isClosed = true;
-
-    position = Position.LEFT;
-
-    setClose(){
-        if(this.isClosed){
-            this.isClosed = false;
-        }else{
-            this.isClosed = true;
-        }
-    }
 
     customLengthValidator(control: AbstractControl): ValidationErrors | null {
         const value = control.value as string;
@@ -118,6 +97,32 @@ export class AppComponent implements OnInit, AfterViewInit {
     setDefinition(data: any) {
         console.log(data)
         this.definition = data;
+    }
+
+
+    //sidebar
+    links: LvSideBarLinks[] = [
+        { description: 'example1', url: '' },
+        { description: 'example2', url: '' },
+        { description: 'example3', url: '' },
+        { description: 'example4', url: '' },
+        { description: 'example5', url: '' }
+    ];
+
+    isClosed = false;
+
+    position = Position.RIGHT;
+
+    setClose(state?: boolean){
+        if(state){
+            this.isClosed = state;
+        }else{
+            if(this.isClosed){
+                this.isClosed = false;
+            }else{
+                this.isClosed = true;
+            }
+        }
     }
 
     constructor() {

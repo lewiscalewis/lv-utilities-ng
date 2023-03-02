@@ -1,9 +1,9 @@
 <div class="container-app">
+    <h1>ShowCase Lv-Utilites-Ng</h1>
     <app-lv-form [definition]="formDef" (getForm)="getForm($event)"></app-lv-form>
     <app-lv-carrousel [slides]="slides"></app-lv-carrousel>
     <app-lv-data-table [url]="url" [readOnly]="false" (updatedDataTable)="setDefinition($event)"></app-lv-data-table>
-    <app-lv-sideBar [links]="links" [close]="isClosed" [position]="position">
-    </app-lv-sideBar>
+    <app-lv-sideBar [links]="links" [close]="isClosed" [position]="position" (isClosed)="setClose($event)"></app-lv-sideBar>
     <button (click)="setClose()">Abrir menu</button>
     <app-lv-load-spinner></app-lv-load-spinner>
 </div>

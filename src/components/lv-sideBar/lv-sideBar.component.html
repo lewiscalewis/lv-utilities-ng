@@ -1,9 +1,9 @@
 <div class="lv-container" [ngClass]="{'open': !close, 'close': close, 'left': position === posLeft, 'right':  position === posRight, 'bottom': position === posBottom}">
     <div class="burguer-icon">
-        <img src="assets/sideBar-icons/burguer-icon.svg" alt="burguer icon" (click)="closeState()">
+        <img [src]="position === posBottom ? 'assets/sideBar-icons/letters_X.svg' : 'assets/sideBar-icons/burguer-icon.svg'" alt="burguer icon" (click)="closeState()">
     </div>
-    <div class="links" *ngFor="let link of links">
-        <div class="link">
+    <div class="links">
+        <div class="link" *ngFor="let link of links">
             <!-- <img [src]="link.icon ? link.icon : 'assets/sideBar-icons/gear.svg'" [alt]="link.description"> -->
             <img src="assets/table-icons/detail.svg" alt="go to url">
             <div>{{link.description}}</div> 
