@@ -109,7 +109,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         { description: 'example5', url: '' }
     ];
 
-    isClosed = false;
+    isClosed = true;
 
     position = Position.RIGHT;
 

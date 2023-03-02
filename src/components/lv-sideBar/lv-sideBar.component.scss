@@ -25,6 +25,7 @@ $translate-calc: 600px;
     overflow-y: auto;
     transition: transform 1s ease-in-out;
     transform: translateX(0px);
+    font-family: $font-family;
 
     .links {
         margin-top: 10px;

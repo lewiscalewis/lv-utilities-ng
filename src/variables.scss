@@ -10,6 +10,7 @@ $table-font-family: Arial, sans-serif;
 $table-font-size: 16px;
 $table-line-height: 1.4;
 $table-text-color: #333;
+$font-family: 'Ubuntu', sans-serif;
 
 $table-mobile-font-size: 14px;
 $table-mobile-td-max-width: 90vw;
@@ -45,6 +46,7 @@ $background-button: #007bff;
         box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
         transition: background-color 0.4s ease-in-out;
         vertical-align: center;
+        font-family: $font-family;
 
         &:hover {
             color: white;
