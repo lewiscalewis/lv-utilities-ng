@@ -4,7 +4,6 @@ fieldset {
     display: flex;
     margin: 20px 0;
     max-width: 80vw;
-    max-height: 600px;
     border: 1px solid lightgray;
     border-radius: 6px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -42,7 +41,6 @@ fieldset {
     display: flex;
     width: 100%;
     max-width: 960px;
-    max-height: 450px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -104,6 +102,7 @@ fieldset {
 .lv-actions {
     position: sticky;
     bottom: 0;
+    padding-top: 10px;
     width: calc(100%);
     display: flex;
     flex-direction: row;
@@ -139,10 +138,30 @@ fieldset {
 }
 
 @media (max-width: 720px) {
-    .lv-label {
+    fieldset {
+        max-height: 100%;
+        max-width: 100vw;
+        padding: 0px;
+        margin-left: 10px;
+        margin-right: 0px;
 
+        .lv-form {
+            padding: 0px;
+            margin-left: 0px;
+            margin-right: 0px;
+
+            .lv-container{
+                padding: 0px;
+                margin-left: 0px;
+                margin-right: 0px;
+            }
+        }
+    }
+    .lv-label {
+        padding: 0;
+        margin: 20px;
         input {
-            width: calc(100% - 15px);
+            max-width: 200px;
             margin: 0;
         }
     }

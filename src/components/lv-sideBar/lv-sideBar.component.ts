@@ -9,6 +9,7 @@ import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.intef
 })
 export class LvSideBarComponent implements OnInit {
 
+    /**Debe cumplir la interfaz LvSideBarLinks, serán los botones de enlace que se mostraran*/
     @Input() links!: LvSideBarLinks[];
     @Input() close!: boolean;
     @Input() position!: Position;

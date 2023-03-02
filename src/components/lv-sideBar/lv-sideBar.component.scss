@@ -34,6 +34,12 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
         padding: 0;
         background-color: white;
 
+        *{
+            display: flex;
+            justify-self: center;
+            align-self: center;
+        }
+
         .link {
             padding: 0;
             margin: 2px;
@@ -51,7 +57,7 @@ $translate-calc: calc($lv-container-closed-width + ($padding * 2));
 
             &:hover {
                 transform: scale(1.1);
-                background-color: lighten($main-theme, 20%);
+                background-color: darken(white, 5%);
                 cursor: pointer;
             }
         }
