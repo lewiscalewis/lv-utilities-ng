@@ -15,6 +15,7 @@ import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-s
 import { LvDropdownComponent } from 'src/components/lv-dropdown/lv-dropdown.component';
 import { LvModalService } from 'src/services/lv-modal.service';
 import { LvDropDownService } from 'src/services/lv-dropdown.service';
+import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LvDropDownService } from 'src/services/lv-dropdown.service';
     LvFormComponent,
     LvSideBarComponent,
     LvLoadSpinnerComponent,
-    LvDropdownComponent
+    LvDropdownComponent,
+    LvSearchBarComponent
   ],
   imports: [
     BrowserModule,

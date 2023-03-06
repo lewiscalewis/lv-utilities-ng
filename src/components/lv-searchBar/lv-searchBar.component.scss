@@ -1,0 +1,35 @@
+@import '../../variables.scss';
+
+.lv-container {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 100%;
+    gap: 5px;
+    font-family: $font-family;
+
+    p{
+        padding: 0px;
+        margin: 0px;
+    }
+
+    img {
+        max-width: 20px;
+        cursor: pointer;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    input {
+        outline: none;
+        -webkit-appearance: none;
+        box-shadow: none !important;
+        border: none;
+    }
+}
+
+.results {
+    position: absolute;
+}
