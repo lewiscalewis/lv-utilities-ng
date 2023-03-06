@@ -12,6 +12,9 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LvSideBarComponent } from 'src/components/lv-sideBar/lv-sideBar.component';
 import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-spinner.component';
+import { LvDropdownComponent } from 'src/components/lv-dropdown/lv-dropdown.component';
+import { LvModalService } from 'src/services/lv-modal.service';
+import { LvDropDownService } from 'src/services/lv-dropdown.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-s
     LvModalComponent,
     LvFormComponent,
     LvSideBarComponent,
-    LvLoadSpinnerComponent
+    LvLoadSpinnerComponent,
+    LvDropdownComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,7 @@ import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-s
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [LvModalService, LvDropDownService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

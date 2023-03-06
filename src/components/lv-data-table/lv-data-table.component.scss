@@ -1,7 +1,25 @@
 @import "../../variables.scss";
 
+.resizable {
+    border-left: 1px solid lightgrey !important;
+    border-right: 1px solid lightgrey !important;
+    overflow: auto;
+    resize: both;
+    min-width: 30px;
+    width: max-content;
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    outline: none;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+    border: none;
+}
+
 .container {
-    max-width: 90vw;
+    max-width: 90vw !important;
     padding: 10px;
     background-color: $main-theme;
     border: 1px solid lightgray;
@@ -112,7 +130,7 @@
     .lv-table input {
         border: none;
         background-color: transparent;
-        width: 100%;
+        width: 90%;
         padding: 10px;
         min-width: 70px;
         margin: 0;
@@ -161,6 +179,13 @@
         border: none;
         color: $table-action-icons-color;
         text-transform: uppercase;
+
+        div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-right: 5px;
+        }
     }
 
     .lv-table tbody tr {
@@ -172,6 +197,7 @@
         padding: 12px 16px;
         vertical-align: middle;
         border: none;
+        min-width: 92px;
 
         img {
             margin-right: 10px;

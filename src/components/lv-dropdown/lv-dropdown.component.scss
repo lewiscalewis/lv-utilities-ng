@@ -1,0 +1,61 @@
+@import '../../variables.scss';
+
+.lv-container {
+    cursor: pointer;
+    width: fit-content;
+    position: absolute;
+
+    img {
+        max-width: 20px;
+    }
+    .dropdown {
+        border: 1px solid lightgray;
+        padding: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        overflow-y: auto;
+        max-height: 300px;
+        max-width: 250px;
+        border-radius: 6px;
+        box-shadow: $box-shadow;
+        font-family: $font-family;
+        position: sticky; 
+        background-color: white;
+        opacity: 1;
+
+        .links {
+            display: flex;
+            width: 100%;
+            text-align: center;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+    
+            .link {
+                box-shadow: 0 0 10px 1px #0000001a;
+                margin: 5px;
+                border-radius: 3px;
+                width: 100%;
+                max-width: 200px;
+                gap: 10px;
+                padding: 5px;
+                padding-left: 15px;
+                padding-right: 15px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: hidden;
+                font-size: smaller;
+                transition: transform 0.3s ease-in-out,
+                background-color 0.5s ease-in-out;
+    
+                &:hover {
+                    transform: scale(1.1);
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

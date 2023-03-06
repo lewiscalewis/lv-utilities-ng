@@ -3,7 +3,7 @@
         <img [src]="position === posBottom ? 'assets/sideBar-icons/letters_X.svg' : 'assets/sideBar-icons/burguer-icon.svg'" alt="burguer icon" (click)="closeState()">
     </div>
     <div class="links">
-        <div class="link" *ngFor="let link of links">
+        <div class="link" *ngFor="let link of links" (click)="redirect(link.url)">
             <!-- <img [src]="link.icon ? link.icon : 'assets/sideBar-icons/gear.svg'" [alt]="link.description"> -->
             <img src="assets/table-icons/detail.svg" alt="go to url">
             <div>{{link.description}}</div> 

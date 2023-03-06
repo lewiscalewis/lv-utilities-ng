@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewContainerRef, ViewRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { HTTP_OPTIONS, ModalType, RequestType, States } from 'src/constants/lv-constans';
@@ -6,6 +6,8 @@ import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom, NotFoundError } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
+import { LvDropDownService } from 'src/services/lv-dropdown.service';
+import { LvDropdownComponent } from '../lv-dropdown/lv-dropdown.component';
 
 
 
@@ -66,7 +68,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     constructor(
         private http: HttpClient, 
         private router: Router, 
-        private viewRef: ViewContainerRef, 
+        private containerRef: ViewContainerRef, 
         private modalService: LvModalService,
         private cdRef: ChangeDetectorRef) { }
 
@@ -90,7 +92,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                         }
                     },
                     error: (err) => {
-                        this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.viewRef);
+                        this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.containerRef);
                     }
                 });
             }
@@ -214,7 +216,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             if(this.modifiedData.length > 0){
                 this.rows = [...this.rows, ...this.modifiedData];
             }
-            this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han guardado los datos correctamente', this.viewRef);
+            this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han guardado los datos correctamente', this.containerRef);
             this.updatedDataTable.emit(this.rows);
             this.getCurrentPage();
         } else {
@@ -242,7 +244,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.http.put(this.url, data, HTTP_OPTIONS)
             .subscribe({
                 next: (res: any) => {
-                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
+                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.containerRef);
                 },
                 error: (err) => {
                     let response = new HttpErrorResponse(err);
@@ -250,14 +252,14 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     let index = 1;
 
                     if (response.status === 200) {
-                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.viewRef);
+                        this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.containerRef);
                     } else {
                         for (let message in response.error.errors) {
                             errorText += `${index}: ${response.error.errors[message]}\n`;
                             index++;
                         }
 
-                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                        this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.containerRef);
                     }
                 }
             });
@@ -267,7 +269,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     requestNew(data: any){
         this.http.post(this.url, data, HTTP_OPTIONS).subscribe({
             next: (res: any) => {
-                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.viewRef);
+                this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.containerRef);
             },
             error: (err) => {
                 let response = new HttpErrorResponse(err);
@@ -275,14 +277,14 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 let index = 1;
 
                 if (response.status === 200) {
-                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.viewRef);
+                    this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.containerRef);
                 } else {
                     for (let message in response.error.errors) {
                         errorText += `${index}: ${response.error.errors[message]}\n`;
                         index++;
                     }
 
-                    this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                    this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.containerRef);
                 }
             }
         });
@@ -357,7 +359,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             }
         } else {
             this.modalService
-                .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.viewRef)
+                .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.containerRef)
                 .getUserResponse().subscribe(async res => {
                     if (res) {
                         this.flagDeleteUpdate = true;
@@ -373,7 +375,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                                 this.http.delete(url)
                                     .subscribe({
                                         next: (res: any) => {
-                                            this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.viewRef)
+                                            this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.containerRef)
                                                 .getUserResponse().subscribe((res) => {
                                                     this.requestPage();
                                                     //this.getCurrentPage();
@@ -394,7 +396,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                                                 errorText = 'No se ha encontrado la página con url: ' + url;
                                             }
 
-                                            this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.viewRef);
+                                            this.modalService.showModal(ModalType.ERROR, 'Error', errorText, this.containerRef);
                                         }
                                     });
                             }
@@ -500,7 +502,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 });
             }
         } catch (error: any) {
-            this.modalService.showModal(ModalType.ERROR, 'Error', error, this.viewRef);
+            this.modalService.showModal(ModalType.ERROR, 'Error', error, this.containerRef);
         }
     }
 
