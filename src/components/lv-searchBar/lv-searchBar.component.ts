@@ -13,6 +13,8 @@ export class LvSearchBarComponent implements OnInit {
 
 
     @Input() url!: string;
+    @Input() internalLinkUrl!: string;
+
     results: any[] = [];
 
     constructor(private http: HttpClient, private modalService: LvModalService, private viewRef: ViewContainerRef) { }
@@ -20,11 +22,11 @@ export class LvSearchBarComponent implements OnInit {
     ngOnInit() {
     }
 
-    async search(userInput: string) {
-        const params = new HttpParams().set('filter', userInput);
-        this.http.get(this.url).subscribe((data: any) => {
+    async search(userInput: any) {
+        console.log(userInput.target.value);
+        const params = new HttpParams().set('search', userInput.target.value);
+        this.http.get(this.url, {params}).subscribe((data: any) => {
             this.results = data;
-            console.log(this.results);
         });
     }  
 

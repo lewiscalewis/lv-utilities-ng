@@ -24,7 +24,7 @@
                           <td  *ngFor="let field of newRowCleanObject[x]; let o=index">
                               <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
                                   <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
                                   <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
                                   <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
                               </ng-container>
@@ -39,7 +39,7 @@
                           <td  *ngFor="let field of row; let o=index">
                               <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
                                   <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                                   <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                                   <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                               </ng-container>

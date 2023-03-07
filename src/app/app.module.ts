@@ -16,6 +16,8 @@ import { LvDropdownComponent } from 'src/components/lv-dropdown/lv-dropdown.comp
 import { LvModalService } from 'src/services/lv-modal.service';
 import { LvDropDownService } from 'src/services/lv-dropdown.service';
 import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.component';
+import { RouterModule } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -27,16 +29,18 @@ import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.c
     LvSideBarComponent,
     LvLoadSpinnerComponent,
     LvDropdownComponent,
-    LvSearchBarComponent
+    LvSearchBarComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule,
+    CommonModule
   ],
-  providers: [LvModalService, LvDropDownService],
+  providers: [LvModalService, LvDropDownService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

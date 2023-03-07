@@ -8,6 +8,7 @@ import { firstValueFrom, NotFoundError } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
 import { LvDropDownService } from 'src/services/lv-dropdown.service';
 import { LvDropdownComponent } from '../lv-dropdown/lv-dropdown.component';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -66,10 +67,11 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     loading: boolean = true;
 
     constructor(
-        private http: HttpClient, 
-        private router: Router, 
-        private containerRef: ViewContainerRef, 
+        private http: HttpClient,
+        private router: Router,
+        private containerRef: ViewContainerRef,
         private modalService: LvModalService,
+        private datePipe: DatePipe,
         private cdRef: ChangeDetectorRef) { }
 
     ngAfterViewInit(): void {
@@ -152,7 +154,6 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             if (dateRegex.test(dateString)) {
                 res = true;
             }
-
             return res;
         }
 
@@ -205,7 +206,6 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     modifyData() {
         this.loading = true;
-        console.log(this.modifiedData)
         if (this.definition) {
             if (this.newRowChanges.length > 0) {
                 let formattedData = this.newRowChanges.map((row: any) => {
@@ -213,7 +213,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 });
                 this.rows = [...this.rows, ...formattedData]
             }
-            if(this.modifiedData.length > 0){
+            if (this.modifiedData.length > 0) {
                 this.rows = [...this.rows, ...this.modifiedData];
             }
             this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han guardado los datos correctamente', this.containerRef);
@@ -228,7 +228,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 });
                 this.requestNew(newChanges);
             }
-            if(this.modifiedData.length > 0){
+            if (this.modifiedData.length > 0) {
                 data = [...this.modifiedData];
                 this.requestModify(data);
             }
@@ -266,7 +266,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.modifiedData = [];
     }
 
-    requestNew(data: any){
+    requestNew(data: any) {
         this.http.post(this.url, data, HTTP_OPTIONS).subscribe({
             next: (res: any) => {
                 this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.containerRef);
@@ -301,16 +301,24 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     updateFieldValue(event: any, row: any, fieldIndex: number, isNew?: boolean) {
-        let cleanRow = { ...this.rowFormatter(row) };
+        const cleanRow = this.rowFormatter(row);
 
         if (parseFloat(event.value) != null && parseFloat(event.value) != undefined && !isNaN(parseFloat(event.value)) && !this.isDateValid(event.value) && event.value.match(/[a-zA-Z]+/) === null) {
             cleanRow[this.headers[fieldIndex]] = parseFloat(event.value);
+            if (this.isDateValid(event.value)) {
+                const dateValue = new Date(event.value);
+                cleanRow[this.headers[fieldIndex]] = this.datePipe.transform(dateValue, 'yyyy-MM-dd');
+                console.log(this.datePipe.transform(dateValue, 'yyyy-MM-dd'))
+            } else {
+                console.log(this.datePipe.transform(new Date(event.value), 'yyyy-MM-dd'))
+                cleanRow[this.headers[fieldIndex]] = event.value;
+            }
         } else {
             cleanRow[this.headers[fieldIndex]] = event.value;
         }
 
         if (isNew) {
-            let finded = this.newRowChanges.find((r: any) => r.id === row.id);
+            const finded = this.newRowChanges.find((r: any) => r.id === row.id);
             if (finded) {
                 this.newRowChanges.forEach((r: any) => {
                     if (r.id === finded.id) {
@@ -323,22 +331,22 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                 this.newRowChanges.push(row);
             }
         } else {
-            let finded = this.modifiedData.find((r: any) => r.id === cleanRow.id);
+            const finded = this.modifiedData.find((r: any) => r.id === cleanRow.id);
             if (finded) {
-                this.modifiedData.forEach((r: any) => {
+                this.modifiedData = this.modifiedData.map((r: any) => {
                     if (r.id === finded.id) {
-                        row[this.headers[fieldIndex]] = event.value;
-                        r = cleanRow;
+                        r[this.headers[fieldIndex]] = cleanRow[this.headers[fieldIndex]];
                     }
+                    return r;
                 });
             } else {
-                this.modifiedData.push(cleanRow);
+                this.modifiedData.push({ ...cleanRow });
             }
         }
 
-
         this.isDirty = true;
     }
+
 
     rowFormatter(row: any) {
         let resRow: any = [];
@@ -420,17 +428,17 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                     break;
             }
         });
-    
-        if(this.definition){
+
+        if (this.definition) {
             let increase = true;
             this.rows.forEach((row: any) => {
                 let fr = this.rowFormatter(row);
-                if(fr['id'] > this.lastId){
+                if (fr['id'] > this.lastId) {
                     this.lastId = fr['id'] + 1;
                     increase = false;
                 }
             });
-            if(increase){
+            if (increase) {
                 this.lastId++;
             }
         }
