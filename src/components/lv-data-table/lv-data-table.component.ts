@@ -9,6 +9,7 @@ import { LvModalService } from 'src/services/lv-modal.service';
 import { LvDropDownService } from 'src/services/lv-dropdown.service';
 import { LvDropdownComponent } from '../lv-dropdown/lv-dropdown.component';
 import { DatePipe } from '@angular/common';
+import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
 
 
 
@@ -65,6 +66,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     newRowChanges: any[] = [];
     private lastId = 0;
     loading: boolean = true;
+    searchData: LvSearchData[] = [];
 
     constructor(
         private http: HttpClient,
@@ -110,7 +112,27 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
 
     ngOnInit(): void {
+        this.definition?.rows.forEach(row => {
+            let frow: LvSearchData = {
+                id: row.id,
+                nombre: {...row},
+                url: this.url + '/' + row.id
+            };
+            this.searchData.push(frow);
+        });
+    }
 
+    search(){
+        this.http.get(this.url).subscribe((res: any) => {
+            res.forEach((row: any) => {
+                let frow: LvSearchData = {
+                    id: row.id,
+                    nombre: {...row},
+                    url: this.url + '/' + row.id
+                };
+                this.searchData.push(frow)
+            });
+        });
     }
 
     getFieldType(value: any): string | void {

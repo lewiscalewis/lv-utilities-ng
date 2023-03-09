@@ -1,4 +1,7 @@
 <div class="container" [style.background-color]="headerColor[0]">
+    <div class="search">
+        <app-lv-searchBar [url]="url + '/search'" [rowData]="searchData" class="navigator"></app-lv-searchBar>
+    </div>
     <div class="lv-table-container">
         <table class="lv-table" [style.color]="rowColor[1]">
             <ng-container *ngIf="!loading; else spinner">

@@ -6,7 +6,9 @@
     </div>
     <div class="results" *ngIf="results.length > 0">
         <ul>
-            <li *ngFor="let result of results" [routerLink]="">{{result}}</li>
+            <a *ngFor="let result of results" [href]="result.url">
+                <li >{{result}}</li>
+            </a>
         </ul>
     </div>
 </div>
