@@ -4,11 +4,9 @@
         <input type="text" (keyup)="search($event)">
         <img src="assets/search-icons/search-status-svgrepo-com.svg" alt="buscar" (click)="search($event)">
     </div>
-    <div class="results" *ngIf="results.length > 0">
+    <div class="results" *ngIf="results.length > 0 && showResultList">
         <ul>
-            <a *ngFor="let result of results" [href]="result.url">
-                <li >{{result}}</li>
-            </a>
+            <li *ngFor="let result of results" (click)="sendData(result)">{{result}}</li>
         </ul>
     </div>
 </div>

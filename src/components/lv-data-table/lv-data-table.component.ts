@@ -67,6 +67,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     private lastId = 0;
     loading: boolean = true;
     searchData: LvSearchData[] = [];
+    searchUserInput: string = '';
 
     constructor(
         private http: HttpClient,
@@ -87,18 +88,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
             this.loading = false;
         } else {
             if (this.flagFirstExecution) {
-                this.http.get(this.url + '/totalpages').subscribe({
-                    next: (data) => {
-                        if (!!data) {
-                            let res: any = data;
-                            this.totalPages = res;
-                            this.flagFirstExecution = false;
-                        }
-                    },
-                    error: (err) => {
-                        this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.containerRef);
-                    }
-                });
+                this.getTotalPagesFromServer();
             }
             this.requestPage();
             //this.getHttpData();
@@ -108,31 +98,53 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         }
     }
 
+    reload(input: any){
+        if(input.target.value){
+            this.loading = true; 
+        }else{
+            console.log(this.loading)
+            this.loading = false;
+            this.ngAfterViewInit();
+            this.getTotalPagesFromServer();
+        }
+    }
+
     //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
 
+    getTotalPagesFromServer(){
+        this.http.get(this.url + '/totalpages').subscribe({
+            next: (data) => {
+                if (!!data) {
+                    let res: any = data;
+                    this.totalPages = res;
+                    this.flagFirstExecution = false;
+                }
+            },
+            error: (err) => {
+                this.modalService.showModal(ModalType.ERROR, 'Error', 'No se ha encontrado la url proporcionada o bien los datos no son correctos', this.containerRef);
+            }
+        });
+    }
 
     ngOnInit(): void {
         this.definition?.rows.forEach(row => {
             let frow: LvSearchData = {
                 id: row.id,
-                nombre: {...row},
+                nombre: { ...row },
                 url: this.url + '/' + row.id
             };
             this.searchData.push(frow);
         });
     }
 
-    search(){
-        this.http.get(this.url).subscribe((res: any) => {
-            res.forEach((row: any) => {
-                let frow: LvSearchData = {
-                    id: row.id,
-                    nombre: {...row},
-                    url: this.url + '/' + row.id
-                };
-                this.searchData.push(frow)
-            });
-        });
+    manageSearchData(event: any) {
+        let objectMapper: LvObjectReader = new LvObjectReader(event);
+        this.headers = objectMapper.getHeadersForTable();
+        this.rows = objectMapper.getRowsForTable();
+        this.formatDataTable(); // llamada aquí
+        this.loading = false;
+        let total = Math.ceil(this.pageRows.length / 15);
+        this.totalPages =  total <= 1 ? 1 : total;
     }
 
     getFieldType(value: any): string | void {

@@ -19,7 +19,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     slides: LvSlide[] = [
         { nombre: 'example 1', descripcion: 'example 1', src: 'assets/slides-samples/example1.jpg' },
         { nombre: 'example 2', descripcion: 'example 2', src: 'assets/slides-samples/example2.png' },
-        { nombre: 'example 3', descripcion: 'example 3', src: 'assets/slides-samples/example3.jpg' }
+        { nombre: 'example 3', descripcion: 'example 3', src: 'assets/slides-samples/example3.jpg' },
+        { nombre: 'No man,s land', descripcion: 'No man,s land', src: 'assets/slides-samples/No Man\'s Land pagina.png' }
     ];
     color = 'darkcyan';
     colorBotones: string[] = ['red', 'yellow'];
