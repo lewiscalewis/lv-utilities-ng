@@ -2,11 +2,11 @@
     <div class="lv-search">
         <p>Buscar: </p>
         <input type="text" (keyup)="search($event)">
-        <img src="assets/search-icons/search-status-svgrepo-com.svg" alt="buscar" (click)="search($event)">
+        <img src="assets/search-icons/search-status-svgrepo-com.svg" alt="buscar">
     </div>
     <div class="results" *ngIf="results.length > 0 && showResultList">
         <ul>
-            <li *ngFor="let result of results" (click)="sendData(result)">{{result}}</li>
+            <li *ngFor="let result of list" (click)="sendData(result)">{{ printObject(result) }}</li>
         </ul>
     </div>
 </div>

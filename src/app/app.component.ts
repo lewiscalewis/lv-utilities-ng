@@ -5,6 +5,7 @@ import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { LvSlide } from 'src/models/lv-carrousel-models/lv-slide.model';
+import { User } from 'src/models/lv-carrousel-models/show-case-models/user.model';
 import { LvModalService } from 'src/services/lv-modal.service';
 
 @Component({
@@ -124,6 +125,13 @@ export class AppComponent implements OnInit, AfterViewInit {
                 this.isClosed = true;
             }
         }
+    }
+
+    //search
+    user = new User();
+
+    getSearchResult(event: any){
+        console.log(event[0])
     }
 
     constructor() {

@@ -102,7 +102,6 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         if(input.target.value){
             this.loading = true; 
         }else{
-            console.log(this.loading)
             this.loading = false;
             this.ngAfterViewInit();
             this.getTotalPagesFromServer();

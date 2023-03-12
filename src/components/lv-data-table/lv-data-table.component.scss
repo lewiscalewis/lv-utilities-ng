@@ -4,7 +4,7 @@
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
     overflow: auto;
-    resize: both;
+    resize: horizontal;
     min-width: 30px;
     width: max-content;
     margin: 0;
@@ -21,7 +21,8 @@ input {
 .container {
     max-width: 90vw !important;
     padding: 10px;
-    background-color: $main-theme;
+    padding-bottom: 0px;
+    background-color: rgb(255, 255, 255);
     border: 1px solid lightgray;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 6px;
@@ -40,19 +41,21 @@ input {
         
         .navigator {
             width: 100%;
-            max-width: 800px;
         }
     }
 
     .action-container {
         .actions {
-            margin-top: 20px;
             @include button-style();
 
+            position: relative;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            width: 100%;
+            left: -10px;
+            padding: 10px;
 
             .pagination {
                 display: flex;
@@ -67,10 +70,10 @@ input {
                     text-align: center;
                     cursor: pointer;
                     transition: background-color, 0.5s ease-in-out;
-                    background-color: #eee;
+                    background-color: #ffffff;
 
                     &:hover {
-                        background-color: white;
+                        background-color: rgb(232, 232, 232);
                     }
                 }
                 .before {
@@ -80,10 +83,10 @@ input {
                     text-align: center;
                     cursor: pointer;
                     transition: background-color, 0.5s ease-in-out;
-                    background-color: #eee;
+                    background-color: #ffffff;
 
                     &:hover {
-                        background-color: white;
+                        background-color: rgb(232, 232, 232);
                     }
                 }
                 .current-page {
@@ -92,6 +95,7 @@ input {
                     margin-left: 10px;
                     padding: 5px;
                     text-align: center;
+                    background-color: white;
                 }
             }
         }
@@ -189,8 +193,9 @@ input {
     .lv-table thead th {
         padding: 12px 16px;
         font-weight: bold;
-        background-color: $main-theme;
+        background-color: $table-th-color;
         border: none;
+        border-bottom: 1px solid whitesmoke;
         color: $table-action-icons-color;
         text-transform: uppercase;
 
