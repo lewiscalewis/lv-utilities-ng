@@ -1,7 +1,7 @@
 <div class="lv-container">
     <div class="lv-search">
         <p>Buscar: </p>
-        <input type="text" (keyup)="search($event)">
+        <input type="text" (keyup)="search($event)" (blur)="closeList()">
         <img src="assets/search-icons/search-status-svgrepo-com.svg" alt="buscar">
     </div>
     <div class="results" *ngIf="results.length > 0 && showResultList">

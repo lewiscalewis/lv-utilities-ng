@@ -131,7 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     user = new User();
 
     getSearchResult(event: any){
-        console.log(event[0])
+        console.log(event)
     }
 
     constructor() {

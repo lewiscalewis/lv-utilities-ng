@@ -17,7 +17,7 @@ export class LvSearchBarComponent<T> implements OnInit {
     @Input() showResultList: boolean = true;
     @Input() type!: any;
     @Input() isTableMode: boolean = false;
-    @Output() getResults: EventEmitter<any[]> = new EventEmitter();
+    @Output() getResults: EventEmitter<any> = new EventEmitter();
     @Output() userInput: EventEmitter<string> = new EventEmitter();
 
     results: LvSearchData[] = [];
@@ -39,11 +39,12 @@ export class LvSearchBarComponent<T> implements OnInit {
             this.http.get(this.url, { params }).subscribe((data: any) => {
                 this.results = data;
                 if(this.type){
-                    this.listResult = [Object.assign(this.type, data)];
+                    this.listResult = [...data];
                     this.listResult.forEach((r: any) => {
+                        r = Object.assign(this.type, r);
                         let toString: string = '';
-                        for(let prop in r[0]){
-                            toString = toString + ' ' + r[0][prop];
+                        for(let prop in r){
+                            toString = toString + ' ' + r[prop];
                         }
                         this.list.push(toString);
                     });
@@ -65,13 +66,18 @@ export class LvSearchBarComponent<T> implements OnInit {
         if(this.isTableMode){
             this.getResults.emit([data]);
         }else{
-            this.getResults.emit(this.listResult[0]);
+            this.getResults.emit(data);
         }
+        this.list = [];
     }
 
     printObject(obj: LvObject): string {
         return obj.toString();
-      }
+    }
+
+    closeList(){
+        setTimeout(()=> this.list = [], 200);
+    }
       
 
 }
