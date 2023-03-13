@@ -9,6 +9,57 @@
     width: max-content;
     margin: 0;
     padding: 0;
+
+    .lv-filters {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex-wrap: wrap;
+
+        select {
+            border: 1px solid #ddd;
+            width: 160px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: white;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><path d="M6 6L0 0h12z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 8px 6px;
+            cursor: pointer;
+            transition: border-color 0.3s ease-in-out;
+        
+            &:focus {
+              border-color: #0077cc;
+              outline: none;
+            }
+          }
+      
+        input[type="number"] {
+          border: 1px solid #ddd;
+          padding: 5px;
+          border-radius: 5px;
+          transition: border-color 0.3s ease-in-out;
+      
+          &:focus {
+            border-color: #0077cc;
+            outline: none;
+          }
+        }
+      
+        @include button-style();
+
+        button {
+            margin: 0px;
+        }
+      }
+      
 }
 
 input {
@@ -159,27 +210,6 @@ input {
         width: 150px; /* o el ancho que prefieras */
     }
 
-    //   .lv-table input[type="date"]::-webkit-calendar-picker-indicator {
-    //     width: 1.2em;
-    //     height: 1.2em;
-    //     padding: 0;
-    //     margin: 0;
-    //     vertical-align: middle;
-    //     opacity: 0.9;
-    //   }
-
-    .lv-table button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #60a5fa;
-        color: #fff;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-    }
-
     .lv-table button:hover {
         background-color: #3b82f6;
     }
@@ -198,6 +228,13 @@ input {
         border-bottom: 1px solid whitesmoke;
         color: $table-action-icons-color;
         text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.5s ease-in-out;
+
+        &:hover {
+            background-color: lightgrey;
+            color: white;
+        }
 
         div {
             display: flex;

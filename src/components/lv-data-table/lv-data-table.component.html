@@ -11,9 +11,20 @@
                           <img style="cursor: pointer;" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                           <img style="cursor: pointer;" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                       </th>
-                      <th class="resizable" *ngFor="let header of headers" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
+                      <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
                         <div>
-                            {{header}} <app-lv-dropdown></app-lv-dropdown>
+                            {{header}}
+                            <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"> 
+                            <app-lv-dropdown [id]="z" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
+                                <div class="lv-filters">
+                                    <select name="filters" id="filters" #select>
+                                        <option value="gt">Mayor que:</option>
+                                        <option value="st">Menor que:</option>
+                                    </select>
+                                    <input type="number" #filterInput>
+                                    <button class="secondary" (click)="filterTable(select, filterInput)">Filtrar</button>
+                                </div>
+                            </app-lv-dropdown>
                         </div>
                       </th>
                     </tr>

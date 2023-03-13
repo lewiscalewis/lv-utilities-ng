@@ -90,8 +90,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     getForm(form: FormGroup) {
         console.log(form)
-        let inputElement = document.getElementById('example') as HTMLInputElement;
-        inputElement.addEventListener('blur', () => {
+        let inputElement = document.getElementById('example');
+        console.log(document.getElementById('example'))
+        inputElement?.addEventListener('blur', () => {
             console.log('Control lost focus');
         });
     }

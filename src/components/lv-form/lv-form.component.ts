@@ -63,7 +63,9 @@ export class LvFormComponent implements OnInit {
                 this.form.addControl(field.formControlName,
                     field.control);
             });
-            this.getForm.emit(this.form);
+            setTimeout(() => {
+                this.getForm.emit(this.form);
+            });
             this.form.valueChanges.subscribe((changes) => {
                 let formIsValid = true;
                 this.definition.fields.forEach(field => {

@@ -1,5 +1,5 @@
-<div class="lv-container" (click)="openClose()">
-    <img src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu">
+<div class="lv-container" tabindex="0">
+    <img src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu" (click)="openClose()">
     <div class="dropdown" *ngIf="close">
         <div *ngFor="let item of links" class="links">
             <div class="link" (click)="redirect(item.url)">

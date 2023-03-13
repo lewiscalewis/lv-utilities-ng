@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewContainerRef, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { HTTP_OPTIONS, ModalType, RequestType, States } from 'src/constants/lv-constans';
@@ -6,7 +6,6 @@ import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom, NotFoundError } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
-import { LvDropDownService } from 'src/services/lv-dropdown.service';
 import { LvDropdownComponent } from '../lv-dropdown/lv-dropdown.component';
 import { DatePipe } from '@angular/common';
 import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
@@ -43,6 +42,9 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     @Input() detailUrl: string = '';
     @Output() updatedDataTable: EventEmitter<any[][]> = new EventEmitter();
 
+    @ViewChild('select') select!: ElementRef;
+    @ViewChild('filterInput') input!: ElementRef;
+
     headers: string[] = [];
     fields: string = '';
     rows: string[][] = [];
@@ -68,6 +70,10 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     loading: boolean = true;
     searchData: LvSearchData[] = [];
     searchUserInput: string = '';
+    orderBy: boolean = true;
+    showOrderByArrows: boolean = false;
+    selectedHeaderIndex: number = 0;
+    dropDownInstance: any[] = [];
 
     constructor(
         private http: HttpClient,
@@ -98,10 +104,10 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         }
     }
 
-    reload(input: any){
-        if(input.target.value){
-            this.loading = true; 
-        }else{
+    reload(input: any) {
+        if (input.target.value) {
+            this.loading = true;
+        } else {
             this.loading = false;
             this.ngAfterViewInit();
             this.getTotalPagesFromServer();
@@ -110,7 +116,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
 
-    getTotalPagesFromServer(){
+    getTotalPagesFromServer() {
         this.http.get(this.url + '/totalpages').subscribe({
             next: (data) => {
                 if (!!data) {
@@ -143,7 +149,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.formatDataTable(); // llamada aquí
         this.loading = false;
         let total = Math.ceil(this.pageRows.length / 15);
-        this.totalPages =  total <= 1 ? 1 : total;
+        this.totalPages = total <= 1 ? 1 : total;
     }
 
     getFieldType(value: any): string | void {
@@ -553,6 +559,87 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         } else {
             this.flagReduceOrExpandShow = true; //se contrae
         }
+    }
+
+    orderPageRow(n: number, event: any) {
+        const clickedElement = event.target as HTMLElement;
+        const isDropdownClicked = clickedElement.closest('.lv-container') !== null;
+        const isSelectClicked = clickedElement.closest('#filters') !== null;
+
+        // Si el evento fue disparado por el dropdown, no se hace nada
+        if (isDropdownClicked || isSelectClicked) {
+            return;
+        }
+        this.showOrderByArrows = true;
+        this.selectedHeaderIndex = n;
+        if (this.orderBy) {
+            if (typeof this.pageRows[0][n] === 'number') {
+                this.pageRows = this.pageRows.sort((a: any, b: any) => {
+                    if (a[n] === null) {
+                        return 1
+                    }
+                    else if (b[n] === null) {
+                        return -1
+                    } else {
+                        return a[n] - b[n]
+                    }
+                });
+            } else {
+                this.pageRows = this.pageRows.sort((a: any, b: any) => {
+                    if (a[n] === null) {
+                        return 1
+                    }
+                    else if (b[n] === null) {
+                        return -1
+                    } else {
+                        return a[n].localeCompare(b[n])
+                    }
+                });
+            }
+
+            this.orderBy = false;
+        } else {
+            if (typeof this.pageRows[0][n] === 'number') {
+                this.pageRows = this.pageRows.sort((a: any, b: any) => {
+                    if (a[n] === null) {
+                        return -1
+                    }
+                    else if (b[n] === null) {
+                        return 1
+                    } else {
+                        return b[n] - (a[n])
+                    }
+                });
+            } else {
+                this.pageRows = this.pageRows.sort((a: any, b: any) => {
+                    if (a[n] === null) {
+                        return -1
+                    }
+                    else if (b[n] === null) {
+                        return 1
+                    } else {
+                        return b[n].localeCompare(a[n])
+                    }
+                });
+            }
+            this.orderBy = true;
+        }
+    }
+
+    filterTable(select?: HTMLSelectElement, input?: HTMLInputElement, index?: number){
+        console.log(select?.value);
+    }
+
+    setDropDowns(event: any){
+        this.dropDownInstance.push(event);
+    }
+
+    closeDropDowns(n: number) {
+        this.dropDownInstance.forEach(d => {
+            if(d.id !== n){
+                d.close = false;
+            }
+        })
     }
 
 }

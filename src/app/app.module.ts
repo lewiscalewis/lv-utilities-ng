@@ -14,7 +14,6 @@ import { LvSideBarComponent } from 'src/components/lv-sideBar/lv-sideBar.compone
 import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-spinner.component';
 import { LvDropdownComponent } from 'src/components/lv-dropdown/lv-dropdown.component';
 import { LvModalService } from 'src/services/lv-modal.service';
-import { LvDropDownService } from 'src/services/lv-dropdown.service';
 import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -40,7 +39,7 @@ import { CommonModule, DatePipe } from '@angular/common';
     RouterModule,
     CommonModule
   ],
-  providers: [LvModalService, LvDropDownService, DatePipe],
+  providers: [LvModalService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
