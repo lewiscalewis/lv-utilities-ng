@@ -232,8 +232,8 @@ input {
         transition: background-color 0.5s ease-in-out;
 
         &:hover {
-            background-color: lightgrey;
-            color: white;
+            background-color: rgb(233, 233, 233);
+            color: darkgray;
         }
 
         div {

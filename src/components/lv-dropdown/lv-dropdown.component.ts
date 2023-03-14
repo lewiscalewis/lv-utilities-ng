@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
@@ -15,6 +15,7 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
     @Input() links!: LvSideBarLinks[];
     @Input() public id!: number;
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
+    @ViewChild('dropdown') dropdown!: ElementRef;
 
     close: boolean = false;
 
@@ -32,7 +33,8 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
         window.open(url);
     }
 
-    openClose() {
+    openClose(event: Event) {
+        console.log(this.dropdown)
         if (this.close) {
             this.close = false;
         } else {

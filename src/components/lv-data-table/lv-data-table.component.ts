@@ -35,6 +35,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     /**
      * Objeto de tupo RequestType para definir el tipo de petición: get o post, por defecto si no se rellena: GET
      */
+    @Input() currencyFields: any[] = [];
     @Input() requestType: RequestType = RequestType.GET;
     @Input() rowColor: string[] = [];
     @Input() headerColor: string[] = [];
@@ -540,7 +541,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         let objectMapper: LvObjectReader;
         try {
             if (this.currentPage) {
-                this.http.get(this.url + '/page/' + this.currentPage).subscribe(data => {
+                this.http.get(this.url + '/' + this.currentPage).subscribe(data => {
                     objectMapper = new LvObjectReader(data);
                     this.headers = objectMapper.getHeadersForTable();
                     this.rows = objectMapper.getRowsForTable();
@@ -628,6 +629,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     filterTable(select?: HTMLSelectElement, input?: HTMLInputElement, index?: number){
         console.log(select?.value);
+        console.log(input?.value);
     }
 
     setDropDowns(event: any){
