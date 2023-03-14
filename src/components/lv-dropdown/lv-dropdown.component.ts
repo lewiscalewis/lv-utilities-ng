@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
@@ -9,18 +9,16 @@ import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.intef
 })
 export class LvDropdownComponent implements OnInit, AfterViewInit {
 
-    constructor() { }
+    constructor(private elementRef: ElementRef) { }
 
     /**Debe cumplir la interfaz LvSideBarLinks, serán los botones de enlace que se mostraran*/
     @Input() links!: LvSideBarLinks[];
     @Input() public id!: number;
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
-    @ViewChild('dropdown') dropdown!: ElementRef;
 
-    close: boolean = false;
+    open: boolean = false;
 
     ngOnInit() {
-        
     }
 
     ngAfterViewInit(): void {
@@ -33,12 +31,19 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
         window.open(url);
     }
 
-    openClose(event: Event) {
-        console.log(this.dropdown)
-        if (this.close) {
-            this.close = false;
+    openClose(event: MouseEvent) {
+        if (this.open) {
+            this.open = false;
         } else {
-            this.close = true;
+            this.open = true;
+        }
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const clickedInside = this.elementRef.nativeElement.contains(event.target);
+        if (!clickedInside) {
+            this.open = false;
         }
     }
 }

@@ -12,10 +12,9 @@
                           <img style="cursor: pointer;" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                       </th>
                       <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
-                        <div>
-                            {{header}}
-                            <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"> 
-                            <app-lv-dropdown [id]="z" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
+                        <div class="th-wrapper">
+                            <div class="header">{{header}} <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"></div> 
+                            <app-lv-dropdown class="dropdown" [id]="z" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
                                 <div class="lv-filters">
                                     <select name="filters" id="filters" #select>
                                         <option value="gt">Mayor que:</option>

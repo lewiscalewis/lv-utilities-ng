@@ -1,6 +1,6 @@
 <div class="lv-container" tabindex="0">
-    <img src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu" (click)="openClose($event)">
-    <div class="dropdown" *ngIf="close" #dropdown>
+    <img id="dropdown-image" src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu" (click)="openClose($event)">
+    <div class="dropdown" *ngIf="open" #dropdown>
         <div *ngFor="let item of links" class="links">
             <div class="link" (click)="redirect(item.url)">
                 <img *ngIf="item.icon" [src]="item.icon" alt="icon">

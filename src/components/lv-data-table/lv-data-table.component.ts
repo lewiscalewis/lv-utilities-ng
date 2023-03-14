@@ -1,12 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { HTTP_OPTIONS, ModalType, RequestType, States } from 'src/constants/lv-constans';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HTTP_OPTIONS, ModalType, RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
-import { firstValueFrom, NotFoundError } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
-import { LvDropdownComponent } from '../lv-dropdown/lv-dropdown.component';
 import { DatePipe } from '@angular/common';
 import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
 
@@ -82,7 +81,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         private containerRef: ViewContainerRef,
         private modalService: LvModalService,
         private datePipe: DatePipe,
-        private cdRef: ChangeDetectorRef) { }
+        private cdRef: ChangeDetectorRef,
+        ) { }
 
     ngAfterViewInit(): void {
         this.loading = true;
@@ -627,21 +627,26 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         }
     }
 
-    filterTable(select?: HTMLSelectElement, input?: HTMLInputElement, index?: number){
+    filterTable(select?: HTMLSelectElement, input?: HTMLInputElement, index?: number) {
         console.log(select?.value);
         console.log(input?.value);
     }
 
-    setDropDowns(event: any){
+    setDropDowns(event: any) {
         this.dropDownInstance.push(event);
     }
 
-    closeDropDowns(n: number) {
-        this.dropDownInstance.forEach(d => {
-            if(d.id !== n){
+    closeDropDowns(n?: number) {
+        if(n){
+            this.dropDownInstance.forEach(d => {
+                if (d.id !== n) {
+                    d.close = false;
+                }
+            });
+        }else{
+            this.dropDownInstance.forEach(d => {
                 d.close = false;
-            }
-        })
+            });
+        }
     }
-
 }

@@ -1,26 +1,35 @@
 @import '../../variables.scss';
 
 .lv-container {
+    display: flex;
     cursor: pointer;
+    width: auto;
     width: fit-content;
-    position: absolute;
-    z-index: 999;
 
     img {
         max-width: 20px;
+        padding: 5px;
+        &:hover {
+            border-radius: 50%;
+            background-color: whitesmoke;
+        }
     }
     .dropdown {
         border: 1px solid lightgray;
         padding: 8px;
         overflow-y: auto;
+        width: fit-content;
         max-height: 300px;
         max-width: 250px;
         border-radius: 6px;
         box-shadow: $box-shadow;
         font-family: $font-family;
-        position: sticky; 
         background-color: white;
         opacity: 1;
+        z-index: 999;
+        position: absolute;
+        margin-top: 30px;
+        margin-left: -200px;
 
         .links {
             display: flex;
