@@ -14,6 +14,7 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
     /**Debe cumplir la interfaz LvSideBarLinks, serán los botones de enlace que se mostraran*/
     @Input() links!: LvSideBarLinks[];
     @Input() public id!: number;
+    @Input() marginLeftDropdown!: number;
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
 
     open: boolean = false;

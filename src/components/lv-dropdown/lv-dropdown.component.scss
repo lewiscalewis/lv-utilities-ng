@@ -29,7 +29,6 @@
         z-index: 999;
         position: absolute;
         margin-top: 30px;
-        margin-left: -200px;
 
         .links {
             display: flex;
@@ -59,6 +58,12 @@
                 font-size: smaller;
                 transition: transform 0.3s ease-in-out,
                 background-color 0.5s ease-in-out;
+
+                div {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
     
                 &:hover {
                     transform: scale(1.1);
