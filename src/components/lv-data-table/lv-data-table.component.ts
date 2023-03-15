@@ -82,7 +82,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         private modalService: LvModalService,
         private datePipe: DatePipe,
         private cdRef: ChangeDetectorRef,
-        ) { }
+    ) { }
 
     ngAfterViewInit(): void {
         this.loading = true;
@@ -144,6 +144,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     manageSearchData(event: any) {
+        this.loading = true;
         let objectMapper: LvObjectReader = new LvObjectReader(event);
         this.headers = objectMapper.getHeadersForTable();
         this.rows = objectMapper.getRowsForTable();
@@ -151,6 +152,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         this.loading = false;
         let total = Math.ceil(this.pageRows.length / 15);
         this.totalPages = total <= 1 ? 1 : total;
+        this.loading = false;
     }
 
     getFieldType(value: any): string | void {
@@ -627,26 +629,46 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         }
     }
 
-    filterTable(select?: HTMLSelectElement, input?: HTMLInputElement, index?: number) {
-        console.log(select?.value);
-        console.log(input?.value);
-    }
-
-    setDropDowns(event: any) {
-        this.dropDownInstance.push(event);
-    }
-
-    closeDropDowns(n?: number) {
-        if(n){
-            this.dropDownInstance.forEach(d => {
-                if (d.id !== n) {
-                    d.close = false;
-                }
-            });
-        }else{
-            this.dropDownInstance.forEach(d => {
-                d.close = false;
+    filterTable(
+        select: HTMLSelectElement, 
+        input: HTMLInputElement, 
+        header: string, 
+        selectRange?: HTMLSelectElement, 
+        select2?: HTMLSelectElement, 
+        input2?: HTMLInputElement
+    ) {
+        this.loading = true;
+        this.http.get(
+            this.url + '/filter' + `?operation=${select?.value}&
+            param=${input?.value}&
+            property=${header}&
+            range=${selectRange?.value}&
+            operation2=${select2?.value}&
+            param2=${input2?.value}`).
+        subscribe((res:any) => {
+                let objectReader = new LvObjectReader(res);
+                this.pageRows = objectReader.getRowsForTable();
+                this.loading = false;
+                let total = Math.ceil(this.pageRows.length / 15);
+                this.totalPages = total <= 1 ? 1 : total;
             });
         }
-    }
+
+    setDropDowns(event: any) {
+            this.dropDownInstance.push(event);
+        }
+
+    closeDropDowns(n ?: number) {
+            if(n) {
+                this.dropDownInstance.forEach(d => {
+                    if (d.id !== n) {
+                        d.close = false;
+                    }
+                });
+            }else{
+                this.dropDownInstance.forEach(d => {
+                    d.close = false;
+                });
+            }
+        }
 }

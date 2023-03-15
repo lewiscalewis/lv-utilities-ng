@@ -1,15 +1,15 @@
 <div class="lv-container" tabindex="0">
     <img id="dropdown-image" src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu" (click)="openClose($event)">
-    <div class="dropdown" *ngIf="open" [style]="'margin-left: '+marginLeftDropdown+'px'">
-        <div *ngFor="let item of links" class="links">
-            <div class="link" (click)="redirect(item.url)">
-                <img *ngIf="item.icon" [src]="item.icon" alt="icon">
-                <img *ngIf="!item.icon" class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20">
-                <div>{{item.description}}</div>
-            </div>
+</div>
+<div class="dropdown" *ngIf="open" [style]="'margin-left: '+marginLeftDropdown+'px'" [style.top.px]="topDropdown">
+    <div *ngFor="let item of links" class="links">
+        <div class="link" (click)="redirect(item.url)">
+            <img *ngIf="item.icon" [src]="item.icon" alt="icon">
+            <img *ngIf="!item.icon" class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20">
+            <div>{{item.description}}</div>
         </div>
-        <div class="dev-content">
-            <ng-content></ng-content>
-        </div>
+    </div>
+    <div class="dev-content">
+        <ng-content></ng-content>
     </div>
 </div>

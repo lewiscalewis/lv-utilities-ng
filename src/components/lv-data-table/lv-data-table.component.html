@@ -14,14 +14,26 @@
                       <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
                         <div class="th-wrapper">
                             <div class="header">{{header}} <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"></div> 
-                            <app-lv-dropdown class="dropdown" [id]="z" [marginLeftDropdown]="-200" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
+                            <app-lv-dropdown *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
                                 <div class="lv-filters">
                                     <select name="filters" id="filters" #select>
                                         <option value="gt">Mayor que:</option>
                                         <option value="st">Menor que:</option>
                                     </select>
-                                    <input type="number" #filterInput>
-                                    <button class="secondary" (click)="filterTable(select, filterInput)">Filtrar</button>
+                                    <input type="text" #filterInput>
+                                    <select name="rangeFilter" id="rangeFilter" #selectRange>
+                                        <option value="or">O</option>
+                                        <option value="and">Y</option>
+                                    </select>
+                                    <select name="filters2" id="filters2" #select2>
+                                        <option value="gt">Mayor que:</option>
+                                        <option value="st">Menor que:</option>
+                                    </select>
+                                    <input type="text" #filterInput2>
+                                    <div class="filter-buttons">
+                                        <button class="secondary" (click)="filterTable(select, filterInput, header, selectRange, select2, filterInput2)">Filtrar</button>
+                                        <button class="danger" (click)="requestPage()">Borrar filtros</button>
+                                    </div>
                                 </div>
                             </app-lv-dropdown>
                         </div>
@@ -29,6 +41,7 @@
                     </tr>
                   </thead>
                   <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
+                    <!--Filas nuevas-->
                       <tr *ngFor="let row of newRows;let i=index; let x = index" [style.background-color]="i%2!==0 ? rowColor[0] : rowColor[2]">
                           <td  [hidden]="readOnly">
                               <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
@@ -44,6 +57,7 @@
                               <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
                           </td>
                       </tr> 
+                      <!--Filas normales-->
                       <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
                           <td  [hidden]="readOnly">
                               <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">

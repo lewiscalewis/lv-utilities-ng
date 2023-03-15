@@ -29,6 +29,9 @@
         flex-direction: column;
         gap: 5px;
         flex-wrap: wrap;
+        max-width: 150px;
+        max-height: 300px;
+        z-index: 999;
 
         select {
             border: 1px solid #ddd;
@@ -55,7 +58,7 @@
             }
         }
 
-        input[type="number"] {
+        input[type="text"] {
             border: 1px solid #ddd;
             padding: 5px;
             height: 15px;
@@ -72,11 +75,12 @@
 
         button {
             margin: 0px;
-            height: 25px;
+            max-height: 40px;
             padding-top: 4px;
             padding-left: 8px;
             padding-right: 8px;
             padding-bottom: 4px;
+            font-size: 9pt;
         }
     }
 }
@@ -89,6 +93,7 @@ input {
 }
 
 .container {
+    z-index: 1;
     max-width: 90vw !important;
     padding: 10px;
     padding-bottom: 0px;
@@ -178,6 +183,7 @@ input {
         max-height: 600px;
         overflow-x: auto;
         overflow-y: auto;
+        min-height: 260px;
     }
 
     .lv-table {
@@ -268,6 +274,7 @@ input {
     .lv-table tbody tr {
         border-bottom: 1px solid $table-row-hover-color;
         transition: background-color 0.2s ease-in-out;
+        max-height: 100px !important;
     }
 
     .lv-table td {

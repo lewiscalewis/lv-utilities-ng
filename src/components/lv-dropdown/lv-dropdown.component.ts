@@ -18,6 +18,7 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
 
     open: boolean = false;
+    topDropdown: number = 0;
 
     ngOnInit() {
     }
@@ -37,6 +38,8 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
             this.open = false;
         } else {
             this.open = true;
+            const rect = (event.target as HTMLElement).getBoundingClientRect();
+            this.topDropdown = 45;
         }
     }
 
