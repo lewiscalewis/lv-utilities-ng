@@ -43,3 +43,9 @@ export const ANGULAR_FORM_VALIDATORS = {
     RIGHT,
     BOTTOM
   }
+
+  export enum Themes {
+    DARK,
+    LIGHT,
+    NEONBLUE
+  }

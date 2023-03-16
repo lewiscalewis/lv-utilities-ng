@@ -17,6 +17,7 @@ import { LvModalService } from 'src/services/lv-modal.service';
 import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
+import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CommonModule, DatePipe } from '@angular/common';
     LvLoadSpinnerComponent,
     LvDropdownComponent,
     LvSearchBarComponent,
+    LvDarkThemeDirective,
   ],
   imports: [
     BrowserModule,

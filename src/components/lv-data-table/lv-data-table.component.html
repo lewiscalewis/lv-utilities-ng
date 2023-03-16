@@ -2,16 +2,16 @@
     <div class="search">
         <app-lv-searchBar [url]="url + '/search'" [rowData]="searchData" [showResultList]="false" [isTableMode]="true" (getResults)="manageSearchData($event)" (userInput)="reload($event)" class="navigator"></app-lv-searchBar>
     </div>
-    <div class="lv-table-container">
-        <table class="lv-table" [style.color]="rowColor[1]">
-            <ng-container *ngIf="!loading; else spinner">
+    <div class="lv-table-container" [class.table-collapse]="flagReduceOrExpandShow">
+        <ng-container *ngIf="!loading; else spinner">
+            <table class="lv-table" [style.color]="rowColor[1]">
                 <thead>
                     <tr>
-                      <th class="resizable" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]" [hidden]="readOnly">
-                          <img style="cursor: pointer;" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                          <img style="cursor: pointer;" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                      </th>
-                      <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
+                    <th class="resizable" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
+                        <img style="cursor: pointer; background-color: white" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img style="cursor: pointer; background-color: white" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                    </th>
+                    <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
                         <div class="th-wrapper">
                             <div class="header">{{header}} <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"></div> 
                             <app-lv-dropdown *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
@@ -20,69 +20,78 @@
                                         <option value="gt">Mayor que:</option>
                                         <option value="st">Menor que:</option>
                                     </select>
-                                    <input type="text" #filterInput>
+                                    <input class="input-dropdown" type="text" #filterInput>
                                     <select name="rangeFilter" id="rangeFilter" #selectRange>
+                                        <option value="">-</option>
                                         <option value="or">O</option>
                                         <option value="and">Y</option>
                                     </select>
-                                    <select name="filters2" id="filters2" #select2>
-                                        <option value="gt">Mayor que:</option>
-                                        <option value="st">Menor que:</option>
-                                    </select>
-                                    <input type="text" #filterInput2>
-                                    <div class="filter-buttons">
-                                        <button class="secondary" (click)="filterTable(select, filterInput, header, selectRange, select2, filterInput2)">Filtrar</button>
+                                    <div *ngIf="selectRange.value" class="range-filters">
+                                        <select name="filters2" id="filters2" #select2>
+                                            <option value="gt">Mayor que:</option>
+                                            <option value="st">Menor que:</option>
+                                        </select>
+                                        <input class="input-dropdown" type="text" #filterInput2>
+                                        <div class="filter-buttons">
+                                            <button class="secondary" (click)="filterTable(select, filterInput, header, selectRange, select2, filterInput2)">Filtrar</button>
+                                            <button class="danger" (click)="requestPage()">Borrar filtros</button>
+                                        </div>
+                                    </div>
+                                    <div class="filter-buttons" *ngIf="!selectRange.value">
+                                        <button class="secondary" (click)="filterTable(select, filterInput, header, selectRange)">Filtrar</button>
                                         <button class="danger" (click)="requestPage()">Borrar filtros</button>
                                     </div>
                                 </div>
                             </app-lv-dropdown>
                         </div>
-                      </th>
+                    </th>
                     </tr>
-                  </thead>
-                  <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
+                </thead>
+                <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
                     <!--Filas nuevas-->
-                      <tr *ngFor="let row of newRows;let i=index; let x = index" [style.background-color]="i%2!==0 ? rowColor[0] : rowColor[2]">
-                          <td  [hidden]="readOnly">
-                              <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                              <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
-                          </td>
-                          <td  *ngFor="let field of newRowCleanObject[x]; let o=index">
-                              <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                                  <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                                  <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                                  <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
-                              </ng-container>
-                              <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
-                          </td>
-                      </tr> 
-                      <!--Filas normales-->
-                      <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
-                          <td  [hidden]="readOnly">
-                              <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
-                              <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
-                          </td>
-                          <td  *ngFor="let field of row; let o=index">
-                              <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
-                                  <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                                  <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                                  <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                                  <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
-                              </ng-container>
-                              <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
-                          </td>
-                      </tr>
-                  </tbody>
-            </ng-container>
-            <ng-template #spinner>
-                <app-lv-load-spinner class="spinner"></app-lv-load-spinner>
-            </ng-template>
-          </table>
+                    <tr *ngFor="let row of newRows;let i=index; let x = index" [style.background-color]="i%2!==0 ? rowColor[0] : rowColor[2]">
+                        <td  [hidden]="readOnly">
+                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                        </td>
+                        <td  *ngFor="let field of newRowCleanObject[x]; let o=index">
+                            <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
+                                <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                                <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
+                            </ng-container>
+                            <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                        </td>
+                    </tr> 
+                    <!--Filas normales-->
+                    <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
+                        <td  [hidden]="readOnly">
+                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
+                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
+                        </td>
+                        <td [hidden]="!readOnly">
+                        </td>
+                        <td  *ngFor="let field of row; let o=index">
+                            <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
+                                <input *ngSwitchCase="'number'" type="number" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                <input *ngSwitchCase="'date'" type="date" [ngModel]="field | date:'yyyy-MM-dd'" (change)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                                <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
+                            </ng-container>
+                            <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </ng-container>
+          <ng-template #spinner>
+            <app-lv-load-spinner class="spinner"></app-lv-load-spinner>
+        </ng-template>
     </div>
-    <div class="action-container" *ngIf="!readOnly">
+    <div class="action-container">
         <div class="actions" [style.background-color]="headerColor[0]">
-            <div>
+            <div *ngIf="!readOnly">
                 <button [disabled]="!isDirty" (click)="modifyData()" [ngClass]="{'disabled': !isDirty, 'success-color': isDirty}">Guardar</button>
                 <button class="secondary" (click)="addRow()" *ngIf="!loading">Añadir</button>
             </div>

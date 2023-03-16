@@ -14,11 +14,11 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
     /**Debe cumplir la interfaz LvSideBarLinks, serán los botones de enlace que se mostraran*/
     @Input() links!: LvSideBarLinks[];
     @Input() public id!: number;
-    @Input() marginLeftDropdown!: number;
+    @Input() marginLeftDropdown: number = 0;
+    @Input() display: boolean = true;
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
 
     open: boolean = false;
-    topDropdown: number = 0;
 
     ngOnInit() {
     }
@@ -38,8 +38,6 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
             this.open = false;
         } else {
             this.open = true;
-            const rect = (event.target as HTMLElement).getBoundingClientRect();
-            this.topDropdown = 45;
         }
     }
 
