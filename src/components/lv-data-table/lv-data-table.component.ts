@@ -639,12 +639,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     ) {
         this.loading = true;
         this.http.get(
-            this.url + '/filter' + `?operation=${select?.value}&
-            param=${input?.value}&
-            property=${header}&
-            range=${selectRange?.value}&
-            operation2=${select2?.value}&
-            param2=${input2?.value}`).
+            this.url + '/filter' + `?operation=${select?.value}&param=${input?.value}&property=${header}&range=${selectRange?.value}&operation2=${select2?.value}&param2=${input2?.value}`).
         subscribe((res:any) => {
                 let objectReader = new LvObjectReader(res);
                 this.pageRows = objectReader.getRowsForTable();
