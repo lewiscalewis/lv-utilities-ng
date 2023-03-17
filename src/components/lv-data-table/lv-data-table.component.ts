@@ -9,8 +9,6 @@ import { LvModalService } from 'src/services/lv-modal.service';
 import { DatePipe } from '@angular/common';
 import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
 
-
-
 @Component({
     selector: 'app-lv-data-table',
     templateUrl: './lv-data-table.component.html',
@@ -31,13 +29,6 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
      * por si se desea setear los datos de forma local y manuel en lugar de por petición
      */
     @Input() definition?: ILvTableDefinition;
-    /**
-     * Objeto de tupo RequestType para definir el tipo de petición: get o post, por defecto si no se rellena: GET
-     */
-    @Input() currencyFields: any[] = [];
-    @Input() requestType: RequestType = RequestType.GET;
-    @Input() rowColor: string[] = [];
-    @Input() headerColor: string[] = [];
     @Input() readOnly: boolean = false;
     @Input() detailUrl: string = '';
     @Output() updatedDataTable: EventEmitter<any[][]> = new EventEmitter();
@@ -74,6 +65,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     showOrderByArrows: boolean = false;
     selectedHeaderIndex: number = 0;
     dropDownInstance: any[] = [];
+    theme!: string;
 
     constructor(
         private http: HttpClient,
@@ -82,6 +74,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         private modalService: LvModalService,
         private datePipe: DatePipe,
         private cdRef: ChangeDetectorRef,
+        private el: ElementRef
     ) { }
 
     ngAfterViewInit(): void {
@@ -103,6 +96,8 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         if (this.rows) {
             this.getCurrentPage();
         }
+
+        this.theme = this.el.nativeElement.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
     }
 
     reload(input: any) {

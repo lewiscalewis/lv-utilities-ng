@@ -16,6 +16,7 @@ export class LvDropdownComponent implements OnInit, AfterViewInit {
     @Input() public id!: number;
     @Input() marginLeftDropdown: number = 0;
     @Input() display: boolean = true;
+    @Input() theme: string = 'light-theme';
     @Output() drowpDownInstance: EventEmitter<LvDropdownComponent> = new EventEmitter();
 
     open: boolean = false;

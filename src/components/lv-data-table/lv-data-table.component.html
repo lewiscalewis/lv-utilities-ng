@@ -1,20 +1,24 @@
-<div class="container" [style.background-color]="headerColor[0]">
+<div class="container">
     <div class="search">
         <app-lv-searchBar [url]="url + '/search'" [rowData]="searchData" [showResultList]="false" [isTableMode]="true" (getResults)="manageSearchData($event)" (userInput)="reload($event)" class="navigator"></app-lv-searchBar>
     </div>
     <div class="lv-table-container" [class.table-collapse]="flagReduceOrExpandShow">
         <ng-container *ngIf="!loading; else spinner">
-            <table class="lv-table" [style.color]="rowColor[1]">
+            <table class="lv-table">
                 <thead>
                     <tr>
-                    <th class="resizable" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
-                        <img style="cursor: pointer; background-color: white" src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                        <img style="cursor: pointer; background-color: white" src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                    <th class="resizable" *ngIf="theme === 'light-theme'">
+                        <img src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                     </th>
-                    <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index" [style.background-color]="headerColor[0]" [style.color]="headerColor[1]">
+                    <th class="resizable" *ngIf="theme === 'dark-theme'">
+                        <img src="assets\table-icons\reduce-dark.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="assets\table-icons\expand-dark.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                    </th>
+                    <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index">
                         <div class="th-wrapper">
                             <div class="header">{{header}} <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"></div> 
-                            <app-lv-dropdown *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
+                            <app-lv-dropdown [theme]="theme" *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
                                 <div class="lv-filters">
                                     <select name="filters" id="filters" #select>
                                         <option value="gt">Mayor que:</option>
@@ -49,7 +53,7 @@
                 </thead>
                 <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
                     <!--Filas nuevas-->
-                    <tr *ngFor="let row of newRows;let i=index; let x = index" [style.background-color]="i%2!==0 ? rowColor[0] : rowColor[2]">
+                    <tr *ngFor="let row of newRows;let i=index; let x = index">
                         <td  [hidden]="readOnly">
                             <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
                             <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
@@ -65,7 +69,7 @@
                         </td>
                     </tr> 
                     <!--Filas normales-->
-                    <tr *ngFor="let row of pageRows; let i=index" [style.background-color]="i%2===0 ? rowColor[0] : rowColor[2]">
+                    <tr *ngFor="let row of pageRows; let i=index">
                         <td  [hidden]="readOnly">
                             <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
                             <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
@@ -90,14 +94,14 @@
         </ng-template>
     </div>
     <div class="action-container">
-        <div class="actions" [style.background-color]="headerColor[0]">
+        <div class="actions">
             <div *ngIf="!readOnly">
                 <button [disabled]="!isDirty" (click)="modifyData()" [ngClass]="{'disabled': !isDirty, 'success-color': isDirty}">Guardar</button>
                 <button class="secondary" (click)="addRow()" *ngIf="!loading">Añadir</button>
             </div>
             <div class="pagination" *ngIf="!loading">
                 <div class="before" (click)="previousPage()" *ngIf="totalPages > 1">&lt;</div>
-                <div class="current-page" [style.color]="headerColor[1]">{{ currentPage }}/{{totalPages}}</div>
+                <div class="current-page">{{ currentPage }}/{{totalPages}}</div>
                 <div class="after" (click)="nextPage()" *ngIf="totalPages > 1">&gt;</div>
               </div>
           </div>

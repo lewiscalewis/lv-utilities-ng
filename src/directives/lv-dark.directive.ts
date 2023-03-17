@@ -1,13 +1,16 @@
-import { Directive } from '@angular/core';
+import { Directive, Input, OnInit } from '@angular/core';
 import { ElementRef, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[lv-dark]'
+    selector: '[lv-dark]'
 })
-export class LvDarkThemeDirective {
+export class LvDarkThemeDirective implements OnInit {
 
-  constructor(private el: ElementRef, private renderer: Renderer2) { 
-    this.renderer.addClass(this.el.nativeElement, "dark-theme");
-  }
+    constructor(private el: ElementRef, private renderer: Renderer2) {
+    }
+
+    ngOnInit() {
+        this.renderer.addClass(this.el.nativeElement, "dark-theme");
+    }
 
 }

@@ -48,6 +48,7 @@ $background-button: #007bff;
         transition: background-color 0.4s ease-in-out;
         vertical-align: center;
         font-family: $font-family;
+        border: 1px solid rgb(255, 255, 255);
 
         &:hover {
             color: white;
@@ -92,7 +93,7 @@ $background-button: #007bff;
 
     .secondary {
         background-color: rgb(0, 2, 145);
-        border: 1px solid rgb(0, 2, 145);
+        border: 1px solid rgb(255, 255, 255);
         color: white;
 
         &:hover {

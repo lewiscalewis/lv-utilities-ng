@@ -1,6 +1,6 @@
 @import "../../variables.scss";
 
-@mixin table {
+@mixin table-standard {
     .resizable {
         border-left: 1px solid lightgrey !important;
         border-right: 1px solid lightgrey !important;
@@ -288,12 +288,6 @@
                 img {
                     margin-right: 10px;
                     cursor: pointer;
-
-                    &:hover {
-                        border-radius: 50%;
-                        border: 1px solid darkgray;
-                        background-color: $table-row-hover-color;
-                    }
                 }
             }
 
@@ -328,10 +322,6 @@
     }
 
     .lv-table-container.table-collapse {
-        min-height: 0px;
+        min-height: 0px !important;
     }
-}
-
-.light-theme {
-    @include table();
 }

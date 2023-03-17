@@ -1,5 +1,6 @@
 <div class="lv-container" tabindex="0">
-    <img id="dropdown-image" src="assets/commons/menu-vertical-svgrepo-com.svg" alt="menu" (click)="openClose($event)">
+    <img *ngIf="theme === 'light-theme'" id="dropdown-image" src="assets/commons/menu-vertical.svg" alt="menu" (click)="openClose($event)">
+    <img *ngIf="theme === 'dark-theme'" id="dropdown-image" src="assets/commons/menu-vertical-dark.svg" alt="menu" (click)="openClose($event)">
 </div>
 <div class="dropdown" *ngIf="open" [style]="'margin-left: '+marginLeftDropdown+'px'">
     <div *ngFor="let item of links" class="links">

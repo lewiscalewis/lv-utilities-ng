@@ -1,0 +1,6 @@
+@import './variables.scss';
+@import './themes/lv-table/dark.scss';
+
+.dark-theme {
+    @include table-dark();
+}
