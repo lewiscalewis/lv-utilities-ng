@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Input, OnInit } from '@angular/core';
 import { trigger, transition, style, animate, AnimationBuilder } from '@angular/animations';
 import { ILvSlide } from 'src/interfaces/lv-carrousel-interfaces/lv-slide.interface';
 
@@ -38,11 +38,13 @@ export class LvCarrouselComponent implements OnInit, AfterViewChecked {
     @Input() colorBotones: string[] = [];
     public selectorBoton: string  = '';
     public currentIndex: number = 0;
+    theme: string = 'light-theme';
 
-    constructor(private animationBuilder: AnimationBuilder) { }
+    constructor(private animationBuilder: AnimationBuilder, private el: ElementRef) { }
     ngAfterViewChecked(): void {
         this.selector = '';
         this.selectorBoton = this.colorBotones.length !== 0 ? 'background-color: ' + this.colorBotones[0] + '; ' + 'color: ' + this.colorBotones[1] : 'background-color: white; color: black;';
+        this.theme = this.el.nativeElement.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
     }
 
     ngOnInit() {

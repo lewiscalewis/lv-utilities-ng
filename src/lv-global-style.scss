@@ -1,6 +1,14 @@
 @import './variables.scss';
 @import './themes/lv-table/dark.scss';
+@import './themes/lv-slider/dark.scss';
+@import './themes/lv-form/dark.scss';
 
 .dark-theme {
+    * {
+        background-color: black !important;
+        color: white !important;
+    }
     @include table-dark();
+    @include slider-dark();
+    @include form-dark();
 }

@@ -4,10 +4,15 @@
         <img id="slide" [src]="slides[currentIndex].src" [alt]="slides[currentIndex].descripcion">
       </div>
     </div>
-    <div class="user-controls">
+    <div class="user-controls" *ngIf="theme === 'light-theme'">
       <img src="assets/slider-icons/chevron-left-square-svgrepo-com.svg" alt="anterior" (click)="anterior()">
       <div class="slide-name">{{slides[currentIndex].nombre}}</div>
       <img src="assets/slider-icons/chevron-right-square-svgrepo-com.svg" alt="anterior" (click)="siguiente()">
     </div>
+    <div class="user-controls" *ngIf="theme === 'dark-theme'">
+        <img src="assets/slider-icons/chevron-left-square-svgrepo-com-dark.svg" alt="anterior" (click)="anterior()">
+        <div class="slide-name">{{slides[currentIndex].nombre}}</div>
+        <img src="assets/slider-icons/chevron-right-square-svgrepo-com-dark.svg" alt="anterior" (click)="siguiente()">
+      </div>
   </div>
   

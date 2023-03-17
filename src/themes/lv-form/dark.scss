@@ -1,0 +1,10 @@
+@mixin form-dark {
+    .fieldset {
+        background-color: black !important;
+        border: 1px solid white !important;
+
+        legend {
+            border: 1px solid white !important;
+        }
+    }
+}

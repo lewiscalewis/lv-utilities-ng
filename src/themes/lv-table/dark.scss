@@ -3,11 +3,6 @@
 $dark-theme-color: #1c1c1c;
 
 @mixin table-dark {
-    
-
-    img {
-        
-    }
 
     input {
         color: white;
@@ -16,6 +11,86 @@ $dark-theme-color: #1c1c1c;
     .container {
         box-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
         background-color: black !important;
+
+        .lv-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex-wrap: wrap;
+            max-width: 150px;
+            max-height: 300px;
+            z-index: 999;
+            background-color: white !important;
+
+            .range-filters {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .filter-buttons {
+                background-color: white !important;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            select {
+                border: 1px solid #ddd !important;
+                width: 160px !important;
+                padding: 5px !important;
+                border-radius: 5px !important;
+                background-color: white !important;
+                font-size: 14px !important;
+                font-weight: bold !important;
+                color: #444 !important;
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                appearance: none !important;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><path d="M6 6L0 0h12z"/></svg>');
+                background-repeat: no-repeat !important;
+                background-position: right 10px center !important;
+                background-size: 8px 6px !important;
+                cursor: pointer;
+                transition: border-color 0.3s ease-in-out !important;
+
+                &:focus {
+                    border-color: #0077cc !important;
+                    outline: none !important;
+                }
+            }
+
+            input[type="text"] {
+                border: 1px solid #ddd !important;
+                background-color: white !important;
+                padding: 5px !important;
+                height: 15px !important;
+                border-radius: 5px !important;
+                transition: border-color 0.3s ease-in-out !important;
+
+                &:focus {
+                    border-color: #0077cc !important;
+                    outline: none !important;
+                }
+            }
+
+            @include button-style();
+
+            button {
+                margin: 0px;
+                max-height: 40px;
+                padding-top: 4px;
+                padding-left: 8px;
+                padding-right: 8px;
+                padding-bottom: 4px;
+                font-size: 9pt;
+            }
+        }
+    
 
         .search,
         .action-container,

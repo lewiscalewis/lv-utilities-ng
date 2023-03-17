@@ -10,7 +10,7 @@
     align-items: center;
     flex-wrap: wrap;
     max-height: 35px;
-    color: black;
+    color: black !important;
 
     .lv-search {
         opacity: 1;
@@ -25,11 +25,16 @@
         border-radius: 4px;
         gap: 5px;
         font-family: $font-family;
-        background-color: white;
+        background-color: white !important;
+        color: black !important;
+        *{
+            background-color: white !important;
+        }
 
         p {
             padding: 0px;
             margin: 0px;
+            color: black !important;
         }
 
         img {
@@ -45,6 +50,7 @@
             box-shadow: none !important;
             border: none;
             width: 100%;
+            color: black !important;
         }
     }
 }
