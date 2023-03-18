@@ -1,4 +1,7 @@
 @mixin slider-dark {
+    * {
+        background-color: rgb(39, 41, 43) !important;
+    }
     img {
         border-radius: 6px;
     }

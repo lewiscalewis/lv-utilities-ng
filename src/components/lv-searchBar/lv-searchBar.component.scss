@@ -11,6 +11,11 @@
     flex-wrap: wrap;
     max-height: 35px;
     color: black !important;
+    background-color: transparent !important;
+
+    th {
+        background-color: rgb(39, 41, 43) !important;
+    }
 
     .lv-search {
         opacity: 1;

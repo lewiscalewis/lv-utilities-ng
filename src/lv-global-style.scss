@@ -4,11 +4,5 @@
 @import './themes/lv-form/dark.scss';
 
 .dark-theme {
-    * {
-        background-color: black !important;
-        color: white !important;
-    }
     @include table-dark();
-    @include slider-dark();
-    @include form-dark();
 }
