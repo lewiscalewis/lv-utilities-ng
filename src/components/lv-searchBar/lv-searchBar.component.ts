@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
 import { LvObject } from 'src/models/lv-object';
 import { LvModalService } from 'src/services/lv-modal.service';
@@ -9,7 +10,7 @@ import { LvModalService } from 'src/services/lv-modal.service';
     templateUrl: './lv-searchBar.component.html',
     styleUrls: ['./lv-searchBar.component.scss']
 })
-export class LvSearchBarComponent<T> implements OnInit {
+export class LvSearchBarComponent implements OnInit, OnDestroy {
 
 
     @Input() url!: string;
@@ -23,8 +24,14 @@ export class LvSearchBarComponent<T> implements OnInit {
     results: LvSearchData[] = [];
     listResult: any;
     list: any[] = [];
+    private destroy$: Subject<void> = new Subject<void>();
 
-    constructor(private http: HttpClient, private modalService: LvModalService, private viewRef: ViewContainerRef) { }
+    constructor(private http: HttpClient) { }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
     ngOnInit() {
     }
@@ -36,7 +43,7 @@ export class LvSearchBarComponent<T> implements OnInit {
         }
         if (this.url) {
             const params = new HttpParams().set('search', userInput.target.value);
-            this.http.get(this.url, { params }).subscribe((data: any) => {
+            this.http.get(this.url, { params }).pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
                 this.results = data;
                 if(this.type){
                     this.listResult = [...data];

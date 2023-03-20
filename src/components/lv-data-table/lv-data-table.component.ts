@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HTTP_OPTIONS, ModalType, RequestType } from 'src/constants/lv-constans';
 import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { LvModalService } from 'src/services/lv-modal.service';
 import { DatePipe } from '@angular/common';
 import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
@@ -14,7 +14,7 @@ import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBa
     templateUrl: './lv-data-table.component.html',
     styleUrls: ['./lv-data-table.component.scss'],
 })
-export class LvDataTableComponent implements OnInit, AfterViewInit {
+export class LvDataTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /**
      * Url de la que quiere sacar la información para pintar la tabla
@@ -66,6 +66,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     selectedHeaderIndex: number = 0;
     dropDownInstance: any[] = [];
     theme!: string;
+    private destroy$: Subject<void> = new Subject<void>();
 
     constructor(
         private http: HttpClient,
@@ -76,6 +77,11 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         private cdRef: ChangeDetectorRef,
         private el: ElementRef
     ) { }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
     ngAfterViewInit(): void {
         this.loading = true;
@@ -113,7 +119,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     //TODO: añadir compatibilidad odata, insertar, si se ingresan datos desde el definition, devolver el array modificado tras darle a guardar;
 
     getTotalPagesFromServer() {
-        this.http.get(this.url + '/totalpages').subscribe({
+        this.http.get(this.url + '/totalpages').pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 if (!!data) {
                     let res: any = data;
@@ -214,7 +220,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     //     let objectMapper: LvObjectReader;
     //     if (this.requestType === RequestType.POST) {
     //         this.http.post(this.url, this.data, this.httpOptions)
-    //             .subscribe({
+    //             .pipe(takeUntil(this.destroy$)).subscribe({
     //                 next: (res) => {
     //                     objectMapper = new LvObjectReader(res);
     //                     this.headers = objectMapper.getHeadersForTable();
@@ -232,7 +238,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     //             });
     //     }
     //     if (this.requestType === RequestType.GET) {
-    //         this.http.get(this.url).subscribe(data => {
+    //         this.http.get(this.url).pipe(takeUntil(this.destroy$)).subscribe(data => {
     //             objectMapper = new LvObjectReader(data);
     //             this.headers = objectMapper.getHeadersForTable();
     //             this.httpData = objectMapper.getRowsForTable();
@@ -279,7 +285,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
 
     requestModify(data: any) {
         this.http.put(this.url, data, HTTP_OPTIONS)
-            .subscribe({
+            .pipe(takeUntil(this.destroy$)).subscribe({
                 next: (res: any) => {
                     this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han modificado los datos', this.containerRef);
                 },
@@ -304,7 +310,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     requestNew(data: any) {
-        this.http.post(this.url, data, HTTP_OPTIONS).subscribe({
+        this.http.post(this.url, data, HTTP_OPTIONS).pipe(takeUntil(this.destroy$)).subscribe({
             next: (res: any) => {
                 this.modalService.showModal(ModalType.SUCCESS, 'Información sobre la operación', 'Se han añadido los datos', this.containerRef);
             },
@@ -405,7 +411,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         } else {
             this.modalService
                 .showModal(ModalType.CONFIRMATION, 'Confirmación de operación', '¿Está seguro de que desea eliminar este registro?', this.containerRef)
-                .getUserResponse().subscribe(async res => {
+                .getUserResponse().pipe(takeUntil(this.destroy$)).subscribe(async res => {
                     if (res) {
                         this.flagDeleteUpdate = true;
                         if (this.definition) {
@@ -418,10 +424,10 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
                             let url = this.url + '/' + event[0];
                             if (await this.canRemove(url + '/canRemove')) {
                                 this.http.delete(url)
-                                    .subscribe({
+                                    .pipe(takeUntil(this.destroy$)).subscribe({
                                         next: (res: any) => {
                                             this.modalService.showModal(ModalType.SUCCESS, 'Se han borrado los registros', res.message, this.containerRef)
-                                                .getUserResponse().subscribe((res) => {
+                                                .getUserResponse().pipe(takeUntil(this.destroy$)).subscribe((res) => {
                                                     this.requestPage();
                                                     //this.getCurrentPage();
                                                 });
@@ -538,7 +544,7 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
         let objectMapper: LvObjectReader;
         try {
             if (this.currentPage) {
-                this.http.get(this.url + '/' + this.currentPage).subscribe(data => {
+                this.http.get(this.url + '/' + this.currentPage).pipe(takeUntil(this.destroy$)).subscribe(data => {
                     objectMapper = new LvObjectReader(data);
                     this.headers = objectMapper.getHeadersForTable();
                     this.rows = objectMapper.getRowsForTable();
@@ -625,40 +631,40 @@ export class LvDataTableComponent implements OnInit, AfterViewInit {
     }
 
     filterTable(
-        select: HTMLSelectElement, 
-        input: HTMLInputElement, 
-        header: string, 
-        selectRange?: HTMLSelectElement, 
-        select2?: HTMLSelectElement, 
+        select: HTMLSelectElement,
+        input: HTMLInputElement,
+        header: string,
+        selectRange?: HTMLSelectElement,
+        select2?: HTMLSelectElement,
         input2?: HTMLInputElement
     ) {
         this.loading = true;
         this.http.get(
             this.url + '/filter' + `?operation=${select?.value}&param=${input?.value}&property=${header}&range=${selectRange?.value}&operation2=${select2?.value}&param2=${input2?.value}`).
-        subscribe((res:any) => {
+            subscribe((res: any) => {
                 let objectReader = new LvObjectReader(res);
                 this.pageRows = objectReader.getRowsForTable();
                 this.loading = false;
                 let total = Math.ceil(this.pageRows.length / 15);
                 this.totalPages = total <= 1 ? 1 : total;
             });
-        }
+    }
 
     setDropDowns(event: any) {
-            this.dropDownInstance.push(event);
-        }
+        this.dropDownInstance.push(event);
+    }
 
-    closeDropDowns(n ?: number) {
-            if(n) {
-                this.dropDownInstance.forEach(d => {
-                    if (d.id !== n) {
-                        d.close = false;
-                    }
-                });
-            }else{
-                this.dropDownInstance.forEach(d => {
+    closeDropDowns(n?: number) {
+        if (n) {
+            this.dropDownInstance.forEach(d => {
+                if (d.id !== n) {
                     d.close = false;
-                });
-            }
+                }
+            });
+        } else {
+            this.dropDownInstance.forEach(d => {
+                d.close = false;
+            });
         }
+    }
 }
