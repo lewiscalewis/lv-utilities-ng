@@ -7,8 +7,6 @@ import { LvModalComponent } from 'src/components/lv-modal/lv-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-
-import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LvSideBarComponent } from 'src/components/lv-sideBar/lv-sideBar.component';
 import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-spinner.component';
@@ -21,7 +19,6 @@ import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
 
 @NgModule({
   declarations: [
-    AppComponent,
     LvCarrouselComponent,
     LvDataTableComponent,
     LvModalComponent,
@@ -41,7 +38,6 @@ import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
     RouterModule,
     CommonModule
   ],
-  providers: [LvModalService, DatePipe],
-  bootstrap: [AppComponent]
+  providers: [LvModalService, DatePipe]
 })
 export class AppModule { }
