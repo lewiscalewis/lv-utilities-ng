@@ -17,7 +17,12 @@
                     </th>
                     <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index">
                         <div class="th-wrapper">
-                            <div class="header">{{header}} <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10"></div> 
+                            <div class="header" *ngIf="theme === 'light-theme'">{{header}} 
+                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10">
+                            </div> 
+                            <div class="header" *ngIf="theme === 'dark-theme'">{{header}} 
+                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com-dark.svg' : 'assets/commons/arrow-down-alt-svgrepo-com-dark.svg'" alt="orderByArrow" width="10">
+                            </div>
                             <app-lv-dropdown [theme]="theme" *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
                                 <div class="lv-filters">
                                     <select name="filters" id="filters" #select>
@@ -54,9 +59,14 @@
                 <tbody class="table-controls-expand" [class.table-controls-reduce]="flagReduceOrExpandShow">
                     <!--Filas nuevas-->
                     <tr *ngFor="let row of newRows;let i=index; let x = index">
-                        <td  [hidden]="readOnly">
+                        <td  *ngIf="!readOnly && theme === 'light-theme'">
                             <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
                             <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                        </td>
+        
+                        <td  [hidden]="!readOnly && theme === 'dark-theme'">
+                            <img class="table-icons" src="assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
                         <td  *ngFor="let field of newRowCleanObject[x]; let o=index">
                             <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
@@ -70,9 +80,14 @@
                     </tr> 
                     <!--Filas normales-->
                     <tr *ngFor="let row of pageRows; let i=index">
-                        <td  [hidden]="readOnly">
-                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(row)">
-                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(row['id'])">
+                        <td  *ngIf="!readOnly && theme === 'light-theme'">
+                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                        </td>
+
+                        <td  *ngIf="!readOnly && theme === 'dark-theme'">
+                            <img class="table-icons" src="assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
                         <td [hidden]="!readOnly">
                         </td>

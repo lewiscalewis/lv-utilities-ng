@@ -3,6 +3,14 @@
 @import './themes/lv-slider/dark.scss';
 @import './themes/lv-form/dark.scss';
 
-.dark-theme {
+app-lv-data-table.dark-theme {
     @include table-dark();
+}
+
+app-lv-carrousel.dark-theme {
+    @include slider-dark();
+}
+
+app-lv-form.dark-theme {
+    @include form-dark();
 }

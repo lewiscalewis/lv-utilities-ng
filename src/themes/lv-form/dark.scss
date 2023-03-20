@@ -1,10 +1,19 @@
 @mixin form-dark {
-    .fieldset {
-        background-color: black !important;
-        border: 1px solid white !important;
 
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background-color: white !important;
+    }
+
+    fieldset {
+        border: 2px solid white !important;
+        
         legend {
-            border: 1px solid white !important;
+            border: 2px solid white !important;
         }
+    }
+
+    * {
+        background-color: rgb(39, 41, 43) !important;
+        color: white !important;
     }
 }
