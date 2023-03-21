@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LvCarrouselComponent } from 'src/components/lv-carrousel/lv-carrousel.component';
 import { LvDataTableComponent } from 'src/components/lv-data-table/lv-data-table.component';
@@ -38,6 +38,26 @@ import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
     RouterModule,
     CommonModule
   ],
-  providers: [LvModalService, DatePipe]
+  providers: [LvModalService, DatePipe],
+  exports: [
+    LvCarrouselComponent,
+    LvDataTableComponent,
+    LvModalComponent,
+    LvFormComponent,
+    LvSideBarComponent,
+    LvLoadSpinnerComponent,
+    LvDropdownComponent,
+    LvSearchBarComponent,
+    LvDarkThemeDirective
+  ]
 })
-export class AppModule { }
+export class LvModule {
+    public static forRoot(): ModuleWithProviders<LvModule> {
+        return {
+            ngModule: LvModule,
+            providers: [
+                LvModalService
+            ]
+        };
+    }
+ }
