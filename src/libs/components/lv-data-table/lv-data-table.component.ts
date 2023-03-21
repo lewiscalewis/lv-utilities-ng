@@ -1,13 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { ILvTableDefinition } from 'src/interfaces/lv-table-interfaces/lv-table-definition.interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { HTTP_OPTIONS, ModalType, RequestType } from 'src/constants/lv-constans';
-import { LvObjectReader } from 'src/middleware/lv-object-reader.middleware';
 import { Router } from '@angular/router';
 import { firstValueFrom, Subject, takeUntil } from 'rxjs';
-import { LvModalService } from 'src/services/lv-modal.service';
 import { DatePipe } from '@angular/common';
-import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
+import { ModalType, HTTP_OPTIONS } from '../../constants/lv-constans';
+import { LvSearchData } from '../../interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
+import { ILvTableDefinition } from '../../interfaces/lv-table-interfaces/lv-table-definition.interface';
+import { LvObjectReader } from '../../middleware/lv-object-reader.middleware';
+import { LvModalService } from '../../services/lv-modal.service';
 
 @Component({
     selector: 'app-lv-data-table',

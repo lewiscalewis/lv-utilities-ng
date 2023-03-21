@@ -1,21 +1,19 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { LvCarrouselComponent } from 'src/components/lv-carrousel/lv-carrousel.component';
-import { LvDataTableComponent } from 'src/components/lv-data-table/lv-data-table.component';
-import { LvFormComponent } from 'src/components/lv-form/lv-form.component';
-import { LvModalComponent } from 'src/components/lv-modal/lv-modal.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LvSideBarComponent } from 'src/components/lv-sideBar/lv-sideBar.component';
-import { LvLoadSpinnerComponent } from 'src/components/lv-load-spinner/lv-load-spinner.component';
-import { LvDropdownComponent } from 'src/components/lv-dropdown/lv-dropdown.component';
-import { LvModalService } from 'src/services/lv-modal.service';
-import { LvSearchBarComponent } from 'src/components/lv-searchBar/lv-searchBar.component';
-import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
+import { HttpClientModule } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { LvCarrouselComponent } from '../components/lv-carrousel/lv-carrousel.component';
+import { LvDataTableComponent } from '../components/lv-data-table/lv-data-table.component';
+import { LvDropdownComponent } from '../components/lv-dropdown/lv-dropdown.component';
+import { LvFormComponent } from '../components/lv-form/lv-form.component';
+import { LvLoadSpinnerComponent } from '../components/lv-load-spinner/lv-load-spinner.component';
+import { LvModalComponent } from '../components/lv-modal/lv-modal.component';
+import { LvSearchBarComponent } from '../components/lv-searchBar/lv-searchBar.component';
+import { LvSideBarComponent } from '../components/lv-sideBar/lv-sideBar.component';
+import { LvDarkThemeDirective } from '../directives/lv-dark.directive';
+import { LvModalService } from '../services/lv-modal.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +29,6 @@ import { LvDarkThemeDirective } from 'src/directives/lv-dark.directive';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

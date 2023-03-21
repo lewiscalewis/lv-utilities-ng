@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { HTTP_OPTIONS, ModalType } from 'src/constants/lv-constans';
-import { LvFormDefinition } from 'src/interfaces/lv-form/lv-form.interface';
-import { LvModalService } from 'src/services/lv-modal.service';
+import { HTTP_OPTIONS, ModalType } from 'src/libs/constants/lv-constans';
+import { LvFormDefinition } from 'src/libs/interfaces/lv-form/lv-form.interface';
+import { LvModalService } from 'src/libs/services/lv-modal.service';
 
 @Component({
     selector: 'app-lv-form',
