@@ -1,0 +1,95 @@
+@import "../../variables.scss";
+
+@mixin slider-standard {
+.carousel {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    align-self: center;
+    position: relative;
+    width: 800px;
+    max-width: 800px;
+    padding-top: 10px;
+    z-index: 1;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    font-family: $font-family;
+    background-color: white;
+    border: 1px solid white;
+
+    .image-container-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px; // Altura fija del contenedor de imágenes
+        width: 100%;
+        max-width: 100%;
+        background-color: white;
+    }
+
+    .image-container {
+        width: 100%;
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        img {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+        }
+    }
+
+    .user-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: calc(100% - 20px);
+        border-radius: 6px;
+        height: 100%;
+        color: black;
+        padding: 10px;
+        background-color: white;
+
+        .slide-name {
+            font-size: 1.3rem;
+        }
+
+        img {
+            max-width: 40px;
+            margin-left: 30px;
+            margin-right: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            transform: scale(1);
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            @media (hover: none) {
+                &:active {
+                    transform: scale(1.1);
+                }
+            }
+        }
+
+        @include button-style();
+    }
+}
+
+@media (max-width: 800px) {
+    .carousel {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 0px;
+        margin-right: 0px;
+        max-width: 90vw;
+    }
+}
+
+}

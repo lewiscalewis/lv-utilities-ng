@@ -115,7 +115,7 @@
     }
 
     .container {
-        z-index: 1;
+        width: fit-content;
         max-width: 90vw !important;
         padding: 10px;
         padding-bottom: 0px;
@@ -123,7 +123,6 @@
         border: 1px solid lightgray;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         border-radius: 6px;
-        max-width: 95vw;
         margin-top: 20px;
         margin-bottom: 20px;
         font-family: $font-family;
@@ -144,16 +143,16 @@
 
         .action-container {
             border-radius: 6px;
+            width: 100%;
+            
             .actions {
                 @include button-style();
-
-                position: relative;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
-                left: -10px;
+                gap: 30px;
                 padding: 10px;
                 border-radius: 6px;
 
@@ -161,6 +160,7 @@
                     display: flex;
                     flex-direction: row;
                     margin-right: 30px;
+                    margin-left: 30px;
 
                     .after {
                         box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 15px;
@@ -205,7 +205,8 @@
         }
 
         .lv-table-container {
-            max-width: 95vw;
+            width: 100%;
+            max-width: calc(100% - 20px);
             max-height: 600px;
             overflow-x: auto;
             overflow-y: auto;

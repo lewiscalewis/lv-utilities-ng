@@ -3,7 +3,7 @@
         <div class="header" [ngClass]="{'confirmation': modalType === 0, 'error': modalType === 1, 'warning': modalType === 2, 'succes' : modalType === 3, 'information' : modalType === 4}">
             <div class="relleno"></div>
             <div>{{headerMessage}}</div>
-            <img src="assets\modal-icons\close.svg" alt="" class="quitIcon" (click)="closeModal()">
+            <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/modal-icons/close.svg" alt="" class="quitIcon" (click)="closeModal()">
         </div>
         <div class="body">
             <div style="white-space: pre-line">{{message}}</div>

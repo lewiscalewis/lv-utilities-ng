@@ -1,0 +1,155 @@
+$main-theme: #eee;
+$table-row-odd-color: #ffffff;
+$table-row-even-color: #f4f4f4;
+$table-row-hover-color: #ddd;
+$table-th-color: white;
+$table-action-icons-color: #555;
+$table-action-icons-hover-color: #333;
+$table-background-color: #fff;
+$table-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$table-font-family: Arial, sans-serif;
+$table-font-size: 16px;
+$table-line-height: 1.4;
+$table-text-color: #333;
+$font-family: 'Ubuntu', sans-serif;
+
+$table-mobile-font-size: 14px;
+$table-mobile-td-max-width: 90vw;
+$table-mobile-td-max-height: 100px;
+$table-mobile-td-overflow: "auto";
+$actions-color: #333;
+
+$shadow-color: rgba(255, 255, 255, 0.5); // Color del sombreado
+$shadow-blur: 10px; // Desenfoque del sombreado
+$shadow-offset: 0px 0px; // Desplazamiento horizontal y vertical del sombreado
+$shadow-size: 0px; // Tamaño del sombreado
+
+//temas
+$succes-color: rgb(76, 175, 80);
+$box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+//botones
+$background-button: #007bff;
+
+@mixin button-style() {
+    button {
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+        border: 1px solid white;
+        text-align: center;
+        padding: 0.5rem;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 0.25rem;
+        background-color: white !important;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+        transition: background-color 0.4s ease-in-out;
+        vertical-align: center;
+        font-family: $font-family;
+        border: 1px solid rgb(255, 255, 255) !important;
+        color: black !important;
+
+        &:hover {
+            color: white;
+            background-color: $background-button;
+            box-shadow: $shadow-offset $shadow-blur $shadow-size $shadow-color;
+        }
+    }
+
+    .success-color {
+        background-color: $succes-color !important;
+        color: white !important;
+
+        &:hover {
+            border: 1px solid $succes-color !important;
+            background-color: white !important;
+            color: $succes-color !important;
+        }
+    }
+
+    .danger {
+        background-color: red !important;
+        color: white !important;
+
+        &:hover {
+            border: 1px solid red !important;
+            background-color: white !important;
+            color: red !important;
+        }
+    }
+
+    .disabled {
+        background-color: rgb(168, 165, 165) !important;
+        border: 1px solid rgb(168, 165, 165) !important;
+        color: grey;
+
+        &:hover {
+            background-color: rgb(168, 165, 165) !important;
+            border: 1px solid rgb(168, 165, 165) !important;
+            color: grey !important;
+        }
+    }
+
+    .secondary {
+        background-color: rgb(0, 2, 145) !important;
+        border: 1px solid rgb(255, 255, 255) !important;
+        color: white !important;
+
+        &:hover {
+            background-color: rgb(255, 255, 255) !important;
+            border: 1px solid rgb(0, 2, 145) !important;
+            color: rgb(0, 2, 145) !important;
+        }
+    }
+}
+
+html {
+    *::-webkit-scrollbar {
+        background-color: #f5f5f5;
+    }
+
+    *::-webkit-scrollbar:horizontal {
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar:vertical {
+        width: 10px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: #c5c5c5;
+        border-radius: 10px;
+        border: 2px solid #f5f5f5;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: #a5a5a5;
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+        background-color: #888;
+    }
+
+    *::-webkit-scrollbar-corner {
+        background-color: #f5f5f5;
+    }
+
+    *::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    *::-webkit-scrollbar-thumb:horizontal {
+        height: 8px;
+        min-width: 50px;
+    }
+
+    *::-webkit-scrollbar-thumb:vertical {
+        width: 8px;
+        min-height: 50px;
+    }
+}
+
+

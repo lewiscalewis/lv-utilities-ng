@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="search">
+    <div class="search" *ngIf="!definition">
         <app-lv-searchBar [url]="url + '/search'" [rowData]="searchData" [showResultList]="false" [isTableMode]="true" (getResults)="manageSearchData($event)" (userInput)="reload($event)" class="navigator"></app-lv-searchBar>
     </div>
     <div class="lv-table-container" [class.table-collapse]="flagReduceOrExpandShow">
@@ -8,22 +8,22 @@
                 <thead>
                     <tr>
                     <th class="resizable" *ngIf="theme === 'light-theme'">
-                        <img src="assets\table-icons\reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                        <img src="assets\table-icons\expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/reduce.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/expand.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                     </th>
                     <th class="resizable" *ngIf="theme === 'dark-theme'">
-                        <img src="assets\table-icons\reduce-dark.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
-                        <img src="assets\table-icons\expand-dark.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/reduce-dark.svg" alt="achicar tabla" *ngIf="flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
+                        <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/expand-dark.svg" alt="achicar tabla" *ngIf="!flagReduceOrExpandShow" (click)="reduceOrExpand()" width="25px">
                     </th>
                     <th class="resizable" (click)="orderPageRow(headers.indexOf(header), $event)" *ngFor="let header of headers; let z = index">
                         <div class="th-wrapper">
                             <div class="header" *ngIf="theme === 'light-theme'">{{header}} 
-                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com.svg' : 'assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10">
+                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/arrow-up-alt-svgrepo-com.svg' : 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/arrow-down-alt-svgrepo-com.svg'" alt="orderByArrow" width="10">
                             </div> 
                             <div class="header" *ngIf="theme === 'dark-theme'">{{header}} 
-                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'assets/commons/arrow-up-alt-svgrepo-com-dark.svg' : 'assets/commons/arrow-down-alt-svgrepo-com-dark.svg'" alt="orderByArrow" width="10">
+                                <img *ngIf="showOrderByArrows && selectedHeaderIndex === z" [src]="orderBy ? 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/arrow-up-alt-svgrepo-com-dark.svg' : 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/arrow-down-alt-svgrepo-com-dark.svg'" alt="orderByArrow" width="10">
                             </div>
-                            <app-lv-dropdown [theme]="theme" *ngIf="!flagReduceOrExpandShow" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
+                            <app-lv-dropdown [theme]="theme" *ngIf="!flagReduceOrExpandShow && !definition" class="dropdown" [id]="z" [marginLeftDropdown]="-120" (drowpDownInstance)="setDropDowns($event)" (click)="closeDropDowns(z)">
                                 <div class="lv-filters">
                                     <select name="filters" id="filters" #select>
                                         <option value="gt">Mayor que:</option>
@@ -60,13 +60,13 @@
                     <!--Filas nuevas-->
                     <tr *ngFor="let row of newRows;let i=index; let x = index">
                         <td  *ngIf="!readOnly && theme === 'light-theme'">
-                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
         
-                        <td  [hidden]="!readOnly && theme === 'dark-theme'">
-                            <img class="table-icons" src="assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                            <img class="table-icons" src="assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                        <td  *ngIf="!readOnly && theme === 'dark-theme'">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
                         <td  *ngFor="let field of newRowCleanObject[x]; let o=index">
                             <ng-container [ngSwitch]="getFieldType(field)" *ngIf="!readOnly">
@@ -81,13 +81,13 @@
                     <!--Filas normales-->
                     <tr *ngFor="let row of pageRows; let i=index">
                         <td  *ngIf="!readOnly && theme === 'light-theme'">
-                            <img class="table-icons" src="assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                            <img class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/delete.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
-
+        
                         <td  *ngIf="!readOnly && theme === 'dark-theme'">
-                            <img class="table-icons" src="assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
-                            <img class="table-icons" src="assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/delete-dark.svg" alt="Eliminar" width="20" height="20" (click)="deleteRow(newRowObject, true)">
+                            <img class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail-dark.svg" alt="Detalle" width="20" height="20" (click)="redirectToDetail(newRowObject['id'])">
                         </td>
                         <td [hidden]="!readOnly">
                         </td>

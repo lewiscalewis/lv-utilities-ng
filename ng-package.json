@@ -1,7 +1,15 @@
 {
-  "$schema": "node_modules\ng-packagr\ng-package.schema.json",
+  "$schema": "ng-package.schema.json",
   "dest": "./dist/lv-utilities-ng",
+  "allowedNonPeerDependencies": [
+      "@angular/common"
+  ],
+  "assets": ["./assets"],
   "lib": {
-    "entryFile": "public_api.ts"
+    "entryFile": "public_api.ts",
+    "styleIncludePaths": [
+      "src/*.scss",
+      "src/themes/**/*.scss"
+    ]
   }
 }

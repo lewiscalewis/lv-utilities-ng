@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, ViewContainerRef } from "@angular/core";
-import { ModalType } from "src/constants/lv-constans";
-import { LvModalComponent } from "src/components/lv-modal/lv-modal.component";
+import { ModalType } from "../constants/lv-constans";
+import { LvModalComponent } from "../components/lv-modal/lv-modal.component";
 import { Subject } from "rxjs";
 
 @Injectable({

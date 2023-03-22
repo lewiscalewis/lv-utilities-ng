@@ -1,4 +1,4 @@
-import { ILvSlide } from "src/interfaces/lv-carrousel-interfaces/lv-slide.interface";
+import { ILvSlide } from "../../interfaces/lv-carrousel-interfaces/lv-slide.interface";
 
 export class LvSlide implements ILvSlide {
     public nombre: string = '';

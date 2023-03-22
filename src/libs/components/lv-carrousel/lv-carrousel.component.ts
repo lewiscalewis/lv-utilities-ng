@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, ElementRef, Input, OnInit } from '@angular/core';
 import { trigger, transition, style, animate, AnimationBuilder } from '@angular/animations';
-import { ILvSlide } from 'src/interfaces/lv-carrousel-interfaces/lv-slide.interface';
+import { ILvSlide } from '../../interfaces/lv-carrousel-interfaces/lv-slide.interface';
 
 @Component({
     selector: 'app-lv-carrousel',

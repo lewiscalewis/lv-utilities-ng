@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ModalType } from 'src/libs/constants/lv-constans';
-import { LvModalService } from 'src/libs/services/lv-modal.service';
+import { ModalType } from '../../constants/lv-constans';
+import { LvModalService } from '../../services/lv-modal.service';
 
 @Component({
     selector: 'app-lv-modal',

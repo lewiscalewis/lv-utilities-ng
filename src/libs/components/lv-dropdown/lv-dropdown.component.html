@@ -1,12 +1,12 @@
 <div class="lv-container" tabindex="0">
-    <img *ngIf="theme === 'light-theme'" id="dropdown-image" src="assets/commons/menu-vertical.svg" alt="menu" (click)="openClose($event)">
-    <img *ngIf="theme === 'dark-theme'" id="dropdown-image" src="assets/commons/menu-vertical-dark.svg" alt="menu" (click)="openClose($event)">
+    <img *ngIf="theme === 'light-theme'" id="dropdown-image" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/menu-vertical.svg" alt="menu" (click)="openClose($event)">
+    <img *ngIf="theme === 'dark-theme'" id="dropdown-image" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/commons/menu-vertical-dark.svg" alt="menu" (click)="openClose($event)">
 </div>
 <div class="dropdown" *ngIf="open" [style]="'margin-left: '+marginLeftDropdown+'px'">
     <div *ngFor="let item of links" class="links">
         <div class="link" (click)="redirect(item.url)">
             <img *ngIf="item.icon" [src]="item.icon" alt="icon">
-            <img *ngIf="!item.icon" class="table-icons" src="assets/table-icons/detail.svg" alt="Detalle" width="20" height="20">
+            <img *ngIf="!item.icon" class="table-icons" src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail.svg" alt="Detalle" width="20" height="20">
             <div>{{item.description}}</div>
         </div>
     </div>

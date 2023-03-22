@@ -1,9 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { LvSearchData } from 'src/interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
-import { LvObject } from 'src/models/lv-object';
-import { LvModalService } from 'src/services/lv-modal.service';
+import { LvSearchData } from '../../interfaces/lv-searchBar-interfaces/lv-searchBar.interface';
+import { LvObject } from '../../models/lv-object';
 
 @Component({
     selector: 'app-lv-searchBar',

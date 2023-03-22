@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
+import { LvSideBarLinks } from '../../interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
 @Component({
     selector: 'app-lv-dropdown',

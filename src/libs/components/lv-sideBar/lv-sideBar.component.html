@@ -1,11 +1,11 @@
 <div class="lv-container" [ngClass]="{'open': !close, 'close': close, 'left': position === posLeft, 'right':  position === posRight, 'bottom': position === posBottom}">
     <div class="burguer-icon">
-        <img [src]="position === posBottom ? 'assets/sideBar-icons/letters_X.svg' : 'assets/sideBar-icons/burguer-icon.svg'" alt="burguer icon" (click)="closeState()">
+        <img [src]="position === posBottom ? 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/sideBar-icons/letters_X.svg' : 'https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/sideBar-icons/burguer-icon.svg'" alt="burguer icon" (click)="closeState()">
     </div>
     <div class="links">
         <div class="link" *ngFor="let link of links" (click)="redirect(link.url)">
             <!-- <img [src]="link.icon ? link.icon : 'assets/sideBar-icons/gear.svg'" [alt]="link.description"> -->
-            <img src="assets/table-icons/detail.svg" alt="go to url">
+            <img src="https://github.com/lewiscalewis/lv-utilities-assets/blob/master/assets/table-icons/detail.svg" alt="go to url">
             <div>{{link.description}}</div> 
         </div>
         <ng-content></ng-content>

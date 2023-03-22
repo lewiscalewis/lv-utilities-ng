@@ -5,6 +5,7 @@ export * from './src/libs/components/lv-sideBar/lv-sideBar.component';
 export * from './src/libs/components/lv-load-spinner/lv-load-spinner.component';
 export * from './src/libs/components/lv-dropdown/lv-dropdown.component';
 export * from './src/libs/components/lv-searchBar/lv-searchBar.component';
+export * from './src/libs/components/lv-carrousel/lv-carrousel.component';
 export * from './src/libs/directives/lv-dark.directive';
 export * from './src/libs/services/lv-modal.service';
 export * from './src/libs/constants/lv-constans';

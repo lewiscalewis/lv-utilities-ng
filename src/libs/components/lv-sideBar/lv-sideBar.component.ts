@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Position } from 'src/constants/lv-constans';
-import { LvSideBarLinks } from 'src/interfaces/lv-sideBar/lv-sideBar-links.inteface';
+import { Position } from '../../constants/lv-constans';
+import { LvSideBarLinks } from '../../interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
 @Component({
     selector: 'app-lv-sideBar',
