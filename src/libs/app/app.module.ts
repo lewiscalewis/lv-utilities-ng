@@ -14,6 +14,7 @@ import { LvSearchBarComponent } from '../components/lv-searchBar/lv-searchBar.co
 import { LvSideBarComponent } from '../components/lv-sideBar/lv-sideBar.component';
 import { LvDarkThemeDirective } from '../directives/lv-dark.directive';
 import { LvModalService } from '../services/lv-modal.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { LvModalService } from '../services/lv-modal.service';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    CommonModule
+    CommonModule,
+    BrowserAnimationsModule
   ],
   providers: [LvModalService, DatePipe],
   exports: [
