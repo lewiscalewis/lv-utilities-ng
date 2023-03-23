@@ -116,7 +116,7 @@
 
     .container {
         width: fit-content;
-        max-width: 90vw !important;
+        max-width: 95vw !important;
         padding: 10px;
         padding-bottom: 0px;
         background-color: white;
@@ -206,7 +206,7 @@
 
         .lv-table-container {
             width: 100%;
-            max-width: calc(100% - 20px);
+            max-width: calc(100% + 20px);
             max-height: 600px;
             overflow-x: auto;
             overflow-y: auto;

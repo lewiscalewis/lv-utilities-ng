@@ -75,7 +75,7 @@
                                 <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
                                 <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o, true)" [readonly]="readOnly">
                             </ng-container>
-                            <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                            <div class="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
                         </td>
                     </tr> 
                     <!--Filas normales-->
@@ -98,7 +98,7 @@
                                 <input *ngSwitchCase type="email" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                                 <input *ngSwitchDefault type="text" [ngModel]="field" (keyup)="updateFieldValue($event.target, row, o)" [readonly]="readOnly">
                             </ng-container>
-                            <div id="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
+                            <div class="field-readOnly" *ngIf="readOnly">{{isDateValid(field) ? (field | date: 'short') : field}}</div>
                         </td>
                     </tr>
                 </tbody>

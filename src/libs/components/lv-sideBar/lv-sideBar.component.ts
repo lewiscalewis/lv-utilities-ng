@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, HostListener, ElementRef } from '@angular/core';
 import { Position } from '../../constants/lv-constans';
 import { LvSideBarLinks } from '../../interfaces/lv-sideBar/lv-sideBar-links.inteface';
 
@@ -20,7 +19,7 @@ export class LvSideBarComponent implements OnInit {
     posRight: Position = Position.RIGHT;
     posBottom: Position = Position.BOTTOM;
 
-    constructor(private router: Router) { }
+    constructor(private elementRef: ElementRef) { }
 
     ngOnInit() {
     }
@@ -37,6 +36,14 @@ export class LvSideBarComponent implements OnInit {
 
     redirect(url: string) {
         window.open(url);
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const clickedInside = this.elementRef.nativeElement.contains(event.target);
+        if (!clickedInside) {
+            this.close = true;
+        }
     }
 
 }

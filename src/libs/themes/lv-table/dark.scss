@@ -109,7 +109,7 @@ $dark-theme-color: rgb(39, 41, 43);
 
         .lv-table-container {
             .lv-table {
-                color: white;
+                color: white !important;
                 background-color: rgb(39, 41, 43) !important;
                 box-shadow: $table-box-shadow !important;
             }
@@ -122,6 +122,10 @@ $dark-theme-color: rgb(39, 41, 43);
                 min-width: 70px;
                 margin: 0;
                 font-size: inherit;
+            }
+
+            .field-readOnly {
+                color: white !important;
             }
 
             .lv-table input[type="date"] {

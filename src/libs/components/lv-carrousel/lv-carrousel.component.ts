@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, ElementRef, Input, OnInit } from '@angular/core';
-import { trigger, transition, style, animate, AnimationBuilder } from '@angular/animations';
+import { trigger, transition, style, animate, AnimationBuilder, query, animateChild, group, keyframes, NoopAnimationPlayer } from '@angular/animations';
 import { ILvSlide } from '../../interfaces/lv-carrousel-interfaces/lv-slide.interface';
 
 @Component({
@@ -8,17 +8,52 @@ import { ILvSlide } from '../../interfaces/lv-carrousel-interfaces/lv-slide.inte
     styleUrls: ['./lv-carrousel.component.scss'],
     animations: [
         trigger('slideAnimation', [
-            // Transición de entrada para el estado previous
-            transition(':enter', [
-                style({ transform: 'translateX(-100%)' }),
-                animate('500ms ease-in-out', style({ transform: 'translateX(0)' }))
-            ]),
-            // Transición de entrada para el estado next
-            transition(':leave', [
-                style({ transform: 'translateX(100%)' }),
-                animate('500ms ease-in-out', style({ transform: 'translateX(0)' }))
-            ]),
-        ])
+            transition(':increment, :decrement', [
+              style({ position: 'relative' }),
+              query(':enter, :leave', [
+                style({
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%'
+                })
+              ]),
+              query(':enter', [
+                style({
+                  left: '100%',
+                  transform: 'translateX(-100%)'
+                })
+              ]),
+              query(':leave', animateChild(), { optional: true }),
+              group([
+                query(':leave', [
+                  animate('500ms ease-in-out', keyframes([
+                    style({
+                      transform: 'translateX(0)',
+                      offset: 0
+                    }),
+                    style({
+                      transform: 'translateX(100%)',
+                      offset: 1
+                    })
+                  ]))
+                ], { optional: true }),
+                query(':enter', [
+                  animate('500ms ease-in-out', keyframes([
+                    style({
+                      transform: 'translateX(-100%)',
+                      offset: 0
+                    }),
+                    style({
+                      transform: 'translateX(0)',
+                      offset: 1
+                    })
+                  ]))
+                ])
+              ]),
+              query(':enter', animateChild())
+            ])
+          ])
     ]
 })
 export class LvCarrouselComponent implements OnInit, AfterViewChecked {
@@ -52,25 +87,54 @@ export class LvCarrouselComponent implements OnInit, AfterViewChecked {
     }
 
     anterior() {
-        this.currentIndex = (this.currentIndex === 0) ? this.slides.length - 1 : this.currentIndex - 1;
-        const animation = this.animationBuilder.build([
-            style({ transform: 'translateX(-100%)' }),
-            animate('500ms ease-in-out', style({ transform: 'translateX(0)' }))
+        const prevIndex = this.currentIndex;
+        const prevImg = document.getElementById('slide');
+        const prevAnimation = this.animationBuilder.build([
+          style({ transform: 'translateX(0)' }),
+          animate('600ms ease-in-out', style({ transform: 'translateX(200%)' }))
         ]);
-
-        const player = animation.create(document.getElementById('slide'));
-        player.play();
-    }
-
-    siguiente() {
-        this.currentIndex = (this.currentIndex === this.slides?.length - 1) ? 0 : this.currentIndex + 1;
-        const animation = this.animationBuilder.build([
-            style({ transform: 'translateX(100%)' }),
-            animate('500ms ease-in-out', style({ transform: 'translateX(0)' }))
+        const prevPlayer = prevAnimation.create(prevImg);
+        
+        prevPlayer.onDone(() => {
+          this.currentIndex = (this.currentIndex === 0) ? this.slides.length - 1 : this.currentIndex - 1;
+          const currImg = document.getElementById('slide');
+          const currAnimation = this.animationBuilder.build([
+            style({ transform: 'translateX(-200%)' }),
+            animate('600ms ease-in-out', style({ transform: 'translateX(0)' }))
+          ]);
+          const currPlayer = currAnimation.create(currImg);
+          currPlayer.play();
+        });
+        
+        prevPlayer.play();
+      }
+      
+      
+      
+      siguiente() {
+        const prevIndex = this.currentIndex;
+        const prevImg = document.getElementById('slide');
+        const prevAnimation = this.animationBuilder.build([
+          style({ transform: 'translateX(0)' }),
+          animate('600ms ease-in-out', style({ transform: 'translateX(-200%)' }))
         ]);
-
-        const player = animation.create(document.getElementById('slide'));
-        player.play();
-    }
+        const prevPlayer = prevAnimation.create(prevImg);
+        
+        prevPlayer.onDone(() => {
+          this.currentIndex = (this.currentIndex === this.slides?.length - 1) ? 0 : this.currentIndex + 1;
+          const currImg = document.getElementById('slide');
+          const currAnimation = this.animationBuilder.build([
+            style({ transform: 'translateX(200%)' }),
+            animate('600ms ease-in-out', style({ transform: 'translateX(0)' }))
+          ]);
+          const currPlayer = currAnimation.create(currImg);
+          currPlayer.play();
+        });
+        
+        prevPlayer.play();
+      }
+      
+      
+      
 
 }

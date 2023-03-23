@@ -5,7 +5,7 @@
     <div class="links">
         <div class="link" *ngFor="let link of links" (click)="redirect(link.url)">
             <!-- <img [src]="link.icon ? link.icon : 'assets/sideBar-icons/gear.svg'" [alt]="link.description"> -->
-            <img src="https://github.com/lewiscalewis/lv-utilities-assets/blob/master/assets/table-icons/detail.svg" alt="go to url">
+            <img src="https://raw.githubusercontent.com/lewiscalewis/lv-utilities-assets/71e25fb4c6915c0d2c56182a15b99e34d75042ac/assets/table-icons/detail.svg" alt="go to url">
             <div>{{link.description}}</div> 
         </div>
         <ng-content></ng-content>

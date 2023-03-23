@@ -38,7 +38,7 @@
                 *ngIf="definition.showResetButton">
                     Limpiar formulario
                  </button>
-                 <div class="required-message" style="color: red" *ngIf="form.invalid"><p>Rellena los campos obligatorios (*)</p></div>
+                 <div class="required-message" style="color: red" *ngIf="form.invalid"><p>Rellena los campos obligatorios (*) y compruebe que todos los campos cumplen con las validaciones</p></div>
                  <ng-container *ngIf="loading; else template">
                     <app-lv-load-spinner></app-lv-load-spinner>
                  </ng-container>

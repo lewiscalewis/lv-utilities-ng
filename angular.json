@@ -28,7 +28,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "./src/libs/assets",
+                "input": "./global-style/",
                 "output": "/assets/"
               },
               "src/favicon.ico",
